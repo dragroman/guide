@@ -17,7 +17,9 @@ export type FormState = {
 export type FormAction =
   | { type: "SET_FIELD"; field: string; value: any }
   | { type: "SET_ERROR"; field: string; message: string }
+  | { type: "SET_ERRORS"; errors: Record<string, string> }
   | { type: "CLEAR_ERROR"; field: string }
+  | { type: "CLEAR_ALL_ERRORS" }
   | { type: "SET_STEP"; step: number }
   | { type: "NEXT_STEP" }
   | { type: "PREV_STEP" }

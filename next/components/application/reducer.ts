@@ -22,12 +22,22 @@ export function formReducer(state: FormState, action: FormAction): FormState {
           [action.field]: action.message,
         },
       }
+    case "SET_ERRORS":
+      return {
+        ...state,
+        errors: action.errors || {},
+      }
     case "CLEAR_ERROR":
       const newErrors = { ...state.errors }
       delete newErrors[action.field]
       return {
         ...state,
         errors: newErrors,
+      }
+    case "CLEAR_ALL_ERRORS":
+      return {
+        ...state,
+        errors: {},
       }
     case "SET_STEP":
       // Проверяем, что шаг в допустимых пределах

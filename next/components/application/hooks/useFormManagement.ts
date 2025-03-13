@@ -1,13 +1,11 @@
-"use client"
 import { useReducer, useCallback, useEffect } from "react"
-import { ZodError } from "zod"
 import { DateRange } from "react-day-picker"
-import { FormState, FormAction, ApplicationSchemaType } from "../types"
+import { differenceInDays } from "date-fns"
+import { FormState, ApplicationSchemaType } from "../types"
 import { formReducer } from "../reducer"
 import { defaultFormValues, TOTAL_STEPS } from "../constants"
-import { applicationSchema } from "@/components/application/schemas/applicationSchema"
 import { saveFormDraft, loadFormDraft, clearFormDraft } from "@/lib/formStorage"
-import { handleZodError, formatDateRangeForSubmission } from "../utils"
+import { formatDateRangeForSubmission } from "../utils"
 
 // Начальное состояние формы
 const initialState: FormState = {
@@ -22,6 +20,9 @@ const initialState: FormState = {
   datesSelected: false,
 }
 
+/**
+ * Хук для управления состоянием формы заявки на тур
+ */
 export function useFormManagement() {
   const [state, dispatch] = useReducer(formReducer, initialState)
   const {
@@ -44,36 +45,33 @@ export function useFormManagement() {
   }, [])
 
   /**
-   * Валидация поля с использованием Zod
+   * Очищает ошибки для указанного поля и всех его вложенных полей
    */
-  const validateField = useCallback(
-    (name: keyof ApplicationSchemaType, value: any) => {
-      try {
-        // Создаем частичную схему для валидации только одного поля
-        const partialSchema = applicationSchema.pick({ [name]: true } as {
-          [key in keyof ApplicationSchemaType]?: true | undefined
-        })
-        partialSchema.parse({ [name]: value })
+  const clearFieldErrors = useCallback(
+    (fieldName: string) => {
+      // Очищаем ошибку самого поля
+      dispatch({ type: "CLEAR_ERROR", field: fieldName })
 
-        // Если валидация успешна, очищаем ошибку для этого поля
-        dispatch({ type: "CLEAR_ERROR", field: name })
-        return true
-      } catch (error) {
-        if (error instanceof ZodError) {
-          // Извлекаем сообщение об ошибке для этого поля
-          const fieldError = error.errors.find((err) => err.path[0] === name)
-          if (fieldError) {
-            dispatch({
-              type: "SET_ERROR",
-              field: name,
-              message: fieldError.message,
-            })
-          }
-        }
-        return false
+      // Очищаем связанные ошибки
+      if (fieldName === "tripPurpose") {
+        dispatch({ type: "CLEAR_ERROR", field: "tripPurpose.otherDescription" })
+      } else if (fieldName === "accommodation") {
+        dispatch({
+          type: "CLEAR_ERROR",
+          field: "accommodation.otherDescription",
+        })
+      } else if (fieldName === "dateRange") {
+        dispatch({ type: "CLEAR_ERROR", field: "dateRange.from" })
+        dispatch({ type: "CLEAR_ERROR", field: "dateRange.to" })
+      }
+
+      // Если меняем поле otherDescription, очищаем ошибку родительского поля
+      if (fieldName.includes("otherDescription")) {
+        const parentField = fieldName.split(".")[0]
+        dispatch({ type: "CLEAR_ERROR", field: parentField })
       }
     },
-    []
+    [dispatch]
   )
 
   /**
@@ -82,16 +80,18 @@ export function useFormManagement() {
   const updateFormData = useCallback(
     (fieldName: string, value: any) => {
       dispatch({ type: "SET_FIELD", field: fieldName, value })
-      validateField(fieldName as keyof ApplicationSchemaType, value)
 
-      // Сохраняем черновик
+      // Очищаем ошибку для обновляемого поля и всех связанных полей
+      clearFieldErrors(fieldName)
+
+      // Сохраняем черновик при каждом изменении
       const updatedData = {
         ...formData,
         [fieldName]: value,
       } as ApplicationSchemaType
       saveFormDraft(updatedData)
     },
-    [formData, validateField]
+    [formData, clearFieldErrors, dispatch]
   )
 
   /**
@@ -114,8 +114,8 @@ export function useFormManagement() {
 
       let daysCount = null
       if (datesSelected && dateRange?.from && dateRange?.to) {
-        const diffTime = dateRange.to.getTime() - dateRange.from.getTime()
-        daysCount = Math.floor(diffTime / (1000 * 60 * 60 * 24)) + 1
+        // Рассчитываем количество дней, включая начальный и конечный дни
+        daysCount = differenceInDays(dateRange.to, dateRange.from) + 1
       }
 
       // Обновляем оба поля
@@ -129,6 +129,9 @@ export function useFormManagement() {
     [updateFormData]
   )
 
+  /**
+   * Обработчик изменения целей поездки
+   */
   const handlePurposeChange = useCallback(
     (name: string, checked: boolean) => {
       const updatedPurpose = {
@@ -136,11 +139,20 @@ export function useFormManagement() {
         [name]: checked,
       }
 
+      // Если снимаем галочку "Другое", очищаем описание
+      if (name === "other" && !checked) {
+        updatedPurpose.otherDescription = ""
+        dispatch({ type: "CLEAR_ERROR", field: "tripPurpose.otherDescription" })
+      }
+
       updateFormData("tripPurpose", updatedPurpose)
     },
-    [formData.tripPurpose, updateFormData]
+    [formData.tripPurpose, updateFormData, dispatch]
   )
 
+  /**
+   * Обработчик изменения текстового описания целей поездки
+   */
   const handlePurposeTextChange = useCallback(
     (value: string) => {
       const updatedPurpose = {
@@ -153,6 +165,9 @@ export function useFormManagement() {
     [formData.tripPurpose, updateFormData]
   )
 
+  /**
+   * Обработчик изменения типа размещения
+   */
   const handleAccommodationChange = useCallback(
     (name: string, checked: boolean) => {
       const updatedAccommodation = {
@@ -160,11 +175,23 @@ export function useFormManagement() {
         [name]: checked,
       }
 
+      // Если снимаем галочку "Другое", очищаем описание
+      if (name === "other" && !checked) {
+        updatedAccommodation.otherDescription = ""
+        dispatch({
+          type: "CLEAR_ERROR",
+          field: "accommodation.otherDescription",
+        })
+      }
+
       updateFormData("accommodation", updatedAccommodation)
     },
-    [formData.accommodation, updateFormData]
+    [formData.accommodation, updateFormData, dispatch]
   )
 
+  /**
+   * Обработчик изменения текстового описания типа размещения
+   */
   const handleAccommodationTextChange = useCallback(
     (value: string) => {
       const updatedAccommodation = {
@@ -177,6 +204,9 @@ export function useFormManagement() {
     [formData.accommodation, updateFormData]
   )
 
+  /**
+   * Обработчик изменения предпочтений к размещению
+   */
   const handlePreferenceChange = useCallback(
     (name: string, checked: boolean) => {
       const updatedPreferences = {
@@ -184,11 +214,23 @@ export function useFormManagement() {
         [name]: checked,
       }
 
+      // Если снимаем галочку "Другое", очищаем описание
+      if (name === "other" && !checked) {
+        updatedPreferences.otherDescription = ""
+        dispatch({
+          type: "CLEAR_ERROR",
+          field: "accommodationPreferences.otherDescription",
+        })
+      }
+
       updateFormData("accommodationPreferences", updatedPreferences)
     },
-    [formData.accommodationPreferences, updateFormData]
+    [formData.accommodationPreferences, updateFormData, dispatch]
   )
 
+  /**
+   * Обработчик изменения текстового описания предпочтений к размещению
+   */
   const handlePreferenceTextChange = useCallback(
     (value: string) => {
       const updatedPreferences = {
@@ -202,43 +244,146 @@ export function useFormManagement() {
   )
 
   /**
-   * Валидация текущего шага формы
+   * Валидация данных для текущего шага формы
    */
   const validateStep = useCallback(() => {
+    // Очищаем ошибки перед валидацией
+    const currentErrors = { ...errors }
+    dispatch({ type: "SET_ERRORS", errors: {} })
+
     try {
       switch (currentStep) {
         case 0: // Имя
-          applicationSchema.pick({ name: true }).parse(formData)
+          if (!formData.name.trim()) {
+            dispatch({
+              type: "SET_ERROR",
+              field: "name",
+              message: "Имя обязательно для заполнения",
+            })
+            return false
+          }
+
+          if (formData.name.trim().length < 2) {
+            dispatch({
+              type: "SET_ERROR",
+              field: "name",
+              message: "Имя должно содержать не менее 2 символов",
+            })
+            return false
+          }
+
           return true
+
         case 1: // Телефон и email
-          applicationSchema.pick({ phone: true }).parse(formData)
-          applicationSchema.pick({ email: true }).parse(formData)
-          return true
-        case 2:
+          let isValid = true
+
+          // Валидация телефона
+          if (!formData.phone) {
+            dispatch({
+              type: "SET_ERROR",
+              field: "phone",
+              message: "Телефон обязателен для заполнения",
+            })
+            isValid = false
+          } else if (!/^\+[1-9]\d{1,14}$/.test(formData.phone)) {
+            dispatch({
+              type: "SET_ERROR",
+              field: "phone",
+              message:
+                "Телефон должен быть в международном формате, например +79123456789",
+            })
+            isValid = false
+          }
+
+          // Валидация email
+          if (!formData.email) {
+            dispatch({
+              type: "SET_ERROR",
+              field: "email",
+              message: "Email обязателен для заполнения",
+            })
+            isValid = false
+          } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
+            dispatch({
+              type: "SET_ERROR",
+              field: "email",
+              message: "Введите корректный email адрес",
+            })
+            isValid = false
+          }
+
+          return isValid
+
+        case 2: // Цель поездки и даты
+          let stepValid = true
+
+          // Проверка выбора хотя бы одной цели поездки
           const anyPurposeSelected = Object.entries(formData.tripPurpose)
             .filter(([key]) => key !== "otherDescription")
             .some(([_, value]) => value === true)
 
           if (!anyPurposeSelected) {
-            throw new Error("Выберите хотя бы одну цель поездки")
+            dispatch({
+              type: "SET_ERROR",
+              field: "tripPurpose",
+              message: "Выберите хотя бы одну цель поездки",
+            })
+            stepValid = false
           }
 
           // Если выбрано "Другое", проверяем наличие описания
           if (
             formData.tripPurpose.other &&
-            !formData.tripPurpose.otherDescription
+            !formData.tripPurpose.otherDescription.trim()
           ) {
-            throw new Error("Укажите описание для пункта 'Другое'")
+            dispatch({
+              type: "SET_ERROR",
+              field: "tripPurpose.otherDescription",
+              message: "Укажите описание для пункта 'Другое'",
+            })
+            stepValid = false
           }
-          if (!state.datesSelected) {
-            if (!formData.dateRange?.from || !formData.dateRange?.to) {
-              throw new Error("Укажите даты начала и окончания поездки")
+
+          // Проверка выбора дат
+          if (!formData.dateRange?.from || !formData.dateRange?.to) {
+            dispatch({
+              type: "SET_ERROR",
+              field: "dateRange",
+              message: "Укажите даты начала и окончания поездки",
+            })
+            stepValid = false
+          } else {
+            // Проверяем, что дата начала не в прошлом
+            const today = new Date()
+            today.setHours(0, 0, 0, 0)
+
+            if (formData.dateRange.from < today) {
+              dispatch({
+                type: "SET_ERROR",
+                field: "dateRange",
+                message: "Дата начала поездки не может быть в прошлом",
+              })
+              stepValid = false
+            }
+
+            // Проверяем, что дата окончания не раньше даты начала
+            if (formData.dateRange.to < formData.dateRange.from) {
+              dispatch({
+                type: "SET_ERROR",
+                field: "dateRange",
+                message:
+                  "Дата окончания поездки не может быть раньше даты начала",
+              })
+              stepValid = false
             }
           }
-          applicationSchema.pick({ dateRange: true }).parse(formData)
 
-          return true
-        case 3:
+          return stepValid
+
+        case 3: // Размещение
+          let accommodationValid = true
+
+          // Проверка выбора хотя бы одного типа размещения
           const anyAccommodationSelected = Object.entries(
             formData.accommodation
           )
@@ -246,67 +391,41 @@ export function useFormManagement() {
             .some(([_, value]) => value === true)
 
           if (!anyAccommodationSelected) {
-            throw new Error("Выберите хотя бы один тип размещения")
+            dispatch({
+              type: "SET_ERROR",
+              field: "accommodation",
+              message: "Выберите хотя бы один тип размещения",
+            })
+            accommodationValid = false
           }
 
           // Если выбрано "Другое", проверяем наличие описания
           if (
             formData.accommodation.other &&
-            !formData.accommodation.otherDescription
+            !formData.accommodation.otherDescription.trim()
           ) {
-            throw new Error("Укажите описание для пункта 'Другое'")
+            dispatch({
+              type: "SET_ERROR",
+              field: "accommodation.otherDescription",
+              message: "Укажите описание для пункта 'Другое'",
+            })
+            accommodationValid = false
           }
 
-          return true
-          return true
+          return accommodationValid
+
         case 4: // Подтверждение - считаем валидным
           return true
+
         default:
           return false
       }
     } catch (error) {
-      if (error instanceof ZodError) {
-        const errorMap = handleZodError(error)
-
-        // Обновляем состояние ошибок
-        Object.entries(errorMap).forEach(([field, message]) => {
-          dispatch({ type: "SET_ERROR", field, message })
-        })
-      } else if (error instanceof Error) {
-        // Определяем правильное поле для ошибки в зависимости от текущего шага
-        let errorField
-        switch (currentStep) {
-          case 0:
-            errorField = "name"
-            break
-          case 1:
-            errorField = error.message.toLowerCase().includes("телефон")
-              ? "phone"
-              : "email"
-            break
-          case 2:
-            if (error.message.includes("Другое")) {
-              errorField = "tripPurpose.otherDescription"
-            } else {
-              errorField = "tripPurpose"
-            }
-            break
-          case 3:
-            errorField = "dateRange"
-            break
-          default:
-            errorField = ""
-        }
-
-        dispatch({
-          type: "SET_ERROR",
-          field: errorField,
-          message: error.message,
-        })
-      }
+      // Восстанавливаем предыдущие ошибки если что-то пошло не так
+      dispatch({ type: "SET_ERRORS", errors: currentErrors })
       return false
     }
-  }, [currentStep, formData, state.datesSelected])
+  }, [currentStep, formData, errors])
 
   /**
    * Переход к следующему шагу
@@ -331,9 +450,21 @@ export function useFormManagement() {
     (step: number) => {
       if (step < currentStep) {
         dispatch({ type: "SET_STEP", step })
+      } else if (step === currentStep) {
+        // Уже на этом шаге, ничего не делаем
+        return
+      } else {
+        // Пытаемся перейти на шаг вперед - нужно пройти валидацию
+        // Для простоты просто вызываем nextStep нужное количество раз
+        for (let i = currentStep; i < step; i++) {
+          if (!validateStep()) {
+            return // Останавливаемся, если валидация не прошла
+          }
+          dispatch({ type: "NEXT_STEP" })
+        }
       }
     },
-    [currentStep]
+    [currentStep, validateStep]
   )
 
   /**
@@ -354,7 +485,130 @@ export function useFormManagement() {
    */
   const ignoreDraft = useCallback(() => {
     dispatch({ type: "IGNORE_DRAFT" })
+    // Удаляем черновик из хранилища
+    clearFormDraft()
   }, [])
+
+  /**
+   * Валидация всей формы перед отправкой
+   */
+  const validateForm = useCallback(() => {
+    // Сбрасываем все ошибки
+    dispatch({ type: "SET_ERRORS", errors: {} })
+
+    try {
+      // Проверяем каждый шаг по отдельности
+      // Имя
+      if (!formData.name.trim()) {
+        dispatch({
+          type: "SET_ERROR",
+          field: "name",
+          message: "Имя обязательно для заполнения",
+        })
+        return false
+      }
+
+      // Телефон и email
+      if (!formData.phone) {
+        dispatch({
+          type: "SET_ERROR",
+          field: "phone",
+          message: "Телефон обязателен для заполнения",
+        })
+        return false
+      } else if (!/^\+[1-9]\d{1,14}$/.test(formData.phone)) {
+        dispatch({
+          type: "SET_ERROR",
+          field: "phone",
+          message:
+            "Телефон должен быть в международном формате, например +79123456789",
+        })
+        return false
+      }
+
+      if (!formData.email) {
+        dispatch({
+          type: "SET_ERROR",
+          field: "email",
+          message: "Email обязателен для заполнения",
+        })
+        return false
+      } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
+        dispatch({
+          type: "SET_ERROR",
+          field: "email",
+          message: "Введите корректный email адрес",
+        })
+        return false
+      }
+
+      // Цель поездки и даты
+      const anyPurposeSelected = Object.entries(formData.tripPurpose)
+        .filter(([key]) => key !== "otherDescription")
+        .some(([_, value]) => value === true)
+
+      if (!anyPurposeSelected) {
+        dispatch({
+          type: "SET_ERROR",
+          field: "tripPurpose",
+          message: "Выберите хотя бы одну цель поездки",
+        })
+        return false
+      }
+
+      if (
+        formData.tripPurpose.other &&
+        !formData.tripPurpose.otherDescription.trim()
+      ) {
+        dispatch({
+          type: "SET_ERROR",
+          field: "tripPurpose.otherDescription",
+          message: "Укажите описание для пункта 'Другое'",
+        })
+        return false
+      }
+
+      if (!formData.dateRange?.from || !formData.dateRange?.to) {
+        dispatch({
+          type: "SET_ERROR",
+          field: "dateRange",
+          message: "Укажите даты начала и окончания поездки",
+        })
+        return false
+      }
+
+      // Размещение
+      const anyAccommodationSelected = Object.entries(formData.accommodation)
+        .filter(([key]) => key !== "otherDescription")
+        .some(([_, value]) => value === true)
+
+      if (!anyAccommodationSelected) {
+        dispatch({
+          type: "SET_ERROR",
+          field: "accommodation",
+          message: "Выберите хотя бы один тип размещения",
+        })
+        return false
+      }
+
+      if (
+        formData.accommodation.other &&
+        !formData.accommodation.otherDescription.trim()
+      ) {
+        dispatch({
+          type: "SET_ERROR",
+          field: "accommodation.otherDescription",
+          message: "Укажите описание для пункта 'Другое'",
+        })
+        return false
+      }
+
+      return true
+    } catch (error) {
+      console.error("Ошибка при валидации формы:", error)
+      return false
+    }
+  }, [formData, dispatch])
 
   /**
    * Отправка формы
@@ -363,39 +617,30 @@ export function useFormManagement() {
     async (e: React.FormEvent) => {
       e.preventDefault()
 
-      // На последнем шаге (подтверждение) нам не нужно валидировать снова,
-      // так как все уже должно быть валидным. Но мы проверяем все данные перед отправкой.
-      if (currentStep !== TOTAL_STEPS - 1) {
+      // Если мы на последнем шаге, валидируем всю форму перед отправкой
+      if (currentStep === TOTAL_STEPS - 1) {
+        if (!validateForm()) {
+          return
+        }
+      } else {
+        // Если мы не на последнем шаге, валидируем только текущий шаг
         if (!validateStep()) {
           return
         }
+
+        // Переходим к следующему шагу
+        dispatch({ type: "NEXT_STEP" })
+        return
       }
 
       dispatch({ type: "SUBMIT_START" })
 
       try {
-        // Проверка, что даты существуют
+        // Форматируем даты для отправки
         if (!formData.dateRange?.from || !formData.dateRange?.to) {
           throw new Error("Пожалуйста, укажите даты начала и окончания поездки")
         }
 
-        // Полная валидация всей формы перед отправкой
-        try {
-          applicationSchema.parse(formData)
-        } catch (validationError) {
-          if (validationError instanceof ZodError) {
-            const errorMap = handleZodError(validationError)
-            dispatch({
-              type: "SUBMIT_ERROR",
-              message: "Пожалуйста, исправьте ошибки в форме перед отправкой",
-              errors: errorMap,
-            })
-            return
-          }
-          throw validationError
-        }
-
-        // Форматируем даты для отправки
         const formattedDates = formatDateRangeForSubmission(formData.dateRange)
 
         // Отправка данных на сервер
@@ -432,26 +677,16 @@ export function useFormManagement() {
       } catch (error) {
         console.error("Ошибка отправки формы:", error)
 
-        if (error instanceof ZodError) {
-          const errorMap = handleZodError(error)
-
-          dispatch({
-            type: "SUBMIT_ERROR",
-            message: "Пожалуйста, исправьте ошибки в форме",
-            errors: errorMap,
-          })
-        } else {
-          dispatch({
-            type: "SUBMIT_ERROR",
-            message:
-              error instanceof Error
-                ? error.message
-                : "Произошла ошибка при отправке формы",
-          })
-        }
+        dispatch({
+          type: "SUBMIT_ERROR",
+          message:
+            error instanceof Error
+              ? error.message
+              : "Произошла ошибка при отправке формы",
+        })
       }
     },
-    [formData, validateStep, currentStep]
+    [formData, validateStep, validateForm, currentStep]
   )
 
   /**
@@ -459,6 +694,7 @@ export function useFormManagement() {
    */
   const resetForm = useCallback(() => {
     dispatch({ type: "RESET_FORM" })
+    clearFormDraft()
   }, [])
 
   // Прогресс заполнения формы
