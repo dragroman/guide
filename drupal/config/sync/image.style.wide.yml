@@ -1,11 +1,11 @@
 uuid: c6416601-3cb1-4198-8cf4-7b7b6d2a55a0
-langcode: en
+langcode: ru
 status: true
 dependencies: {  }
 _core:
   default_config_hash: XHh3ATMH7z4ljwmzdndM47qNMkgLnoYsP98rGxVgCOw
 name: wide
-label: 'Wide (1090)'
+label: 'Широкий (1090)'
 effects:
   09959c15-59ce-4f6d-90df-e2d7cf32bce5:
     uuid: 09959c15-59ce-4f6d-90df-e2d7cf32bce5

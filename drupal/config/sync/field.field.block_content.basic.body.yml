@@ -1,5 +1,5 @@
 uuid: 96638332-a42b-4855-b9a0-07e08cbe076b
-langcode: en
+langcode: ru
 status: true
 dependencies:
   config:
@@ -13,7 +13,7 @@ id: block_content.basic.body
 field_name: body
 entity_type: block_content
 bundle: basic
-label: Body
+label: Содержимое
 description: ''
 required: false
 translatable: true

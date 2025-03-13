@@ -1,14 +1,18 @@
 uuid: 0d3b4ef0-9fa8-443c-8619-5fbf6b96da2b
-langcode: en
+langcode: ru
 status: true
 dependencies:
   config:
     - filter.format.basic_html
+    - filter.format.webform_default
+    - rest.resource.webform_rest_submit
   module:
     - comment
     - contact
     - file
     - filter
+    - media
+    - rest
     - search
     - shortcut
     - system
@@ -25,6 +29,9 @@ permissions:
   - 'access site-wide contact form'
   - 'delete own files'
   - 'post comments'
+  - 'restful post webform_rest_submit'
   - 'search content'
   - 'skip comment approval'
   - 'use text format basic_html'
+  - 'use text format webform_default'
+  - 'view media'

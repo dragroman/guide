@@ -9,7 +9,7 @@ id: node.spot.field_name_cn
 field_name: field_name_cn
 entity_type: node
 bundle: spot
-label: name_cn
+label: 'Название на китайском'
 description: ''
 required: true
 translatable: false

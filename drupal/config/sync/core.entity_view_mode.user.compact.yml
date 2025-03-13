@@ -1,5 +1,5 @@
 uuid: cd167989-7159-4299-b62b-15c24f95b7f7
-langcode: en
+langcode: ru
 status: true
 dependencies:
   module:
@@ -7,7 +7,7 @@ dependencies:
 _core:
   default_config_hash: TtD7OuGskOsQfoGyxXkrdtllBpR37J19d5BMQDZWJgA
 id: user.compact
-label: Compact
+label: Компактный
 description: ''
 targetEntityType: user
 cache: true

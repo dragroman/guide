@@ -1,5 +1,5 @@
 uuid: 9bbaa775-8374-4b1e-a33f-5d24f131913a
-langcode: en
+langcode: ru
 status: true
 dependencies:
   module:
@@ -20,8 +20,8 @@ provider: null
 plugin: search_form_block
 settings:
   id: search_form_block
-  label: 'Search help'
-  label_display: visible
+  label: 'Помощь по поиску'
+  label_display: видимый
   provider: search
   page_id: help_search
 visibility:

@@ -1,5 +1,5 @@
 uuid: 97a8e1c0-2c71-4a7b-a74f-1da7fbbc0bb2
-langcode: en
+langcode: ru
 status: true
 dependencies:
   module:
@@ -10,7 +10,7 @@ dependencies:
 _core:
   default_config_hash: 6eiNWATGTd3lUEKuxNPNyDRDVMsUlM0HS90_R6JJLUI
 id: pathauto_update_alias_user
-label: 'Update URL alias'
+label: 'Обновить URL-синоним'
 type: user
 plugin: pathauto_update_alias
 configuration: {  }

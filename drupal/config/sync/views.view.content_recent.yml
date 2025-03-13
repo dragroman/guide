@@ -1,5 +1,5 @@
 uuid: cc99d609-cc19-451e-ba3c-190a68344610
-langcode: en
+langcode: ru
 status: true
 dependencies:
   module:
@@ -8,20 +8,20 @@ dependencies:
 _core:
   default_config_hash: YqZN5rc7XDQcFcInc8wkzuaHJmC5YvirhTmDcrarT6M
 id: content_recent
-label: 'Recent content'
+label: 'Последние материалы'
 module: node
-description: 'Recent content.'
+description: 'Последние материалы.'
 tag: default
 base_table: node_field_data
 base_field: nid
 display:
   default:
     id: default
-    display_title: Default
+    display_title: 'По умолчанию'
     display_plugin: default
     position: 0
     display_options:
-      title: 'Recent content'
+      title: 'Последние материалы'
       fields:
         title:
           id: title
@@ -131,13 +131,13 @@ display:
       exposed_form:
         type: basic
         options:
-          submit_button: Apply
+          submit_button: Применить
           reset_button: false
-          reset_button_label: Reset
-          exposed_sorts_label: 'Sort by'
+          reset_button_label: Сбросить
+          exposed_sorts_label: 'Сортировать по'
           expose_sort_order: true
-          sort_asc_label: Asc
-          sort_desc_label: Desc
+          sort_asc_label: 'По возрастанию'
+          sort_desc_label: 'По убыванию'
       access:
         type: perm
         options:
@@ -155,7 +155,7 @@ display:
           admin_label: ''
           plugin_id: text_custom
           empty: true
-          content: 'No content available.'
+          content: 'Нет доступных материалов.'
           tokenize: false
       sorts:
         changed:
@@ -290,7 +290,7 @@ display:
           required: true
       use_more: false
       use_more_always: false
-      use_more_text: More
+      use_more_text: Ещё
       link_display: '0'
       link_url: ''
       header: {  }
@@ -307,7 +307,7 @@ display:
       tags: {  }
   block_1:
     id: block_1
-    display_title: Block
+    display_title: Блок
     display_plugin: block
     position: 1
     display_options:

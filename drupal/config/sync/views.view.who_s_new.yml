@@ -1,5 +1,5 @@
 uuid: 59e6dd38-2a37-45be-9eba-1345854cd544
-langcode: en
+langcode: ru
 status: true
 dependencies:
   module:
@@ -7,20 +7,20 @@ dependencies:
 _core:
   default_config_hash: zji0_13MyVGK7Bn1lUMDeZyyOIZedWvqpYUeM_SioPI
 id: who_s_new
-label: "Who's new"
+label: 'Новые пользователи'
 module: user
-description: 'Shows a list of the newest user accounts on the site.'
+description: 'Показывает список новых учётных записей пользователей на сайте.'
 tag: default
 base_table: users_field_data
 base_field: uid
 display:
   default:
     id: default
-    display_title: Default
+    display_title: 'По умолчанию'
     display_plugin: default
     position: 0
     display_options:
-      title: "Who's new"
+      title: 'Новые пользователи'
       fields:
         name:
           id: name
@@ -64,13 +64,13 @@ display:
       exposed_form:
         type: basic
         options:
-          submit_button: Apply
+          submit_button: Применить
           reset_button: false
-          reset_button_label: Reset
-          exposed_sorts_label: 'Sort by'
+          reset_button_label: Сбросить
+          exposed_sorts_label: 'Сортировать по'
           expose_sort_order: true
-          sort_asc_label: Asc
-          sort_desc_label: Desc
+          sort_asc_label: 'По возрастанию'
+          sort_desc_label: 'По убыванию'
       access:
         type: perm
         options:
@@ -180,14 +180,14 @@ display:
       tags: {  }
   block_1:
     id: block_1
-    display_title: "Who's new"
+    display_title: 'Новые пользователи'
     display_plugin: block
     position: 1
     display_options:
-      display_description: 'A list of new users'
+      display_description: 'Список новых пользователей'
       display_extenders: {  }
-      block_description: "Who's new"
-      block_category: User
+      block_description: 'Новые пользователи'
+      block_category: Пользователь
     cache_metadata:
       max-age: -1
       contexts:

@@ -1,5 +1,5 @@
 uuid: 77d23486-5778-4169-bba5-2b482a753d25
-langcode: en
+langcode: ru
 status: true
 dependencies:
   module:
@@ -7,7 +7,7 @@ dependencies:
 _core:
   default_config_hash: RZ-bcSekNSsAbIPLW7Gmyd3uUjIOSrPvnb8RCCZYJm8
 id: help_search
-label: Help
+label: Справка
 path: help
 weight: 0
 plugin: help_search

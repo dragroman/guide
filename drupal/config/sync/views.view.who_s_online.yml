@@ -1,5 +1,5 @@
 uuid: dd73240e-6566-483c-b4a0-31535a527d67
-langcode: en
+langcode: ru
 status: true
 dependencies:
   module:
@@ -7,20 +7,20 @@ dependencies:
 _core:
   default_config_hash: suDsVMgawXoQt4rfmdfpr05EVX3z3KyfDDTYgeSM898
 id: who_s_online
-label: "Who's online block"
+label: 'Блок «Кто на сайте?»'
 module: user
-description: 'Shows the user names of the most recently active users, and the total number of active users.'
+description: 'Показывает имена пользователей, которые были активными в последнее время, и общее число активных пользователей.'
 tag: default
 base_table: users_field_data
 base_field: uid
 display:
   default:
     id: default
-    display_title: Default
+    display_title: 'По умолчанию'
     display_plugin: default
     position: 0
     display_options:
-      title: "Who's online"
+      title: 'Сейчас на сайте'
       fields:
         name:
           id: name
@@ -64,13 +64,13 @@ display:
       exposed_form:
         type: basic
         options:
-          submit_button: Apply
+          submit_button: Применить
           reset_button: false
-          reset_button_label: Reset
-          exposed_sorts_label: 'Sort by'
+          reset_button_label: Сбросить
+          exposed_sorts_label: 'Сортировать по'
           expose_sort_order: true
-          sort_asc_label: Asc
-          sort_desc_label: Desc
+          sort_asc_label: 'По возрастанию'
+          sort_desc_label: 'По убыванию'
       access:
         type: perm
         options:
@@ -88,7 +88,7 @@ display:
           admin_label: ''
           plugin_id: text_custom
           empty: true
-          content: 'There are currently 0 users online.'
+          content: 'Сейчас 0 пользователей онлайн.'
           tokenize: false
       sorts:
         access:
@@ -142,8 +142,8 @@ display:
           exposed: false
           expose:
             operator_id: access_op
-            label: 'Last access'
-            description: 'A user is considered online for this long after they have last viewed a page.'
+            label: 'Последнее посещение'
+            description: 'Пользователь считается находящимся на сайте в течение этого периода, начиная со времени последнего просмотра им страницы.'
             use_operator: false
             operator: access_op
             operator_limit_selection: false
@@ -198,7 +198,7 @@ display:
           admin_label: ''
           plugin_id: result
           empty: false
-          content: 'There are currently @total users online.'
+          content: 'В данный момент пользователей онлайн: @total.'
       footer: {  }
       display_extenders: {  }
     cache_metadata:
@@ -210,13 +210,13 @@ display:
       tags: {  }
   who_s_online_block:
     id: who_s_online_block
-    display_title: "Who's online"
+    display_title: 'Сейчас на сайте'
     display_plugin: block
     position: 1
     display_options:
-      display_description: 'A list of users that are currently logged in.'
+      display_description: 'Список пользователей, авторизированных в данный момент.'
       display_extenders: {  }
-      block_description: "Who's online"
+      block_description: 'Сейчас на сайте'
     cache_metadata:
       max-age: -1
       contexts:

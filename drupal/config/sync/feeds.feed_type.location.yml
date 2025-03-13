@@ -1,0 +1,102 @@
+uuid: 7853e3ae-a542-43f2-af9b-3b78105ac979
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.taxonomy_term.location.field_country
+    - field.field.taxonomy_term.location.field_title_cn
+    - taxonomy.vocabulary.location
+  module:
+    - taxonomy
+label: Location
+id: location
+description: ''
+help: ''
+import_period: -1
+fetcher: directory
+fetcher_configuration:
+  allowed_extensions: 'txt csv tsv xml opml'
+  allowed_schemes:
+    private: private
+  recursive_scan: false
+parser: csv
+parser_configuration:
+  delimiter: TAB
+  no_headers: false
+  line_limit: 100
+processor: 'entity:taxonomy_term'
+processor_configuration:
+  values:
+    vid: location
+  langcode: ru
+  insert_new: 1
+  update_existing: 2
+  update_non_existent: _keep
+  skip_hash_check: false
+  skip_validation: false
+  skip_validation_types: {  }
+  authorize: false
+  revision: false
+  expire: -1
+  owner_feed_author: false
+  owner_id: 0
+custom_sources:
+  field_country:
+    value: country
+    label: country
+    machine_name: field_country
+    type: csv
+  tid:
+    value: tid
+    label: tid
+    machine_name: tid
+    type: csv
+  title_ru:
+    value: title_ru
+    label: title_ru
+    machine_name: title_ru
+    type: csv
+  title_en:
+    value: title_en
+    label: title_en
+    machine_name: title_en
+    type: csv
+  title_cn:
+    value: title_cn
+    label: title_cn
+    machine_name: title_cn
+    type: csv
+mappings:
+  -
+    target: field_country
+    map:
+      value: field_country
+    settings:
+      language: null
+  -
+    target: tid
+    map:
+      value: tid
+    settings: {  }
+    unique:
+      value: 1
+  -
+    target: name
+    map:
+      value: title_ru
+    settings:
+      language: null
+    unique: {  }
+  -
+    target: machine_name
+    map:
+      value: title_en
+    settings: {  }
+    unique: {  }
+  -
+    target: field_title_cn
+    map:
+      value: title_cn
+    settings:
+      language: null
+    unique: {  }

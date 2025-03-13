@@ -1,0 +1,11 @@
+uuid: 73bd1568-adbb-4ef9-96a8-4c9c6e3a1925
+langcode: en
+status: true
+dependencies:
+  config:
+    - node.type.spot
+id: node.spot
+target_entity_type_id: node
+target_bundle: spot
+default_langcode: site_default
+language_alterable: false

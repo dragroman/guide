@@ -1,10 +1,10 @@
 uuid: a3449ed6-176d-42f2-b532-55ac60c785f8
-langcode: en
+langcode: ru
 status: true
 dependencies: {  }
 _core:
   default_config_hash: f7Fq1Sh24P1luZf4RRdeDs4be4diwuU5P-XkpuxjyLk
 id: access_token
-label: 'Access Token'
+label: 'Ключ доступа'
 description: 'The access token type.'
 locked: true

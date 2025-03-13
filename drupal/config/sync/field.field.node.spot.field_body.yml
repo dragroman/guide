@@ -1,0 +1,35 @@
+uuid: 28a098a0-986d-46f2-a32d-417922ec5a79
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_body
+    - node.type.spot
+  module:
+    - entity_reference_revisions
+id: node.spot.field_body
+field_name: field_body
+entity_type: node
+bundle: spot
+label: Описание
+description: ''
+required: true
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:paragraph'
+  handler_settings:
+    target_bundles: null
+    negate: 0
+    target_bundles_drag_drop:
+      image:
+        weight: -6
+        enabled: false
+      text:
+        weight: -7
+        enabled: false
+      text_image:
+        weight: -5
+        enabled: false
+field_type: entity_reference_revisions

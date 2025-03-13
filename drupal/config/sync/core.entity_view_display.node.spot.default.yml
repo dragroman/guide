@@ -3,22 +3,43 @@ langcode: en
 status: true
 dependencies:
   config:
-    - field.field.node.spot.field_description
+    - field.field.node.spot.field_body
+    - field.field.node.spot.field_category
+    - field.field.node.spot.field_location
     - field.field.node.spot.field_name_cn
     - node.type.spot
   module:
+    - entity_reference_revisions
     - user
 id: node.spot.default
 targetEntityType: node
 bundle: spot
 mode: default
 content:
-  field_description:
-    type: basic_string
+  field_body:
+    type: entity_reference_revisions_entity_view
     label: above
-    settings: {  }
+    settings:
+      view_mode: default
+      link: ''
     third_party_settings: {  }
-    weight: 102
+    weight: 105
+    region: content
+  field_category:
+    type: entity_reference_label
+    label: above
+    settings:
+      link: true
+    third_party_settings: {  }
+    weight: 104
+    region: content
+  field_location:
+    type: entity_reference_label
+    label: above
+    settings:
+      link: true
+    third_party_settings: {  }
+    weight: 103
     region: content
   field_name_cn:
     type: string

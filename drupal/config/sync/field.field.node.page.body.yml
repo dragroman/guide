@@ -1,5 +1,5 @@
 uuid: 579f4105-80bd-45d1-b2d6-8e29ae85bb12
-langcode: en
+langcode: ru
 status: true
 dependencies:
   config:
@@ -13,7 +13,7 @@ id: node.page.body
 field_name: body
 entity_type: node
 bundle: page
-label: Body
+label: Содержимое
 description: ''
 required: false
 translatable: true
