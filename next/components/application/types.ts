@@ -1,4 +1,5 @@
-import { DateRange } from "react-day-picker"
+import { DateRange as RDPDateRange } from "react-day-picker"
+import { ApplicationSchemaType } from "./schemas/applicationSchema"
 
 // Типы для состояния формы
 export type FormState = {
@@ -32,40 +33,6 @@ export type FormAction =
   | { type: "SET_DATES_SELECTED"; selected: boolean }
   | { type: "RESET_FORM" }
 
-// Типы данных формы
-export interface ApplicationSchemaType {
-  name: string
-  phone: string
-  email: string
-  tripPurpose: {
-    excursion: boolean
-    business: boolean
-    shopping: boolean
-    food: boolean
-    fun: boolean
-    other: boolean
-    otherDescription: string
-  }
-  dateRange: DateRange | undefined
-  daysCount: number | null
-  accommodation: {
-    hotel3: boolean
-    hotel4: boolean
-    hotel5: boolean
-    apartment: boolean
-    hostel: boolean
-    other: boolean
-    otherDescription: string
-  }
-  accommodationPreferences: {
-    centralLocation: boolean
-    nearShoppingCenters: boolean
-    poolAndSpa: boolean
-    other: boolean
-    otherDescription: string
-  }
-}
-
 // Типы для компонентов шагов
 export interface StepProps {
   formData: ApplicationSchemaType
@@ -80,7 +47,7 @@ export interface StepProps {
 export interface TripPurposeStepProps extends StepProps {
   handlePurposeChange: (name: string, checked: boolean) => void
   handlePurposeTextChange: (value: string) => void
-  handleDateChange: (dateRange: DateRange) => void
+  handleDateChange: (dateRange: RDPDateRange | undefined) => void
 }
 
 export interface AccommodationStepProps extends StepProps {

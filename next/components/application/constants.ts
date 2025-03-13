@@ -1,4 +1,4 @@
-import { ApplicationSchemaType } from "./types"
+import { ApplicationSchemaType } from "./schemas/applicationSchema"
 
 export const TOTAL_STEPS = 5
 
@@ -23,10 +23,7 @@ export const defaultFormValues: ApplicationSchemaType = {
     other: false,
     otherDescription: "",
   },
-  dateRange: {
-    from: undefined,
-    to: undefined,
-  },
+  dateRange: undefined,
   daysCount: null,
   accommodation: {
     hotel3: false,

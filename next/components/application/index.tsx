@@ -10,7 +10,7 @@ import {
 } from "@/components/ui/card"
 import { Alert, AlertTitle, AlertDescription } from "@/components/ui/alert"
 import { STEPS, TOTAL_STEPS } from "./constants"
-import { useFormManagement } from "./hooks/useFormManagement"
+import { useFormManagement } from "./hooks"
 
 // Компоненты шагов
 import { StepPersonalInfo } from "./steps/Step1"

@@ -3,7 +3,7 @@
 import * as React from "react"
 import { format } from "date-fns"
 import { ru } from "date-fns/locale"
-import { Calendar as CalendarIcon } from "lucide-react"
+import { CalendarIcon } from "lucide-react"
 import { DateRange } from "react-day-picker"
 
 import { cn } from "@/lib/utils"
@@ -15,9 +15,15 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover"
 
+// Определяем тип для диапазона дат, используемый библиотекой react-day-picker
+interface ZodDateRange {
+  from?: Date | null | undefined
+  to?: Date | null | undefined
+}
+
 interface DatePickerWithRangeProps {
-  value: DateRange | undefined
-  onDateChange: (date: DateRange | undefined) => void // Убедитесь, что типы совпадают
+  value: ZodDateRange | undefined
+  onDateChange: (date: DateRange | undefined) => void
   className?: string
 }
 
@@ -26,6 +32,15 @@ export function DatePickerWithRange({
   onDateChange,
   className,
 }: DatePickerWithRangeProps) {
+  // Преобразуем наш тип даты в тип DateRange для компонента календаря
+  const selectedRange: DateRange | undefined =
+    value && value.from
+      ? {
+          from: value.from,
+          to: value.to || undefined,
+        }
+      : undefined
+
   return (
     <div className={cn("grid gap-2", className)}>
       <Popover>
@@ -57,9 +72,9 @@ export function DatePickerWithRange({
           <Calendar
             initialFocus
             mode="range"
-            defaultMonth={value?.from}
-            selected={value}
-            onSelect={(newDate) => onDateChange(newDate)} // Явно передаем аргумент
+            defaultMonth={value?.from || undefined}
+            selected={selectedRange}
+            onSelect={onDateChange} // Передаем выбранные даты обратно
             numberOfMonths={2}
             locale={ru}
           />
