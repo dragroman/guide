@@ -1,0 +1,19 @@
+uuid: 8e0dc861-4d12-4b25-92c3-6c299930954b
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_name_cn
+    - node.type.spot
+id: node.spot.field_name_cn
+field_name: field_name_cn
+entity_type: node
+bundle: spot
+label: name_cn
+description: ''
+required: true
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string

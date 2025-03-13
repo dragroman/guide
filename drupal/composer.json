@@ -1,0 +1,118 @@
+{
+    "name": "drupal/recommended-project",
+    "description": "Project template for Drupal projects with a relocated document root",
+    "type": "project",
+    "license": "GPL-2.0-or-later",
+    "homepage": "https://www.drupal.org/project/drupal",
+    "support": {
+        "docs": "https://www.drupal.org/docs/user_guide/en/index.html",
+        "chat": "https://www.drupal.org/node/314178"
+    },
+    "repositories": [
+        {
+            "type": "composer",
+            "url": "https://packages.drupal.org/8"
+        }
+    ],
+    "require": {
+        "composer/installers": "^2.3",
+        "cweagans/composer-patches": "^1.7",
+        "drupal/coffee": "^2.0",
+        "drupal/core-composer-scaffold": "^11.1",
+        "drupal/core-project-message": "^11.1",
+        "drupal/core-recommended": "^11.1",
+        "drupal/feeds": "^3.0",
+        "drupal/feeds_tamper": "^2.0@beta",
+        "drupal/next": "^2.0",
+        "drupal/paragraphs": "^1.19",
+        "drupal/restui": "^1.22",
+        "drupal/s3fs": "^3.7",
+        "drupal/svg_image": "^3.2",
+        "drupal/taxonomy_machine_name": "^2.0",
+        "drupal/webform": "^6.3@beta",
+        "drupal/webform_rest": "^4.2",
+        "drush/drush": "^13.3"
+    },
+    "conflict": {
+        "drupal/drupal": "*"
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true,
+    "config": {
+        "allow-plugins": {
+            "composer/installers": true,
+            "cweagans/composer-patches": true,
+            "dealerdirect/phpcodesniffer-composer-installer": true,
+            "drupal/core-composer-scaffold": true,
+            "drupal/core-project-message": true,
+            "php-http/discovery": true,
+            "phpstan/extension-installer": true
+        },
+        "sort-packages": true
+    },
+    "extra": {
+        "patches": {
+            "drupal/decoupled_router": {
+                "Unable to resolve path on node in other language than default": "https://www.drupal.org/files/issues/2024-08-05/decouple_router-3111456-resolve-language-issue-63--get-translation-re-rolled-and-good-redirect.patch"
+            }
+        },
+        "drupal-scaffold": {
+            "locations": {
+                "web-root": "public_html/"
+            }
+        },
+        "installer-paths": {
+            "public_html/core": [
+                "type:drupal-core"
+            ],
+            "public_html/libraries/{$name}": [
+                "type:drupal-library"
+            ],
+            "public_html/modules/contrib/{$name}": [
+                "type:drupal-module"
+            ],
+            "public_html/profiles/contrib/{$name}": [
+                "type:drupal-profile"
+            ],
+            "public_html/themes/contrib/{$name}": [
+                "type:drupal-theme"
+            ],
+            "drush/Commands/contrib/{$name}": [
+                "type:drupal-drush"
+            ],
+            "public_html/modules/custom/{$name}": [
+                "type:drupal-custom-module"
+            ],
+            "public_html/profiles/custom/{$name}": [
+                "type:drupal-custom-profile"
+            ],
+            "public_html/themes/custom/{$name}": [
+                "type:drupal-custom-theme"
+            ],
+            "recipes/{$name}": [
+                "type:drupal-recipe"
+            ]
+        },
+        "drupal-core-project-message": {
+            "include-keys": [
+                "homepage",
+                "support"
+            ],
+            "post-create-project-cmd-message": [
+                "<bg=blue;fg=white>                                                         </>",
+                "<bg=blue;fg=white>  Congratulations, you’ve installed the Drupal codebase  </>",
+                "<bg=blue;fg=white>  from the drupal/recommended-project template!          </>",
+                "<bg=blue;fg=white>                                                         </>",
+                "",
+                "<bg=yellow;fg=black>Next steps</>:",
+                "  * Install the site: https://www.drupal.org/docs/installing-drupal",
+                "  * Read the user guide: https://www.drupal.org/docs/user_guide/en/index.html",
+                "  * Get support: https://www.drupal.org/support",
+                "  * Get involved with the Drupal community:",
+                "      https://www.drupal.org/getting-involved",
+                "  * Remove the plugin that prints this message:",
+                "      composer remove drupal/core-project-message"
+            ]
+        }
+    }
+}

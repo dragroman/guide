@@ -1,0 +1,22 @@
+uuid: e7e2321e-e48a-467f-8080-ed7ecdb78fd4
+langcode: en
+status: true
+dependencies:
+  module:
+    - node
+id: spot
+label: Spot
+type: 'canonical_entities:node'
+pattern: '/spot/[node:title]'
+selection_criteria:
+  9117d6a4-f75d-4cc7-a8a5-b37ae23797be:
+    id: 'entity_bundle:node'
+    negate: false
+    uuid: 9117d6a4-f75d-4cc7-a8a5-b37ae23797be
+    context_mapping:
+      node: node
+    bundles:
+      spot: spot
+selection_logic: and
+weight: -5
+relationships: {  }

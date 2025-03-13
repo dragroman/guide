@@ -1,0 +1,37 @@
+uuid: e227914e-b809-4df4-97a5-5c19eda328a5
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.node.spot.field_description
+    - field.field.node.spot.field_name_cn
+    - node.type.spot
+  module:
+    - user
+id: node.spot.default
+targetEntityType: node
+bundle: spot
+mode: default
+content:
+  field_description:
+    type: basic_string
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    weight: 102
+    region: content
+  field_name_cn:
+    type: string
+    label: above
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    weight: 101
+    region: content
+  links:
+    settings: {  }
+    third_party_settings: {  }
+    weight: 100
+    region: content
+hidden:
+  langcode: true
