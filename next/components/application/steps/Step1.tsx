@@ -1,20 +1,23 @@
 import React from "react"
-import { StepProps } from "../types"
+import { Controller } from "react-hook-form"
 import { FormField } from "../components/FormField"
+import { StepProps } from "../types"
 
-export function StepPersonalInfo({
-  formData,
-  errors,
-  handleChange,
-}: StepProps) {
+export function StepPersonalInfo({ control, errors }: StepProps) {
   return (
-    <FormField
-      label="Имя *"
+    <Controller
       name="name"
-      value={formData.name}
-      onChange={handleChange}
-      placeholder="Ваше имя"
-      error={errors.name}
+      control={control}
+      render={({ field }) => (
+        <FormField
+          label="Имя *"
+          name="name"
+          value={field.value}
+          onChange={field.onChange}
+          placeholder="Ваше имя"
+          error={errors.name?.message as string}
+        />
+      )}
     />
   )
 }

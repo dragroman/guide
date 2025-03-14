@@ -1,4 +1,5 @@
-import { DateRange as RDPDateRange } from "react-day-picker"
+import { Control, FieldErrors } from "react-hook-form"
+import { DateRange, DateRange as RDPDateRange } from "react-day-picker"
 import { ApplicationSchemaType } from "./schemas/applicationSchema"
 
 // Типы для состояния формы
@@ -8,7 +9,6 @@ export type FormState = {
   isSuccess: boolean
   isError: boolean
   errorMessage: string
-  hasDraft: boolean
   errors: Record<string, string>
   currentStep: number
   datesSelected: boolean
@@ -27,20 +27,31 @@ export type FormAction =
   | { type: "SUBMIT_START" }
   | { type: "SUBMIT_SUCCESS" }
   | { type: "SUBMIT_ERROR"; message: string; errors?: Record<string, string> }
-  | { type: "DRAFT_FOUND" }
-  | { type: "LOAD_DRAFT"; formData: ApplicationSchemaType }
-  | { type: "IGNORE_DRAFT" }
   | { type: "SET_DATES_SELECTED"; selected: boolean }
   | { type: "RESET_FORM" }
 
 // Типы для компонентов шагов
 export interface StepProps {
+  // React Hook Form props
+  control: Control<ApplicationSchemaType>
+  errors: FieldErrors<ApplicationSchemaType>
   formData: ApplicationSchemaType
-  errors: Record<string, string>
-  handleChange: (
+  setValue: (name: any, value: any) => void
+
+  // Обработчики для старых компонентов (для обратной совместимости)
+  handleChange?: (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => void
-  updateFormData: (fieldName: string, value: any) => void
+  updateFormData?: (fieldName: string, value: any) => void
+
+  // Специфичные обработчики
+  handleDateChange?: (dateRange: DateRange | undefined) => void
+  handlePurposeChange?: (name: string, checked: boolean) => void
+  handlePurposeTextChange?: (value: string) => void
+  handleAccommodationChange?: (name: string, checked: boolean) => void
+  handleAccommodationTextChange?: (value: string) => void
+  handlePreferenceChange?: (name: string, checked: boolean) => void
+  handlePreferenceTextChange?: (value: string) => void
 }
 
 // Дополнительные пропсы для специфичных шагов

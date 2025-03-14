@@ -6,8 +6,7 @@ interface FormNavigationProps {
   currentStep: number
   totalSteps: number
   onPrev: () => void
-  onNext: () => void
-  onSubmit: (e: React.FormEvent) => void
+  onNext: (e: React.FormEvent) => void
   isSubmitting: boolean
 }
 
@@ -16,14 +15,13 @@ export function FormNavigation({
   totalSteps,
   onPrev,
   onNext,
-  onSubmit,
   isSubmitting,
 }: FormNavigationProps) {
   return (
     <div className="flex justify-between mt-8">
       {currentStep > 0 && (
         <Button
-          type="button"
+          type="button" // Это кнопка типа button, чтобы она не отправляла форму
           variant="outline"
           onClick={onPrev}
           disabled={isSubmitting}
@@ -34,8 +32,8 @@ export function FormNavigation({
 
       {currentStep < totalSteps - 1 ? (
         <Button
-          type="button"
-          onClick={onNext}
+          type="submit" // Используем тип submit, чтобы сработал обработчик формы
+          onClick={(e) => onNext(e)}
           className={currentStep === 0 ? "w-full" : "ml-auto"}
           disabled={isSubmitting}
         >
@@ -43,8 +41,8 @@ export function FormNavigation({
         </Button>
       ) : (
         <Button
-          type="button"
-          onClick={onSubmit}
+          type="submit" // Для последнего шага тоже используем тип submit
+          onClick={(e) => onNext(e)}
           className="ml-auto"
           disabled={isSubmitting}
         >

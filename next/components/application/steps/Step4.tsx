@@ -1,17 +1,23 @@
 import React from "react"
 import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
-import { AccommodationStepProps } from "../types"
 import { CheckboxField } from "../components/CheckboxField"
+import { StepProps } from "../types"
+import { Controller } from "react-hook-form"
 
 export function StepAccommodation({
-  formData,
+  control,
   errors,
+  formData,
   handleAccommodationChange,
-  handleAccommodationTextChange,
   handlePreferenceChange,
-  handlePreferenceTextChange,
-}: AccommodationStepProps) {
+}: StepProps) {
+  // Проверяем, что необходимые пропсы присутствуют
+  if (!handleAccommodationChange || !handlePreferenceChange) {
+    console.error("Missing required props in StepAccommodation")
+    return <div>Error: Missing required handlers</div>
+  }
+
   return (
     <div className="space-y-6">
       <div>
@@ -62,26 +68,34 @@ export function StepAccommodation({
             <Label htmlFor="accommodationOtherDescription">
               Укажите предпочтения
             </Label>
-            <Textarea
-              id="accommodationOtherDescription"
-              name="otherDescription"
-              value={formData.accommodation.otherDescription}
-              onChange={(e) => handleAccommodationTextChange(e.target.value)}
-              placeholder="Опишите предпочитаемый тип размещения"
+            <Controller
+              name="accommodation.otherDescription"
+              control={control}
+              render={({ field }) => (
+                <Textarea
+                  id="accommodationOtherDescription"
+                  placeholder="Опишите предпочитаемый тип размещения"
+                  {...field}
+                  value={field.value || ""}
+                />
+              )}
             />
-            {errors["accommodation.otherDescription"] && (
+            {errors.accommodation?.otherDescription && (
               <p className="text-sm font-medium text-destructive">
-                {errors["accommodation.otherDescription"]}
+                {errors.accommodation.otherDescription.message as string}
               </p>
             )}
           </div>
         )}
 
-        {errors.accommodation && (
-          <p className="text-sm font-medium text-destructive mt-2">
-            {errors.accommodation}
-          </p>
-        )}
+        {errors.accommodation &&
+          !(errors.accommodation as any).otherDescription && (
+            <p className="text-sm font-medium text-destructive mt-2">
+              {typeof errors.accommodation === "string"
+                ? errors.accommodation
+                : (errors.accommodation.message as string)}
+            </p>
+          )}
       </div>
 
       <div>
@@ -109,7 +123,9 @@ export function StepAccommodation({
 
         {errors.accommodationPreferences && (
           <p className="text-sm font-medium text-destructive mt-2">
-            {errors.accommodationPreferences}
+            {typeof errors.accommodationPreferences === "string"
+              ? errors.accommodationPreferences
+              : (errors.accommodationPreferences.message as string)}
           </p>
         )}
       </div>

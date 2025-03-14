@@ -10,7 +10,7 @@ import {
 } from "@/components/ui/card"
 import { Alert, AlertTitle, AlertDescription } from "@/components/ui/alert"
 import { STEPS, TOTAL_STEPS } from "./constants"
-import { useFormManagement } from "./hooks"
+import { useApplicationForm } from "./hooks/useApplicationForm"
 
 // Компоненты шагов
 import { StepPersonalInfo } from "./steps/Step1"
@@ -21,25 +21,28 @@ import { StepConfirmation } from "./steps/stepFinal"
 
 // Вспомогательные компоненты
 import { SuccessView } from "./components/SuccessView"
-import { DraftNotice } from "./components/DraftNotice"
 import { ProgressIndicator } from "./components/ProgressIndicator"
 import { StepIndicator } from "./components/StepIndicator"
 import { FormNavigation } from "./components/FormNavigation"
+import { StepProps } from "./types"
 
 export default function MultistepForm() {
   const {
-    state,
+    // Состояние формы
     formData,
     currentStep,
-    errors,
     isSubmitting,
     isSuccess,
     isError,
     errorMessage,
-    hasDraft,
     progress,
-    updateFormData,
-    handleChange,
+    errors,
+
+    // React Hook Form
+    control,
+    setValue,
+
+    // Обработчики
     handleDateChange,
     handlePurposeChange,
     handlePurposeTextChange,
@@ -47,14 +50,18 @@ export default function MultistepForm() {
     handleAccommodationTextChange,
     handlePreferenceChange,
     handlePreferenceTextChange,
+
+    // Навигация
     nextStep,
     prevStep,
     goToStep,
-    handleSubmit,
+
+    // Управление формой
+    handleFormAction,
+
+    // Черновики
     resetForm,
-    loadSavedDraft,
-    ignoreDraft,
-  } = useFormManagement()
+  } = useApplicationForm()
 
   // Если форма успешно отправлена, показываем экран успеха
   if (isSuccess) {
@@ -63,61 +70,32 @@ export default function MultistepForm() {
 
   // Функция для рендеринга текущего шага
   const renderCurrentStep = () => {
+    // Общие пропсы для всех шагов
+    const stepProps: StepProps = {
+      formData,
+      errors,
+      control,
+      setValue,
+      handleDateChange,
+      handlePurposeChange,
+      handlePurposeTextChange,
+      handleAccommodationChange,
+      handleAccommodationTextChange,
+      handlePreferenceChange,
+      handlePreferenceTextChange,
+    }
+
     switch (currentStep) {
       case 0:
-        return (
-          <StepPersonalInfo
-            formData={formData}
-            errors={errors}
-            handleChange={handleChange}
-            updateFormData={updateFormData}
-          />
-        )
+        return <StepPersonalInfo {...stepProps} />
       case 1:
-        return (
-          <StepContactInfo
-            formData={formData}
-            errors={errors}
-            handleChange={handleChange}
-            updateFormData={updateFormData}
-          />
-        )
+        return <StepContactInfo {...stepProps} />
       case 2:
-        return (
-          <div>
-            <StepTripPurpose
-              formData={formData}
-              errors={errors}
-              handleChange={handleChange}
-              updateFormData={updateFormData}
-              handlePurposeChange={handlePurposeChange}
-              handlePurposeTextChange={handlePurposeTextChange}
-              handleDateChange={handleDateChange}
-            />
-          </div>
-        )
+        return <StepTripPurpose {...stepProps} />
       case 3:
-        return (
-          <StepAccommodation
-            formData={formData}
-            errors={errors}
-            handleChange={handleChange}
-            updateFormData={updateFormData}
-            handleAccommodationChange={handleAccommodationChange}
-            handleAccommodationTextChange={handleAccommodationTextChange}
-            handlePreferenceChange={handlePreferenceChange}
-            handlePreferenceTextChange={handlePreferenceTextChange}
-          />
-        )
+        return <StepAccommodation {...stepProps} />
       case 4:
-        return (
-          <StepConfirmation
-            formData={formData}
-            errors={errors}
-            handleChange={handleChange}
-            updateFormData={updateFormData}
-          />
-        )
+        return <StepConfirmation {...stepProps} />
       default:
         return null
     }
@@ -145,32 +123,28 @@ export default function MultistepForm() {
             </Alert>
           )}
 
-          {/* Содержимое текущего шага */}
-          {renderCurrentStep()}
+          {/* Форма с текущим шагом */}
+          <form onSubmit={handleFormAction}>
+            {renderCurrentStep()}
 
-          {/* Кнопки навигации */}
-          <FormNavigation
-            currentStep={currentStep}
-            totalSteps={TOTAL_STEPS}
-            onPrev={prevStep}
-            onNext={nextStep}
-            onSubmit={handleSubmit}
-            isSubmitting={isSubmitting}
-          />
+            {/* Кнопки навигации */}
+            <FormNavigation
+              currentStep={currentStep}
+              totalSteps={TOTAL_STEPS}
+              onPrev={prevStep}
+              onNext={handleFormAction}
+              isSubmitting={isSubmitting}
+            />
+          </form>
         </CardContent>
       </Card>
+
       {/* Навигация по шагам */}
       <StepIndicator
         steps={STEPS}
         currentStep={currentStep}
         goToStep={goToStep}
       />
-      {/* Предупреждение о наличии черновика */}
-      {hasDraft && (
-        <div className="max-w-md mx-auto">
-          <DraftNotice onLoad={loadSavedDraft} onIgnore={ignoreDraft} />
-        </div>
-      )}
     </>
   )
 }

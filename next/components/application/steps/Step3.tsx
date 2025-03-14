@@ -1,30 +1,42 @@
 import React from "react"
+import { Controller } from "react-hook-form"
 import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
-import { TripDatesStepProps, TripPurposeStepProps } from "../types"
-import { PurposeCheckbox } from "../components/PurposeCheckbox"
-import { DatePickerWithRange } from "../components/DatePickerWithRange"
 import { Badge } from "@/components/ui/badge"
+import { DatePickerWithRange } from "../components/DatePickerWithRange"
+import { PurposeCheckbox } from "../components/PurposeCheckbox"
+import { StepProps } from "../types"
 import { getDaysText } from "../utils"
 
 export function StepTripPurpose({
-  formData,
+  control,
   errors,
-  handlePurposeChange,
-  handlePurposeTextChange,
+  formData,
+  setValue,
   handleDateChange,
-}: TripPurposeStepProps & TripDatesStepProps) {
+  handlePurposeChange,
+}: StepProps) {
+  // Проверяем, что необходимые пропсы присутствуют
+  if (!handleDateChange || !handlePurposeChange) {
+    console.error("Missing required props in StepTripPurpose")
+    return <div>Error: Missing required handlers</div>
+  }
+
   return (
     <div className="space-y-6">
       <div className="space-y-4">
         <div className="space-y-2">
           <Label htmlFor="dateRange">Предполагаемые даты поездки *</Label>
-          <DatePickerWithRange
-            value={formData.dateRange}
-            onDateChange={(date) =>
-              date !== undefined && handleDateChange(date)
-            }
-            className="w-full"
+          <Controller
+            name="dateRange"
+            control={control}
+            render={({ field }) => (
+              <DatePickerWithRange
+                value={field.value}
+                onDateChange={handleDateChange}
+                className="w-full"
+              />
+            )}
           />
           {formData.daysCount && (
             <div className="mt-2 text-sm">
@@ -34,23 +46,18 @@ export function StepTripPurpose({
               </Badge>
             </div>
           )}
-          {errors["dateRange.from"] && (
-            <p className="text-sm font-medium text-destructive">
-              {errors["dateRange.from"]}
-            </p>
-          )}
-          {errors["dateRange.to"] && (
-            <p className="text-sm font-medium text-destructive">
-              {errors["dateRange.to"]}
-            </p>
-          )}
           {errors.dateRange && (
             <p className="text-sm font-medium text-destructive">
-              {errors.dateRange}
+              {typeof errors.dateRange === "string"
+                ? errors.dateRange
+                : (errors.dateRange.message as string) ||
+                  (errors.dateRange as any)?.from?.message ||
+                  (errors.dateRange as any)?.to?.message}
             </p>
           )}
         </div>
       </div>
+
       <div>
         <h3 className="mb-4 text-sm font-medium">Выберите цель поездки</h3>
         <div className="space-y-3">
@@ -96,24 +103,30 @@ export function StepTripPurpose({
       {formData.tripPurpose.other && (
         <div className="space-y-2">
           <Label htmlFor="otherDescription">Опишите вашу цель</Label>
-          <Textarea
-            id="otherDescription"
-            name="otherDescription"
-            value={formData.tripPurpose.otherDescription}
-            onChange={(e) => handlePurposeTextChange(e.target.value)}
-            placeholder="Опишите вашу цель поездки"
+          <Controller
+            name="tripPurpose.otherDescription"
+            control={control}
+            render={({ field }) => (
+              <Textarea
+                id="otherDescription"
+                placeholder="Опишите вашу цель поездки"
+                {...field}
+              />
+            )}
           />
-          {errors["tripPurpose.otherDescription"] && (
+          {errors.tripPurpose?.otherDescription && (
             <p className="text-sm font-medium text-destructive">
-              {errors["tripPurpose.otherDescription"]}
+              {errors.tripPurpose.otherDescription.message as string}
             </p>
           )}
         </div>
       )}
 
-      {errors.tripPurpose && (
+      {errors.tripPurpose && !(errors.tripPurpose as any).otherDescription && (
         <p className="text-sm font-medium text-destructive">
-          {errors.tripPurpose}
+          {typeof errors.tripPurpose === "string"
+            ? errors.tripPurpose
+            : (errors.tripPurpose.message as string)}
         </p>
       )}
     </div>

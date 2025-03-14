@@ -1,4 +1,3 @@
-import { DraftAlert } from "@/components/misc/DraftAlert"
 import { HeaderNav } from "@/components/navigation/HeaderNav"
 import type { Metadata } from "next"
 import type { ReactNode } from "react"
@@ -26,7 +25,6 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body>
-        <DraftAlert />
         <div className="max-w-screen-md px-6 mx-auto">
           <HeaderNav />
           <main className="container py-10 mx-auto">{children}</main>
