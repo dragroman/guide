@@ -87,7 +87,7 @@ function formReducer(state: FormState, action: FormAction): FormState {
 
 // Определяем поля для валидации на каждом шаге
 const stepValidationFields = [
-  ["name"], // Шаг 0 - личная информация
+  ["name", "peopleCount"], // Шаг 0 - личная информация
   ["phone", "email"], // Шаг 1 - контактная информация
   ["dateRange", "tripPurpose"], // Шаг 2 - даты и цель поездки
   ["accommodation", "accommodationPreferences"], // Шаг 3 - размещение
@@ -435,11 +435,12 @@ export function useApplicationForm() {
           },
           body: JSON.stringify({
             name: data.name,
+            peopleCount: data.peopleCount,
             phone: data.phone,
             date_from: formattedDates.from,
             date_to: formattedDates.to,
             email: data.email,
-            days_count: data.daysCount,
+            daysCount: data.daysCount,
             tripPurpose: data.tripPurpose,
             accommodation: data.accommodation,
             accommodationPreferences: data.accommodationPreferences,

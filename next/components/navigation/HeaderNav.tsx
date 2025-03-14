@@ -15,7 +15,7 @@ export function HeaderNav() {
     <header>
       <div className="container flex items-center justify-between py-6 mx-auto">
         <Link href="/" className="text-2xl font-semibold no-underline">
-          Harbin Guide
+          Haohub Guide
         </Link>
         <NavigationMenu>
           <NavigationMenuList>

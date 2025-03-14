@@ -141,6 +141,10 @@ export const applicationSchema = z.object({
     ),
 
   email: z.string().email("Email обязателен для заполнения"),
+  peopleCount: z
+    .number()
+    .min(1, "Количество участников должно быть больше 0")
+    .max(10, "Количество участников не должно превышать 10"),
   daysCount: z.number().optional().nullable(), // Добавляем .nullable()
 
   dateRange: dateRangeSchema,
@@ -218,6 +222,7 @@ export type ApplicationSchemaType = z.infer<typeof applicationSchema>
 // Начальные значения для формы
 export const defaultFormValues: ApplicationSchemaType = {
   name: "",
+  peopleCount: 1,
   phone: "",
   dateRange: {
     from: addDays(new Date(), 7),

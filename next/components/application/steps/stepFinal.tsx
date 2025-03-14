@@ -62,6 +62,10 @@ export function StepConfirmation({ formData }: StepProps) {
           <span className="font-medium">{formData.name}</span>
         </div>
         <div className="flex justify-between">
+          <span className="text-muted-foreground">Количество участников:</span>
+          <span className="font-medium">{formData.peopleCount}</span>
+        </div>
+        <div className="flex justify-between">
           <span className="text-muted-foreground">Телефон:</span>
           <span className="font-medium">{formData.phone}</span>
         </div>

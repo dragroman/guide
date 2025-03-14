@@ -3,7 +3,7 @@ import { ApplicationSchemaType } from "./schemas/applicationSchema"
 export const TOTAL_STEPS = 5
 
 export const STEPS = [
-  { title: "Личная информация", description: "Как к вам обращаться" },
+  { title: "Знакомство", description: "Как к вам обращаться" },
   { title: "Контактные данные", description: "Как с вами связаться" },
   { title: "Дата и цель поездки", description: "Даты и цели" },
   { title: "Размещение", description: "Где вы хотите остановиться" },
@@ -12,6 +12,7 @@ export const STEPS = [
 
 export const defaultFormValues: ApplicationSchemaType = {
   name: "",
+  peopleCount: 1,
   phone: "",
   email: "",
   tripPurpose: {

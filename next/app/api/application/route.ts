@@ -14,6 +14,8 @@ export async function POST(request: NextRequest) {
       )
     }
 
+    console.log(body)
+
     const tripPurpose = body.tripPurpose || {}
     const accommodation = body.accommodation || {}
     const accommodationPreferences = body.accommodationPreferences || {}
@@ -33,6 +35,7 @@ export async function POST(request: NextRequest) {
         tripPurpose: body.tripPurpose,
         accommodation: body.accommodation,
         accommodationPreferences: body.accommodationPreferences,
+        peopleCount: body.peopleCount,
       })
     } catch (error) {
       if (error instanceof Error) {
@@ -74,6 +77,7 @@ export async function POST(request: NextRequest) {
             ? accommodation.otherDescription
             : "",
           accommodation_preferences: accommodationPreferencesArray,
+          people_count: body.peopleCount,
         }),
       }
     )

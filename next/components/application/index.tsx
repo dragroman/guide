@@ -1,13 +1,6 @@
 "use client"
 
 import React from "react"
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-  CardDescription,
-} from "@/components/ui/card"
 import { Alert, AlertTitle, AlertDescription } from "@/components/ui/alert"
 import { STEPS, TOTAL_STEPS } from "./constants"
 import { useApplicationForm } from "./hooks/useApplicationForm"
@@ -110,53 +103,44 @@ export default function MultistepForm() {
 
   return (
     <>
-      {/* Индикатор прогресса */}
-      <ProgressIndicator
-        currentStep={currentStep}
-        totalSteps={TOTAL_STEPS}
-        progress={progress}
-      />
-      <Card className="w-full max-w-md mx-auto mb-10">
-        <CardHeader>
-          <CardTitle>{STEPS[currentStep].title}</CardTitle>
-          <CardDescription>{STEPS[currentStep].description}</CardDescription>
-        </CardHeader>
-
-        <CardContent>
-          {/* Уведомление о черновике только на первом шаге */}
-          {currentStep === 0 && showDraftNotice && hasDraft && (
-            <DraftNotice onLoad={restoreDraft} onIgnore={ignoreDraft} />
-          )}
-
-          {isError && (
-            <Alert variant="destructive" className="mb-6">
-              <AlertTitle>Ошибка</AlertTitle>
-              <AlertDescription>{errorMessage}</AlertDescription>
-            </Alert>
-          )}
-
-          {/* Форма с текущим шагом */}
-          <form onSubmit={handleFormAction}>
-            {renderCurrentStep()}
-
-            {/* Кнопки навигации */}
-            <FormNavigation
-              currentStep={currentStep}
-              totalSteps={TOTAL_STEPS}
-              onPrev={prevStep}
-              onNext={handleFormAction}
-              isSubmitting={isSubmitting}
-            />
-          </form>
-        </CardContent>
-      </Card>
-
       {/* Навигация по шагам */}
       <StepIndicator
         steps={STEPS}
         currentStep={currentStep}
         goToStep={goToStep}
       />
+      {/* Индикатор прогресса */}
+      <ProgressIndicator
+        currentStep={currentStep}
+        totalSteps={TOTAL_STEPS}
+        progress={progress}
+      />
+      <div className="w-full mx-auto mb-10">
+        {isError && (
+          <Alert variant="destructive" className="mb-6">
+            <AlertTitle>Ошибка</AlertTitle>
+            <AlertDescription>{errorMessage}</AlertDescription>
+          </Alert>
+        )}
+
+        {/* Форма с текущим шагом */}
+        <form onSubmit={handleFormAction}>
+          {renderCurrentStep()}
+
+          {/* Кнопки навигации */}
+          <FormNavigation
+            currentStep={currentStep}
+            totalSteps={TOTAL_STEPS}
+            onPrev={prevStep}
+            onNext={handleFormAction}
+            isSubmitting={isSubmitting}
+          />
+        </form>
+      </div>
+      {/* Уведомление о черновике только на первом шаге */}
+      {currentStep === 0 && showDraftNotice && hasDraft && (
+        <DraftNotice onLoad={restoreDraft} onIgnore={ignoreDraft} />
+      )}
     </>
   )
 }
