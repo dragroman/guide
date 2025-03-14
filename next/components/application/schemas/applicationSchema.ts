@@ -85,6 +85,46 @@ const dateRangeSchema = z
     }
   })
 
+// Схема для валидации типа размещения
+const accommodationSchema = z
+  .object({
+    hotel3: z.boolean(),
+    hotel4: z.boolean(),
+    hotel5: z.boolean(),
+    apartment: z.boolean(),
+    hostel: z.boolean(),
+    other: z.boolean(),
+    otherDescription: z.string().optional(),
+  })
+  .refine(
+    (data) => {
+      // Проверка, что выбран хотя бы один тип размещения
+      return Object.entries(data)
+        .filter(([key]) => key !== "otherDescription")
+        .some(([_, value]) => value === true)
+    },
+    {
+      message: "Выберите хотя бы один тип размещения",
+      path: ["accommodation"],
+    }
+  )
+  .refine(
+    (data) => {
+      // Если выбрано "Другое", проверяем наличие описания
+      if (
+        data.other &&
+        (!data.otherDescription || data.otherDescription.trim() === "")
+      ) {
+        return false
+      }
+      return true
+    },
+    {
+      message: "Укажите описание для пункта 'Другое'",
+      path: ["otherDescription"],
+    }
+  )
+
 // Основная схема для формы заявки
 export const applicationSchema = z.object({
   name: z
@@ -105,22 +145,32 @@ export const applicationSchema = z.object({
 
   dateRange: dateRangeSchema,
 
-  accommodation: z.object({
-    hotel3: z.boolean(),
-    hotel4: z.boolean(),
-    hotel5: z.boolean(),
-    apartment: z.boolean(),
-    hostel: z.boolean(),
-    other: z.boolean(),
-    otherDescription: z.string().optional(),
-  }),
-  accommodationPreferences: z.object({
-    centralLocation: z.boolean(),
-    nearShoppingCenters: z.boolean(),
-    poolAndSpa: z.boolean(),
-    other: z.boolean(),
-    otherDescription: z.string().optional(),
-  }),
+  accommodation: accommodationSchema,
+
+  accommodationPreferences: z
+    .object({
+      centralLocation: z.boolean(),
+      nearShoppingCenters: z.boolean(),
+      poolAndSpa: z.boolean(),
+      other: z.boolean(),
+      otherDescription: z.string().optional(),
+    })
+    .refine(
+      (data) => {
+        // Если выбрано "Другое", проверяем наличие описания
+        if (
+          data.other &&
+          (!data.otherDescription || data.otherDescription.trim() === "")
+        ) {
+          return false
+        }
+        return true
+      },
+      {
+        message: "Укажите описание для пункта 'Другое'",
+        path: ["otherDescription"],
+      }
+    ),
 
   tripPurpose: z
     .object({
@@ -198,5 +248,6 @@ export const defaultFormValues: ApplicationSchemaType = {
     nearShoppingCenters: false,
     poolAndSpa: false,
     other: false,
+    otherDescription: "",
   },
 }

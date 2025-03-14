@@ -1,5 +1,4 @@
-// hooks/useApplicationForm.ts
-import { useReducer, useCallback, useEffect, useRef } from "react"
+import { useReducer, useCallback, useEffect } from "react"
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { DateRange } from "react-day-picker"
@@ -9,6 +8,7 @@ import {
   ApplicationSchemaType,
 } from "../schemas/applicationSchema"
 import { defaultFormValues, TOTAL_STEPS } from "../constants"
+import { useDraftForm } from "./useDraftForm"
 
 // Типы для состояния формы
 type FormState = {
@@ -85,6 +85,15 @@ function formReducer(state: FormState, action: FormAction): FormState {
   }
 }
 
+// Определяем поля для валидации на каждом шаге
+const stepValidationFields = [
+  ["name"], // Шаг 0 - личная информация
+  ["phone", "email"], // Шаг 1 - контактная информация
+  ["dateRange", "tripPurpose"], // Шаг 2 - даты и цель поездки
+  ["accommodation", "accommodationPreferences"], // Шаг 3 - размещение
+  [], // Шаг 4 - подтверждение, проверяем всю форму
+]
+
 // Основной хук для управления формой
 export function useApplicationForm() {
   // React Hook Form для управления полями и валидации
@@ -99,6 +108,7 @@ export function useApplicationForm() {
     reset,
     trigger,
     setError,
+    clearErrors,
   } = useForm<ApplicationSchemaType>({
     resolver: zodResolver(applicationSchema),
     defaultValues: defaultFormValues,
@@ -110,34 +120,120 @@ export function useApplicationForm() {
   // Наблюдаем за всеми полями формы
   const formData = watch()
 
+  // Интеграция функциональности черновика
+  const { hasDraft, showDraftNotice, saveDraft, restoreDraft, ignoreDraft } =
+    useDraftForm(formData, setValue)
+
   // Вычисляем прогресс заполнения формы
   const progress = Math.floor(((state.currentStep + 1) / TOTAL_STEPS) * 100)
 
   // Валидация текущего шага
   const validateCurrentStep = useCallback(async () => {
-    // Определяем поля для валидации в зависимости от текущего шага
-    const stepFields = [
-      ["name"], // Шаг 0 - личная информация
-      ["phone", "email"], // Шаг 1 - контактная информация
-      ["dateRange", "tripPurpose"], // Шаг 2 - даты и цель поездки
-      ["accommodation", "accommodationPreferences"], // Шаг 3 - размещение
-      [], // Шаг 4 - подтверждение, проверяем все поля
-    ]
-
+    // На последнем шаге проверяем всю форму
     if (state.currentStep === TOTAL_STEPS - 1) {
-      // Если это последний шаг - проверяем всю форму
       return await trigger()
-    } else {
-      // Иначе проверяем только поля текущего шага
-      const fieldsToValidate = stepFields[state.currentStep]
-      return await trigger(fieldsToValidate as any)
     }
-  }, [state.currentStep, trigger])
+
+    // Обязательная валидация полей текущего шага
+    const fieldsToValidate = stepValidationFields[state.currentStep]
+    const isStepValid = await trigger(fieldsToValidate as any)
+
+    // Для шага 2 (индекс 2) - даты и цель поездки - проверяем особые условия
+    if (state.currentStep === 2) {
+      // Проверяем, что дата выбрана
+      const dateRange = getValues("dateRange")
+      if (!dateRange || !dateRange.from || !dateRange.to) {
+        setError("dateRange", {
+          type: "custom",
+          message: "Пожалуйста, выберите даты поездки",
+        })
+        return false
+      }
+
+      // Проверяем, что выбрана хотя бы одна цель поездки
+      const tripPurpose = getValues("tripPurpose")
+      const hasPurpose = Object.entries(tripPurpose)
+        .filter(([key]) => key !== "otherDescription")
+        .some(([_, value]) => value === true)
+
+      if (!hasPurpose) {
+        setError("tripPurpose", {
+          type: "custom",
+          message: "Выберите хотя бы одну цель поездки",
+        })
+        return false
+      }
+
+      // Проверяем, что если выбрано "Другое", то заполнено описание
+      if (
+        tripPurpose.other &&
+        (!tripPurpose.otherDescription ||
+          tripPurpose.otherDescription.trim() === "")
+      ) {
+        setError("tripPurpose.otherDescription", {
+          type: "custom",
+          message: "Укажите описание для пункта 'Другое'",
+        })
+        return false
+      }
+    }
+
+    // Для шага 3 (индекс 3) - размещение - проверяем особые условия
+    if (state.currentStep === 3) {
+      // Проверяем, что выбран хотя бы один тип размещения
+      const accommodation = getValues("accommodation")
+      const hasAccommodation = Object.entries(accommodation)
+        .filter(([key]) => key !== "otherDescription")
+        .some(([_, value]) => value === true)
+
+      if (!hasAccommodation) {
+        setError("accommodation", {
+          type: "custom",
+          message: "Выберите хотя бы один тип размещения",
+        })
+        return false
+      }
+
+      // Проверяем, что если выбрано "Другое", то заполнено описание
+      if (
+        accommodation.other &&
+        (!accommodation.otherDescription ||
+          accommodation.otherDescription.trim() === "")
+      ) {
+        setError("accommodation.otherDescription", {
+          type: "custom",
+          message: "Укажите описание для пункта 'Другое'",
+        })
+        return false
+      }
+
+      // Проверяем предпочтения к размещению если выбрано "Другое"
+      const preferences = getValues("accommodationPreferences")
+      if (
+        preferences.other &&
+        (!preferences.otherDescription ||
+          preferences.otherDescription.trim() === "")
+      ) {
+        setError("accommodationPreferences.otherDescription", {
+          type: "custom",
+          message: "Укажите описание для пункта 'Другое'",
+        })
+        return false
+      }
+    }
+
+    return isStepValid
+  }, [state.currentStep, trigger, getValues, setError])
 
   // Обработчик для диапазона дат
   const handleDateChange = useCallback(
     (dateRange: DateRange | undefined) => {
       setValue("dateRange", dateRange as any)
+
+      // Очищаем ошибки после выбора дат
+      if (dateRange?.from && dateRange?.to) {
+        clearErrors("dateRange")
+      }
 
       if (dateRange?.from && dateRange?.to) {
         // Рассчитываем количество дней, включая начальный и конечный дни
@@ -147,7 +243,7 @@ export function useApplicationForm() {
         setValue("daysCount", null)
       }
     },
-    [setValue]
+    [setValue, clearErrors]
   )
 
   // Обработчик для чекбоксов типа поездки
@@ -166,8 +262,17 @@ export function useApplicationForm() {
       }
 
       setValue("tripPurpose", updatedPurpose)
+
+      // Если выбрана хотя бы одна цель, снимаем ошибку
+      const hasPurpose = Object.entries(updatedPurpose)
+        .filter(([key]) => key !== "otherDescription")
+        .some(([_, value]) => value === true)
+
+      if (hasPurpose) {
+        clearErrors("tripPurpose")
+      }
     },
-    [getValues, setValue]
+    [getValues, setValue, clearErrors]
   )
 
   // Обработчик для текстового описания цели поездки
@@ -179,8 +284,13 @@ export function useApplicationForm() {
         ...currentPurpose,
         otherDescription: value,
       })
+
+      // Если поле заполнено, снимаем ошибку
+      if (value.trim() !== "") {
+        clearErrors("tripPurpose.otherDescription")
+      }
     },
-    [getValues, setValue]
+    [getValues, setValue, clearErrors]
   )
 
   // Обработчик для чекбоксов типа размещения
@@ -199,8 +309,17 @@ export function useApplicationForm() {
       }
 
       setValue("accommodation", updatedAccommodation)
+
+      // Если выбран хотя бы один тип размещения, снимаем ошибку
+      const hasAccommodation = Object.entries(updatedAccommodation)
+        .filter(([key]) => key !== "otherDescription")
+        .some(([_, value]) => value === true)
+
+      if (hasAccommodation) {
+        clearErrors("accommodation")
+      }
     },
-    [getValues, setValue]
+    [getValues, setValue, clearErrors]
   )
 
   // Обработчик для текстового описания типа размещения
@@ -212,8 +331,13 @@ export function useApplicationForm() {
         ...currentAccommodation,
         otherDescription: value,
       })
+
+      // Если поле заполнено, снимаем ошибку
+      if (value.trim() !== "") {
+        clearErrors("accommodation.otherDescription")
+      }
     },
-    [getValues, setValue]
+    [getValues, setValue, clearErrors]
   )
 
   // Обработчик для чекбоксов предпочтений размещения
@@ -224,6 +348,11 @@ export function useApplicationForm() {
       const updatedPreferences = {
         ...currentPreferences,
         [name]: checked,
+      }
+
+      // Если снимаем галочку "Другое", очищаем описание
+      if (name === "other" && !checked) {
+        updatedPreferences.otherDescription = ""
       }
 
       setValue("accommodationPreferences", updatedPreferences)
@@ -240,8 +369,13 @@ export function useApplicationForm() {
         ...currentPreferences,
         otherDescription: value,
       })
+
+      // Если поле заполнено, снимаем ошибку
+      if (value.trim() !== "") {
+        clearErrors("accommodationPreferences.otherDescription")
+      }
     },
-    [getValues, setValue]
+    [getValues, setValue, clearErrors]
   )
 
   // Переход к следующему шагу с валидацией
@@ -280,55 +414,61 @@ export function useApplicationForm() {
   )
 
   // Обработчик отправки формы
-  const submitForm = useCallback(async (data: ApplicationSchemaType) => {
-    try {
-      // Форматируем даты для отправки
-      const formattedDates = {
-        from: data.dateRange?.from
-          ? format(data.dateRange.from, "yyyy-MM-dd")
-          : undefined,
-        to: data.dateRange?.to
-          ? format(data.dateRange.to, "yyyy-MM-dd")
-          : undefined,
-      }
+  const submitForm = useCallback(
+    async (data: ApplicationSchemaType) => {
+      try {
+        // Форматируем даты для отправки
+        const formattedDates = {
+          from: data.dateRange?.from
+            ? format(data.dateRange.from, "yyyy-MM-dd")
+            : undefined,
+          to: data.dateRange?.to
+            ? format(data.dateRange.to, "yyyy-MM-dd")
+            : undefined,
+        }
 
-      // Отправка данных на сервер
-      const response = await fetch("/api/application", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          name: data.name,
-          phone: data.phone,
-          date_from: formattedDates.from,
-          date_to: formattedDates.to,
-          email: data.email,
-          days_count: data.daysCount,
-          tripPurpose: data.tripPurpose,
-          accommodation: data.accommodation,
-          accommodationPreferences: data.accommodationPreferences,
-        }),
-      })
+        // Отправка данных на сервер
+        const response = await fetch("/api/application", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            name: data.name,
+            phone: data.phone,
+            date_from: formattedDates.from,
+            date_to: formattedDates.to,
+            email: data.email,
+            days_count: data.daysCount,
+            tripPurpose: data.tripPurpose,
+            accommodation: data.accommodation,
+            accommodationPreferences: data.accommodationPreferences,
+          }),
+        })
 
-      if (!response.ok) {
-        const errorData = await response.json()
-        throw new Error(
-          errorData.message || "Произошла ошибка при отправке формы"
-        )
+        if (!response.ok) {
+          const errorData = await response.json()
+          throw new Error(
+            errorData.message || "Произошла ошибка при отправке формы"
+          )
+        }
+
+        // При успешной отправке удаляем черновик
+        ignoreDraft()
+        dispatch({ type: "SUBMIT_SUCCESS" })
+      } catch (error) {
+        console.error("Ошибка отправки формы:", error)
+        dispatch({
+          type: "SUBMIT_ERROR",
+          message:
+            error instanceof Error
+              ? error.message
+              : "Произошла ошибка при отправке формы",
+        })
       }
-      dispatch({ type: "SUBMIT_SUCCESS" })
-    } catch (error) {
-      console.error("Ошибка отправки формы:", error)
-      dispatch({
-        type: "SUBMIT_ERROR",
-        message:
-          error instanceof Error
-            ? error.message
-            : "Произошла ошибка при отправке формы",
-      })
-    }
-  }, [])
+    },
+    [ignoreDraft]
+  )
 
   // Обработчик для кнопки отправки/следующего шага
   const handleFormAction = useCallback(
@@ -352,8 +492,9 @@ export function useApplicationForm() {
   // Сброс формы
   const resetForm = useCallback(() => {
     reset(defaultFormValues)
+    ignoreDraft() // Удаляем черновик при сбросе формы
     dispatch({ type: "RESET_FORM" })
-  }, [reset])
+  }, [reset, ignoreDraft])
 
   // Возвращаем все необходимые данные и функции
   return {
@@ -372,6 +513,12 @@ export function useApplicationForm() {
     register,
     setValue,
     getValues,
+
+    // Функционал черновика
+    hasDraft,
+    showDraftNotice,
+    restoreDraft,
+    ignoreDraft,
 
     // Обработчики ввода
     handleDateChange,

@@ -11,6 +11,7 @@ import {
 import { Alert, AlertTitle, AlertDescription } from "@/components/ui/alert"
 import { STEPS, TOTAL_STEPS } from "./constants"
 import { useApplicationForm } from "./hooks/useApplicationForm"
+import { DraftNotice } from "./components/DraftNotice"
 
 // Компоненты шагов
 import { StepPersonalInfo } from "./steps/Step1"
@@ -41,6 +42,12 @@ export default function MultistepForm() {
     // React Hook Form
     control,
     setValue,
+
+    // Функционал черновика
+    hasDraft,
+    showDraftNotice,
+    restoreDraft,
+    ignoreDraft,
 
     // Обработчики
     handleDateChange,
@@ -116,6 +123,11 @@ export default function MultistepForm() {
         </CardHeader>
 
         <CardContent>
+          {/* Уведомление о черновике только на первом шаге */}
+          {currentStep === 0 && showDraftNotice && hasDraft && (
+            <DraftNotice onLoad={restoreDraft} onIgnore={ignoreDraft} />
+          )}
+
           {isError && (
             <Alert variant="destructive" className="mb-6">
               <AlertTitle>Ошибка</AlertTitle>

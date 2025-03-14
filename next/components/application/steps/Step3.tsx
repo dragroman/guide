@@ -35,6 +35,7 @@ export function StepTripPurpose({
                 value={field.value}
                 onDateChange={handleDateChange}
                 className="w-full"
+                error={Boolean(errors.dateRange)}
               />
             )}
           />
@@ -46,20 +47,25 @@ export function StepTripPurpose({
               </Badge>
             </div>
           )}
+          {/* Улучшенный вывод ошибок для дат */}
           {errors.dateRange && (
             <p className="text-sm font-medium text-destructive">
               {typeof errors.dateRange === "string"
                 ? errors.dateRange
-                : (errors.dateRange.message as string) ||
-                  (errors.dateRange as any)?.from?.message ||
-                  (errors.dateRange as any)?.to?.message}
+                : errors.dateRange.message
+                  ? errors.dateRange.message
+                  : errors.dateRange.from
+                    ? errors.dateRange.from.message
+                    : errors.dateRange.to
+                      ? errors.dateRange.to.message
+                      : "Пожалуйста, выберите даты поездки"}
             </p>
           )}
         </div>
       </div>
 
       <div>
-        <h3 className="mb-4 text-sm font-medium">Выберите цель поездки</h3>
+        <h3 className="mb-4 text-sm font-medium">Выберите цель поездки *</h3>
         <div className="space-y-3">
           <PurposeCheckbox
             label="Экскурсии"
@@ -98,11 +104,20 @@ export function StepTripPurpose({
             onChange={handlePurposeChange}
           />
         </div>
+        {/* Ошибка для обязательного выбора цели поездки */}
+        {errors.tripPurpose && !errors.tripPurpose.otherDescription && (
+          <p className="text-sm font-medium text-destructive mt-2">
+            {typeof errors.tripPurpose === "string"
+              ? errors.tripPurpose
+              : errors.tripPurpose.message ||
+                "Выберите хотя бы одну цель поездки"}
+          </p>
+        )}
       </div>
 
       {formData.tripPurpose.other && (
         <div className="space-y-2">
-          <Label htmlFor="otherDescription">Опишите вашу цель</Label>
+          <Label htmlFor="otherDescription">Опишите вашу цель *</Label>
           <Controller
             name="tripPurpose.otherDescription"
             control={control}
@@ -111,6 +126,11 @@ export function StepTripPurpose({
                 id="otherDescription"
                 placeholder="Опишите вашу цель поездки"
                 {...field}
+                className={
+                  errors.tripPurpose?.otherDescription
+                    ? "border-destructive"
+                    : ""
+                }
               />
             )}
           />
@@ -120,14 +140,6 @@ export function StepTripPurpose({
             </p>
           )}
         </div>
-      )}
-
-      {errors.tripPurpose && !(errors.tripPurpose as any).otherDescription && (
-        <p className="text-sm font-medium text-destructive">
-          {typeof errors.tripPurpose === "string"
-            ? errors.tripPurpose
-            : (errors.tripPurpose.message as string)}
-        </p>
       )}
     </div>
   )

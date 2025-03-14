@@ -30,36 +30,42 @@ export function StepAccommodation({
             name="hotel3"
             checked={formData.accommodation.hotel3}
             onChange={handleAccommodationChange}
+            groupName="accommodation"
           />
           <CheckboxField
             label="Отель 4★"
             name="hotel4"
             checked={formData.accommodation.hotel4}
             onChange={handleAccommodationChange}
+            groupName="accommodation"
           />
           <CheckboxField
             label="Отель 5★"
             name="hotel5"
             checked={formData.accommodation.hotel5}
             onChange={handleAccommodationChange}
+            groupName="accommodation"
           />
           <CheckboxField
             label="Апартаменты"
             name="apartment"
             checked={formData.accommodation.apartment}
             onChange={handleAccommodationChange}
+            groupName="accommodation"
           />
           <CheckboxField
             label="Хостел"
             name="hostel"
             checked={formData.accommodation.hostel}
             onChange={handleAccommodationChange}
+            groupName="accommodation"
           />
           <CheckboxField
             label="Другое"
             name="other"
             checked={formData.accommodation.other}
             onChange={handleAccommodationChange}
+            groupName="accommodation"
           />
         </div>
 
@@ -77,6 +83,11 @@ export function StepAccommodation({
                   placeholder="Опишите предпочитаемый тип размещения"
                   {...field}
                   value={field.value || ""}
+                  className={
+                    errors.accommodation?.otherDescription
+                      ? "border-destructive"
+                      : ""
+                  }
                 />
               )}
             />
@@ -88,14 +99,21 @@ export function StepAccommodation({
           </div>
         )}
 
+        {/* Ошибка валидации типа размещения */}
         {errors.accommodation &&
-          !(errors.accommodation as any).otherDescription && (
+          typeof errors.accommodation === "object" &&
+          !errors.accommodation.otherDescription && (
             <p className="text-sm font-medium text-destructive mt-2">
-              {typeof errors.accommodation === "string"
-                ? errors.accommodation
-                : (errors.accommodation.message as string)}
+              {errors.accommodation.message}
             </p>
           )}
+
+        {/* Ошибка валидации, если в схеме указан строковый формат ошибки */}
+        {errors.accommodation && typeof errors.accommodation === "string" && (
+          <p className="text-sm font-medium text-destructive mt-2">
+            {errors.accommodation}
+          </p>
+        )}
       </div>
 
       <div>
@@ -106,28 +124,78 @@ export function StepAccommodation({
             name="centralLocation"
             checked={formData.accommodationPreferences.centralLocation}
             onChange={handlePreferenceChange}
+            groupName="preferences"
           />
           <CheckboxField
             label="Близость к торговым центрам"
             name="nearShoppingCenters"
             checked={formData.accommodationPreferences.nearShoppingCenters}
             onChange={handlePreferenceChange}
+            groupName="preferences"
           />
           <CheckboxField
             label="Наличие бассейна, спа, фитнеса"
             name="poolAndSpa"
             checked={formData.accommodationPreferences.poolAndSpa}
             onChange={handlePreferenceChange}
+            groupName="preferences"
+          />
+          <CheckboxField
+            label="Другое"
+            name="other"
+            checked={formData.accommodationPreferences.other}
+            onChange={handlePreferenceChange}
+            groupName="preferences"
           />
         </div>
 
-        {errors.accommodationPreferences && (
-          <p className="text-sm font-medium text-destructive mt-2">
-            {typeof errors.accommodationPreferences === "string"
-              ? errors.accommodationPreferences
-              : (errors.accommodationPreferences.message as string)}
-          </p>
+        {formData.accommodationPreferences.other && (
+          <div className="space-y-2 mt-3">
+            <Label htmlFor="preferencesOtherDescription">
+              Укажите ваши пожелания
+            </Label>
+            <Controller
+              name="accommodationPreferences.otherDescription"
+              control={control}
+              render={({ field }) => (
+                <Textarea
+                  id="preferencesOtherDescription"
+                  placeholder="Опишите ваши пожелания к размещению"
+                  {...field}
+                  value={field.value || ""}
+                  className={
+                    errors.accommodationPreferences?.otherDescription
+                      ? "border-destructive"
+                      : ""
+                  }
+                />
+              )}
+            />
+            {errors.accommodationPreferences?.otherDescription && (
+              <p className="text-sm font-medium text-destructive">
+                {
+                  errors.accommodationPreferences.otherDescription
+                    .message as string
+                }
+              </p>
+            )}
+          </div>
         )}
+
+        {errors.accommodationPreferences &&
+          typeof errors.accommodationPreferences === "object" &&
+          !errors.accommodationPreferences.otherDescription && (
+            <p className="text-sm font-medium text-destructive mt-2">
+              {errors.accommodationPreferences.message}
+            </p>
+          )}
+
+        {errors.accommodationPreferences &&
+          typeof errors.accommodationPreferences === "string" && (
+            <p className="text-sm font-medium text-destructive mt-2">
+              {errors.accommodationPreferences}
+            </p>
+          )}
       </div>
     </div>
   )
