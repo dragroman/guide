@@ -1,7 +1,7 @@
 import React from "react"
 import { Controller } from "react-hook-form"
 import { FormField } from "../components/FormField"
-import { PeopleCounter } from "../components/PeopleCounter"
+import { AgeGroupDrawer } from "../components/PeopleCounter"
 import { StepProps } from "../types"
 
 export function StepPersonalInfo({
@@ -27,19 +27,32 @@ export function StepPersonalInfo({
         )}
       />
 
-      <Controller
-        name="peopleCount"
-        control={control}
-        render={() => (
-          <PeopleCounter
-            label="Сколько вас будет путешествовать?"
-            description="Укажите точное число участников тура"
-            min={1}
-            max={10}
-            onChange={(count) => setValue("peopleCount", count)}
+      {/* Компонент с возрастными группами */}
+      <div className="space-y-8">
+        <div className="space-y-2">
+          <label className="text-sm font-medium">Состав группы</label>
+          <Controller
+            name="ageGroups"
+            control={control}
+            render={({ field }) => (
+              <AgeGroupDrawer
+                label="Выберите путешественников"
+                description="Укажите сколько людей и какого возраста поедут в тур"
+                value={field.value}
+                onChange={(groups) => {
+                  field.onChange(groups)
+                  // Также можно обновить peopleCount для совместимости
+                  const totalPeople = Object.values(groups).reduce(
+                    (sum, count) => sum + count,
+                    0
+                  )
+                  setValue("peopleCount", totalPeople)
+                }}
+              />
+            )}
           />
-        )}
-      />
+        </div>
+      </div>
     </div>
   )
 }

@@ -4,15 +4,18 @@ export const TOTAL_STEPS = 5
 
 export const STEPS = [
   { title: "Знакомство", description: "Как к вам обращаться" },
-  { title: "Контактные данные", description: "Как с вами связаться" },
-  { title: "Дата и цель поездки", description: "Даты и цели" },
+  { title: "Поездка", description: "Даты и цели" },
   { title: "Размещение", description: "Где вы хотите остановиться" },
+  { title: "Связь", description: "Как с вами связаться" },
   { title: "Подтверждение", description: "Проверьте введенные данные" },
 ]
 
 export const defaultFormValues: ApplicationSchemaType = {
   name: "",
   peopleCount: 1,
+  ageGroups: {
+    adults: 1,
+  },
   phone: "",
   email: "",
   tripPurpose: {

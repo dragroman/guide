@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from "react"
+import { useState, useEffect, useCallback, useRef } from "react"
 import { useLocalStorage } from "./useLocalStorage"
 import { ApplicationSchemaType } from "../schemas/applicationSchema"
 
@@ -15,9 +15,16 @@ export function useDraftForm(
   // Состояние для отображения уведомления о черновике
   const [showDraftNotice, setShowDraftNotice] = useState(false)
 
+  // Флаг, указывающий, что пользователь уже принял решение по черновику
+  const userMadeDecision = useRef(false)
+
+  // Используем ref для отслеживания времени последнего сохранения
+  const lastSaveTime = useRef(0)
+
   // Проверка наличия черновика при загрузке компонента
   useEffect(() => {
-    if (draftData) {
+    // Проверяем черновик только при инициализации и если пользователь еще не принял решение
+    if (draftData && !userMadeDecision.current) {
       // Рекурсивная функция для проверки наличия данных в объекте
       const hasAnyData = (obj: Record<string, any>): boolean => {
         return Object.entries(obj).some(([key, value]) => {
@@ -73,10 +80,15 @@ export function useDraftForm(
       const hasData = hasAnyData(draftData)
       setShowDraftNotice(hasData)
     }
-  }, [draftData])
+  }, [draftData]) // Зависимость только от draftData
 
   // Сохранение черновика при изменении формы
   const saveDraft = useCallback(() => {
+    // Не сохраняем черновик, если пользователь уже решил игнорировать его
+    if (userMadeDecision.current && !showDraftNotice) {
+      return
+    }
+
     // Проверяем, есть ли в форме хоть какие-то данные, которые стоит сохранить
     const hasAnyValue =
       formData.name ||
@@ -91,20 +103,28 @@ export function useDraftForm(
       )
 
     if (hasAnyValue) {
+      // Обновляем время последнего сохранения
+      lastSaveTime.current = Date.now()
       setDraftData(formData)
     }
-  }, [formData, setDraftData])
+  }, [formData, setDraftData, showDraftNotice])
 
   // Автоматическое сохранение черновика при изменении данных формы
   useEffect(() => {
+    // Не устанавливаем таймер, если пользователь уже решил игнорировать черновик
+    if (userMadeDecision.current && !showDraftNotice) {
+      return
+    }
+
     const timer = setTimeout(() => {
       saveDraft()
     }, 1000)
 
     return () => clearTimeout(timer)
-  }, [formData, saveDraft])
+  }, [formData, saveDraft, showDraftNotice])
 
   // Восстановление черновика
+  // В функции useDraftForm.ts
   const restoreDraft = useCallback(() => {
     if (draftData) {
       // Рекурсивная функция для обхода вложенных объектов
@@ -112,11 +132,10 @@ export function useDraftForm(
         Object.entries(data).forEach(([key, value]) => {
           const path = prefix ? `${prefix}.${key}` : key
 
-          // Специальная обработка для dateRange (преобразование ISO-строк в объекты Date)
+          // Специальная обработка для dateRange
           if (path === "dateRange" && value && typeof value === "object") {
             const dateRange: Record<string, Date> = {}
 
-            // Используем явное приведение типов и проверки
             const dateObj = value as Record<string, unknown>
 
             if (dateObj && typeof dateObj === "object") {
@@ -149,11 +168,25 @@ export function useDraftForm(
               }
             }
           }
+          // Обработка для ageGroups (и других объектных типов без преобразования)
+          else if (
+            (path === "ageGroups" ||
+              path === "accommodation" ||
+              path === "tripPurpose" ||
+              path === "accommodationPreferences") &&
+            value &&
+            typeof value === "object" &&
+            !Array.isArray(value)
+          ) {
+            // Установка объекта напрямую
+            setValue(path as any, { ...value })
+          }
           // Если значение - объект и не null/undefined, обрабатываем его рекурсивно
           else if (
             value !== null &&
             typeof value === "object" &&
-            !Array.isArray(value)
+            !Array.isArray(value) &&
+            !(value instanceof Date)
           ) {
             setNestedValues(value, path)
           } else if (value !== undefined) {
@@ -165,14 +198,17 @@ export function useDraftForm(
 
       // Восстанавливаем все поля, включая вложенные
       setNestedValues(draftData)
-
       setShowDraftNotice(false)
     }
   }, [draftData, setValue])
 
   // Игнорирование черновика
   const ignoreDraft = useCallback(() => {
+    // Отмечаем, что пользователь принял решение по черновику
+    userMadeDecision.current = true
+    // Удаляем черновик
     removeDraftData()
+    // Скрываем уведомление о черновике
     setShowDraftNotice(false)
   }, [removeDraftData])
 

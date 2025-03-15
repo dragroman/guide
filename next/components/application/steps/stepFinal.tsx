@@ -1,3 +1,4 @@
+import React from "react"
 import { format } from "date-fns"
 import { getDaysText } from "../utils"
 import { StepProps } from "../types"
@@ -53,78 +54,93 @@ export function StepConfirmation({ formData }: StepProps) {
       .join(", ")
   }
 
+  // Функция для рендеринга информационного блока
+  const renderInfoBlock = (label: string, value: React.ReactNode) => (
+    <div className="p-3 border-b border-gray-100 last:border-b-0">
+      <div className="text-xs text-muted-foreground mb-1">{label}</div>
+      <div className="font-medium text-sm break-words">{value}</div>
+    </div>
+  )
+
   return (
-    <div className="space-y-4">
-      <h3 className="font-medium">Проверьте введенные данные:</h3>
-      <div className="space-y-2 p-4 bg-muted/50 rounded-md">
-        <div className="flex justify-between">
-          <span className="text-muted-foreground">Имя:</span>
-          <span className="font-medium">{formData.name}</span>
-        </div>
-        <div className="flex justify-between">
-          <span className="text-muted-foreground">Количество участников:</span>
-          <span className="font-medium">{formData.peopleCount}</span>
-        </div>
-        <div className="flex justify-between">
-          <span className="text-muted-foreground">Телефон:</span>
-          <span className="font-medium">{formData.phone}</span>
-        </div>
-        <div className="flex justify-between">
-          <span className="text-muted-foreground">Электронная почта:</span>
-          <span className="font-medium">{formData.email}</span>
-        </div>
+    <div className="touch-action-manipulation">
+      <h3 className="font-medium text-lg mb-4">Проверьте данные:</h3>
 
-        <div className="flex justify-between">
-          <span className="text-muted-foreground">Цель поездки:</span>
-          <span className="font-medium">
+      <div className="bg-muted/30 rounded-md overflow-hidden">
+        {/* Используем отдельные карточки для каждого блока данных */}
+        {renderInfoBlock("Имя", formData.name)}
+
+        {renderInfoBlock("Количество участников", formData.peopleCount)}
+
+        {formData.ageGroups &&
+          renderInfoBlock(
+            "Возрастные группы",
+            Object.entries(formData.ageGroups).map(
+              ([key, value], index, arr) => (
+                <span key={key}>
+                  {`${key}: ${value}`}
+                  {index < arr.length - 1 ? ", " : ""}
+                </span>
+              )
+            )
+          )}
+
+        {renderInfoBlock("Телефон", formData.phone)}
+
+        {renderInfoBlock("Email", formData.email)}
+
+        {renderInfoBlock(
+          "Цель поездки",
+          <>
             {getSelectedOptions(formData.tripPurpose, ["otherDescription"])}
-            {formData.tripPurpose.other && formData.tripPurpose.otherDescription
-              ? ` (${formData.tripPurpose.otherDescription})`
-              : ""}
-          </span>
-        </div>
+            {formData.tripPurpose.other &&
+            formData.tripPurpose.otherDescription ? (
+              <div className="mt-1 text-xs italic">
+                {formData.tripPurpose.otherDescription}
+              </div>
+            ) : null}
+          </>
+        )}
 
-        <div className="flex justify-between">
-          <span className="text-muted-foreground">Тип размещения:</span>
-          <span className="font-medium">
+        {renderInfoBlock(
+          "Тип размещения",
+          <>
             {getSelectedOptions(formData.accommodation, ["otherDescription"])}
             {formData.accommodation.other &&
-            formData.accommodation.otherDescription
-              ? ` (${formData.accommodation.otherDescription})`
-              : ""}
-          </span>
-        </div>
+            formData.accommodation.otherDescription ? (
+              <div className="mt-1 text-xs italic">
+                {formData.accommodation.otherDescription}
+              </div>
+            ) : null}
+          </>
+        )}
 
-        <div className="flex justify-between">
-          <span className="text-muted-foreground">Пожелания к размещению:</span>
-          <span className="font-medium">
+        {renderInfoBlock(
+          "Пожелания к размещению",
+          <>
             {getSelectedOptions(formData.accommodationPreferences, [
               "otherDescription",
             ])}
             {formData.accommodationPreferences.other &&
-            formData.accommodationPreferences.otherDescription
-              ? ` (${formData.accommodationPreferences.otherDescription})`
-              : ""}
-          </span>
-        </div>
+            formData.accommodationPreferences.otherDescription ? (
+              <div className="mt-1 text-xs italic">
+                {formData.accommodationPreferences.otherDescription}
+              </div>
+            ) : null}
+          </>
+        )}
 
-        <div className="flex justify-between">
-          <span className="text-muted-foreground">Даты:</span>
-          <span className="font-medium">
-            {formData.dateRange?.from && formData.dateRange?.to
-              ? `${format(formData.dateRange.from, "dd.MM.yyyy")} - ${format(formData.dateRange.to, "dd.MM.yyyy")}`
-              : "Не выбраны"}
-          </span>
-        </div>
-        <div className="flex justify-between">
-          <span className="text-muted-foreground">
-            Продолжительность поездки:
-          </span>
-          <span className="font-medium">
-            {formData.daysCount?.toString()}{" "}
-            {getDaysText(formData.daysCount ?? 0)}
-          </span>
-        </div>
+        {renderInfoBlock(
+          "Даты",
+          formData.dateRange?.from && formData.dateRange?.to
+            ? `${format(formData.dateRange.from, "dd.MM.yyyy")} - ${format(formData.dateRange.to, "dd.MM.yyyy")}`
+            : "Не выбраны"
+        )}
+
+        {renderInfoBlock(
+          "Продолжительность",
+          `${formData.daysCount} ${getDaysText(formData.daysCount ?? 0)}`
+        )}
       </div>
     </div>
   )

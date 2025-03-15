@@ -11,6 +11,29 @@ const parseDate = (value: unknown): Date | null => {
   return null
 }
 
+// Добавляем схему для возрастных групп
+const ageGroupsSchema = z
+  .record(
+    z.string(), // ключ - id возрастной группы
+    z
+      .number() // значение - количество человек
+      .min(0, "Количество не может быть отрицательным")
+      .max(10, "Максимальное количество - 10 человек в одной группе")
+  )
+  .refine(
+    (data) => {
+      // Проверяем, что есть хотя бы один человек
+      const totalPeople = Object.values(data).reduce(
+        (sum, count) => sum + count,
+        0
+      )
+      return totalPeople > 0
+    },
+    {
+      message: "Должен быть хотя бы один путешественник",
+    }
+  )
+
 // Создаем схему для диапазона дат
 const dateRangeSchema = z
   .object({
@@ -144,8 +167,9 @@ export const applicationSchema = z.object({
   peopleCount: z
     .number()
     .min(1, "Количество участников должно быть больше 0")
-    .max(10, "Количество участников не должно превышать 10"),
-  daysCount: z.number().optional().nullable(), // Добавляем .nullable()
+    .max(20, "Количество участников не должно превышать 10"),
+  daysCount: z.number().optional().nullable(),
+  ageGroups: ageGroupsSchema,
 
   dateRange: dateRangeSchema,
 
@@ -223,6 +247,14 @@ export type ApplicationSchemaType = z.infer<typeof applicationSchema>
 export const defaultFormValues: ApplicationSchemaType = {
   name: "",
   peopleCount: 1,
+  ageGroups: {
+    adults: 1,
+    children: 0,
+    seniors: 0,
+    toddlers: 0,
+    infants: 0,
+    teens: 0,
+  },
   phone: "",
   dateRange: {
     from: addDays(new Date(), 7),

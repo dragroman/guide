@@ -1,10 +1,10 @@
 import { NextRequest, NextResponse } from "next/server"
 import { applicationSchema } from "@/components/application/schemas/applicationSchema"
-import { format } from "date-fns"
 
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json()
+    console.log(body)
 
     // Проверяем что получены все необходимые данные
     if (!body.name || !body.phone || !body.date_from || !body.date_to) {
@@ -36,6 +36,7 @@ export async function POST(request: NextRequest) {
         accommodation: body.accommodation,
         accommodationPreferences: body.accommodationPreferences,
         peopleCount: body.peopleCount,
+        ageGroups: body.ageGroups,
       })
     } catch (error) {
       if (error instanceof Error) {
@@ -78,6 +79,12 @@ export async function POST(request: NextRequest) {
             : "",
           accommodation_preferences: accommodationPreferencesArray,
           people_count: body.peopleCount,
+          adults: body.ageGroups.adults,
+          children: body.ageGroups.children,
+          seniors: body.ageGroups.seniors,
+          toddlers: body.ageGroups.toddlers,
+          infants: body.ageGroups.infants,
+          teens: body.ageGroups.teens,
         }),
       }
     )

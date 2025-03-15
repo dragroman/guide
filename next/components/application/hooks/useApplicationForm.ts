@@ -87,10 +87,10 @@ function formReducer(state: FormState, action: FormAction): FormState {
 
 // Определяем поля для валидации на каждом шаге
 const stepValidationFields = [
-  ["name", "peopleCount"], // Шаг 0 - личная информация
-  ["phone", "email"], // Шаг 1 - контактная информация
-  ["dateRange", "tripPurpose"], // Шаг 2 - даты и цель поездки
-  ["accommodation", "accommodationPreferences"], // Шаг 3 - размещение
+  ["name", "peopleCount", "ageGroups"],
+  ["dateRange", "tripPurpose"], // даты и цель поездки
+  ["accommodation", "accommodationPreferences"], // размещение
+  ["phone", "email"], //  контактная информация
   [], // Шаг 4 - подтверждение, проверяем всю форму
 ]
 
@@ -139,7 +139,7 @@ export function useApplicationForm() {
     const isStepValid = await trigger(fieldsToValidate as any)
 
     // Для шага 2 (индекс 2) - даты и цель поездки - проверяем особые условия
-    if (state.currentStep === 2) {
+    if (state.currentStep === 1) {
       // Проверяем, что дата выбрана
       const dateRange = getValues("dateRange")
       if (!dateRange || !dateRange.from || !dateRange.to) {
@@ -179,7 +179,7 @@ export function useApplicationForm() {
     }
 
     // Для шага 3 (индекс 3) - размещение - проверяем особые условия
-    if (state.currentStep === 3) {
+    if (state.currentStep === 2) {
       // Проверяем, что выбран хотя бы один тип размещения
       const accommodation = getValues("accommodation")
       const hasAccommodation = Object.entries(accommodation)
@@ -444,6 +444,7 @@ export function useApplicationForm() {
             tripPurpose: data.tripPurpose,
             accommodation: data.accommodation,
             accommodationPreferences: data.accommodationPreferences,
+            ageGroups: data.ageGroups,
           }),
         })
 

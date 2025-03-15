@@ -1,146 +1,202 @@
 import React from "react"
-import { Controller } from "react-hook-form"
 import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
-import { Badge } from "@/components/ui/badge"
-import { DatePickerWithRange } from "../components/DatePickerWithRange"
-import { PurposeCheckbox } from "../components/PurposeCheckbox"
+import { CheckboxField } from "../components/CheckboxField"
 import { StepProps } from "../types"
-import { getDaysText } from "../utils"
+import { Controller } from "react-hook-form"
 
-export function StepTripPurpose({
+export function StepAccommodation({
   control,
   errors,
   formData,
-  setValue,
-  handleDateChange,
-  handlePurposeChange,
+  handleAccommodationChange,
+  handlePreferenceChange,
 }: StepProps) {
   // Проверяем, что необходимые пропсы присутствуют
-  if (!handleDateChange || !handlePurposeChange) {
-    console.error("Missing required props in StepTripPurpose")
+  if (!handleAccommodationChange || !handlePreferenceChange) {
+    console.error("Missing required props in StepAccommodation")
     return <div>Error: Missing required handlers</div>
   }
 
   return (
     <div className="space-y-6">
-      <div className="space-y-4">
-        <div className="space-y-2">
-          <Label htmlFor="dateRange">Предполагаемые даты поездки *</Label>
-          <Controller
-            name="dateRange"
-            control={control}
-            render={({ field }) => (
-              <DatePickerWithRange
-                value={field.value}
-                onDateChange={handleDateChange}
-                className="w-full"
-                error={Boolean(errors.dateRange)}
-              />
-            )}
-          />
-          {formData.daysCount && (
-            <div className="mt-2 text-sm">
-              <Badge variant="outline">
-                Продолжительность: {formData.daysCount}{" "}
-                {getDaysText(formData.daysCount)}
-              </Badge>
-            </div>
-          )}
-          {/* Улучшенный вывод ошибок для дат */}
-          {errors.dateRange && (
-            <p className="text-sm font-medium text-destructive">
-              {typeof errors.dateRange === "string"
-                ? errors.dateRange
-                : errors.dateRange.message
-                  ? errors.dateRange.message
-                  : errors.dateRange.from
-                    ? errors.dateRange.from.message
-                    : errors.dateRange.to
-                      ? errors.dateRange.to.message
-                      : "Пожалуйста, выберите даты поездки"}
-            </p>
-          )}
-        </div>
-      </div>
-
       <div>
-        <h3 className="mb-4 text-sm font-medium">Выберите цель поездки *</h3>
+        <h3 className="mb-4 text-sm font-medium">
+          Предпочитаемый тип размещения
+        </h3>
         <div className="space-y-3">
-          <PurposeCheckbox
-            label="Экскурсии"
-            name="excursion"
-            checked={formData.tripPurpose.excursion}
-            onChange={handlePurposeChange}
+          <CheckboxField
+            label="Отель 3★"
+            name="hotel3"
+            checked={formData.accommodation.hotel3}
+            onChange={handleAccommodationChange}
+            groupName="accommodation"
           />
-          <PurposeCheckbox
-            label="Деловая поездка"
-            name="business"
-            checked={formData.tripPurpose.business}
-            onChange={handlePurposeChange}
+          <CheckboxField
+            label="Отель 4★"
+            name="hotel4"
+            checked={formData.accommodation.hotel4}
+            onChange={handleAccommodationChange}
+            groupName="accommodation"
           />
-          <PurposeCheckbox
-            label="Шоппинг"
-            name="shopping"
-            checked={formData.tripPurpose.shopping}
-            onChange={handlePurposeChange}
+          <CheckboxField
+            label="Отель 5★"
+            name="hotel5"
+            checked={formData.accommodation.hotel5}
+            onChange={handleAccommodationChange}
+            groupName="accommodation"
           />
-          <PurposeCheckbox
-            label="Гастрономический туризм"
-            name="food"
-            checked={formData.tripPurpose.food}
-            onChange={handlePurposeChange}
+          <CheckboxField
+            label="Апартаменты"
+            name="apartment"
+            checked={formData.accommodation.apartment}
+            onChange={handleAccommodationChange}
+            groupName="accommodation"
           />
-          <PurposeCheckbox
-            label="Развлечения"
-            name="fun"
-            checked={formData.tripPurpose.fun}
-            onChange={handlePurposeChange}
+          <CheckboxField
+            label="Хостел"
+            name="hostel"
+            checked={formData.accommodation.hostel}
+            onChange={handleAccommodationChange}
+            groupName="accommodation"
           />
-          <PurposeCheckbox
+          <CheckboxField
             label="Другое"
             name="other"
-            checked={formData.tripPurpose.other}
-            onChange={handlePurposeChange}
+            checked={formData.accommodation.other}
+            onChange={handleAccommodationChange}
+            groupName="accommodation"
           />
         </div>
-        {/* Ошибка для обязательного выбора цели поездки */}
-        {errors.tripPurpose && !errors.tripPurpose.otherDescription && (
+
+        {formData.accommodation.other && (
+          <div className="space-y-2 mt-3">
+            <Label htmlFor="accommodationOtherDescription">
+              Укажите предпочтения
+            </Label>
+            <Controller
+              name="accommodation.otherDescription"
+              control={control}
+              render={({ field }) => (
+                <Textarea
+                  id="accommodationOtherDescription"
+                  placeholder="Опишите предпочитаемый тип размещения"
+                  {...field}
+                  value={field.value || ""}
+                  className={
+                    errors.accommodation?.otherDescription
+                      ? "border-destructive"
+                      : ""
+                  }
+                />
+              )}
+            />
+            {errors.accommodation?.otherDescription && (
+              <p className="text-sm font-medium text-destructive">
+                {errors.accommodation.otherDescription.message as string}
+              </p>
+            )}
+          </div>
+        )}
+
+        {/* Ошибка валидации типа размещения */}
+        {errors.accommodation &&
+          typeof errors.accommodation === "object" &&
+          !errors.accommodation.otherDescription && (
+            <p className="text-sm font-medium text-destructive mt-2">
+              {errors.accommodation.message}
+            </p>
+          )}
+
+        {/* Ошибка валидации, если в схеме указан строковый формат ошибки */}
+        {errors.accommodation && typeof errors.accommodation === "string" && (
           <p className="text-sm font-medium text-destructive mt-2">
-            {typeof errors.tripPurpose === "string"
-              ? errors.tripPurpose
-              : errors.tripPurpose.message ||
-                "Выберите хотя бы одну цель поездки"}
+            {errors.accommodation}
           </p>
         )}
       </div>
 
-      {formData.tripPurpose.other && (
-        <div className="space-y-2">
-          <Label htmlFor="otherDescription">Опишите вашу цель *</Label>
-          <Controller
-            name="tripPurpose.otherDescription"
-            control={control}
-            render={({ field }) => (
-              <Textarea
-                id="otherDescription"
-                placeholder="Опишите вашу цель поездки"
-                {...field}
-                className={
-                  errors.tripPurpose?.otherDescription
-                    ? "border-destructive"
-                    : ""
-                }
-              />
-            )}
+      <div>
+        <h3 className="mb-4 text-sm font-medium">Пожелания к размещению</h3>
+        <div className="space-y-3">
+          <CheckboxField
+            label="Близость к центру города"
+            name="centralLocation"
+            checked={formData.accommodationPreferences.centralLocation}
+            onChange={handlePreferenceChange}
+            groupName="preferences"
           />
-          {errors.tripPurpose?.otherDescription && (
-            <p className="text-sm font-medium text-destructive">
-              {errors.tripPurpose.otherDescription.message as string}
+          <CheckboxField
+            label="Близость к торговым центрам"
+            name="nearShoppingCenters"
+            checked={formData.accommodationPreferences.nearShoppingCenters}
+            onChange={handlePreferenceChange}
+            groupName="preferences"
+          />
+          <CheckboxField
+            label="Наличие бассейна, спа, фитнеса"
+            name="poolAndSpa"
+            checked={formData.accommodationPreferences.poolAndSpa}
+            onChange={handlePreferenceChange}
+            groupName="preferences"
+          />
+          <CheckboxField
+            label="Другое"
+            name="other"
+            checked={formData.accommodationPreferences.other}
+            onChange={handlePreferenceChange}
+            groupName="preferences"
+          />
+        </div>
+
+        {formData.accommodationPreferences.other && (
+          <div className="space-y-2 mt-3">
+            <Label htmlFor="preferencesOtherDescription">
+              Укажите ваши пожелания
+            </Label>
+            <Controller
+              name="accommodationPreferences.otherDescription"
+              control={control}
+              render={({ field }) => (
+                <Textarea
+                  id="preferencesOtherDescription"
+                  placeholder="Опишите ваши пожелания к размещению"
+                  {...field}
+                  value={field.value || ""}
+                  className={
+                    errors.accommodationPreferences?.otherDescription
+                      ? "border-destructive"
+                      : ""
+                  }
+                />
+              )}
+            />
+            {errors.accommodationPreferences?.otherDescription && (
+              <p className="text-sm font-medium text-destructive">
+                {
+                  errors.accommodationPreferences.otherDescription
+                    .message as string
+                }
+              </p>
+            )}
+          </div>
+        )}
+
+        {errors.accommodationPreferences &&
+          typeof errors.accommodationPreferences === "object" &&
+          !errors.accommodationPreferences.otherDescription && (
+            <p className="text-sm font-medium text-destructive mt-2">
+              {errors.accommodationPreferences.message}
             </p>
           )}
-        </div>
-      )}
+
+        {errors.accommodationPreferences &&
+          typeof errors.accommodationPreferences === "string" && (
+            <p className="text-sm font-medium text-destructive mt-2">
+              {errors.accommodationPreferences}
+            </p>
+          )}
+      </div>
     </div>
   )
 }

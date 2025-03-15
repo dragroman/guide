@@ -10,10 +10,14 @@ import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
 import { Calendar } from "@/components/ui/calendar"
 import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover"
+  Drawer,
+  DrawerContent,
+  DrawerHeader,
+  DrawerTitle,
+  DrawerFooter,
+  DrawerClose,
+  DrawerTrigger,
+} from "@/components/ui/drawer"
 
 // Определяем тип для диапазона дат, используемый библиотекой react-day-picker
 interface ZodDateRange {
@@ -34,7 +38,7 @@ export function DatePickerWithRange({
   className,
   error,
 }: DatePickerWithRangeProps) {
-  // Состояние для управления popover
+  // Состояние для управления открытием/закрытием
   const [open, setOpen] = React.useState(false)
 
   // Временное состояние для выбора даты
@@ -59,15 +63,6 @@ export function DatePickerWithRange({
     }
   }, [value])
 
-  // Преобразуем наш тип даты в тип DateRange для компонента календаря
-  const selectedRange: DateRange | undefined =
-    value && value.from
-      ? {
-          from: value.from,
-          to: value.to || undefined,
-        }
-      : undefined
-
   // Обработчик временного выбора даты (без сохранения)
   const handleRangeChange = (range: DateRange | undefined) => {
     setTempRange(range)
@@ -86,10 +81,17 @@ export function DatePickerWithRange({
     setOpen(false)
   }
 
+  // Отображение выбранных дат или плейсхолдер
+  const displayDates = value?.from
+    ? value.to
+      ? `${format(value.from, "dd.MM.yyyy", { locale: ru })} - ${format(value.to, "dd.MM.yyyy", { locale: ru })}`
+      : format(value.from, "dd.MM.yyyy", { locale: ru })
+    : "Выберите даты"
+
   return (
     <div className={cn("grid gap-2", className)}>
-      <Popover open={open} onOpenChange={setOpen}>
-        <PopoverTrigger asChild>
+      <Drawer open={open} onOpenChange={setOpen}>
+        <DrawerTrigger asChild>
           <Button
             id="date"
             variant={"outline"}
@@ -100,32 +102,27 @@ export function DatePickerWithRange({
             )}
           >
             <CalendarIcon className="mr-2 h-4 w-4" />
-            {value?.from ? (
-              value.to ? (
-                <>
-                  {format(value.from, "dd.MM.yyyy", { locale: ru })} -{" "}
-                  {format(value.to, "dd.MM.yyyy", { locale: ru })}
-                </>
-              ) : (
-                format(value.from, "dd.MM.yyyy", { locale: ru })
-              )
-            ) : (
-              <span>Выберите даты</span>
-            )}
+            <span>{displayDates}</span>
           </Button>
-        </PopoverTrigger>
-        <PopoverContent className="w-auto p-0" align="start">
-          <div className="p-0">
+        </DrawerTrigger>
+        <DrawerContent>
+          <DrawerHeader className="border-b">
+            <DrawerTitle>Выберите даты поездки</DrawerTitle>
+          </DrawerHeader>
+
+          <div className="px-4 py-2 flex flex-col items-center">
             <Calendar
               initialFocus
               mode="range"
               defaultMonth={value?.from || tempRange?.from || undefined}
               selected={tempRange}
               onSelect={handleRangeChange}
-              numberOfMonths={2}
+              numberOfMonths={1}
               locale={ru}
+              className="rounded-md border mx-auto"
             />
-            <div className="flex items-center justify-between p-3 border-t border-border">
+
+            <div className="flex items-center justify-between w-full mt-4 p-3 border-t border-border">
               <Button
                 variant="ghost"
                 size="sm"
@@ -148,8 +145,14 @@ export function DatePickerWithRange({
               </Button>
             </div>
           </div>
-        </PopoverContent>
-      </Popover>
+
+          <DrawerFooter className="pt-2">
+            <DrawerClose asChild>
+              <Button variant="outline">Отмена</Button>
+            </DrawerClose>
+          </DrawerFooter>
+        </DrawerContent>
+      </Drawer>
     </div>
   )
 }

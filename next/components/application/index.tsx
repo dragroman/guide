@@ -8,9 +8,9 @@ import { DraftNotice } from "./components/DraftNotice"
 
 // Компоненты шагов
 import { StepPersonalInfo } from "./steps/Step1"
-import { StepContactInfo } from "./steps/Step2"
-import { StepTripPurpose } from "./steps/Step3"
-import { StepAccommodation } from "./steps/Step4"
+import { StepContactInfo } from "./steps/Step4"
+import { StepTripPurpose } from "./steps/Step2"
+import { StepAccommodation } from "./steps/Step3"
 import { StepConfirmation } from "./steps/stepFinal"
 
 // Вспомогательные компоненты
@@ -89,11 +89,11 @@ export default function MultistepForm() {
       case 0:
         return <StepPersonalInfo {...stepProps} />
       case 1:
-        return <StepContactInfo {...stepProps} />
-      case 2:
         return <StepTripPurpose {...stepProps} />
-      case 3:
+      case 2:
         return <StepAccommodation {...stepProps} />
+      case 3:
+        return <StepContactInfo {...stepProps} />
       case 4:
         return <StepConfirmation {...stepProps} />
       default:
@@ -109,12 +109,7 @@ export default function MultistepForm() {
         currentStep={currentStep}
         goToStep={goToStep}
       />
-      {/* Индикатор прогресса */}
-      <ProgressIndicator
-        currentStep={currentStep}
-        totalSteps={TOTAL_STEPS}
-        progress={progress}
-      />
+
       <div className="w-full mx-auto mb-10">
         {isError && (
           <Alert variant="destructive" className="mb-6">
@@ -124,23 +119,32 @@ export default function MultistepForm() {
         )}
 
         {/* Форма с текущим шагом */}
-        <form onSubmit={handleFormAction}>
-          {renderCurrentStep()}
-
-          {/* Кнопки навигации */}
-          <FormNavigation
-            currentStep={currentStep}
-            totalSteps={TOTAL_STEPS}
-            onPrev={prevStep}
-            onNext={handleFormAction}
-            isSubmitting={isSubmitting}
-          />
+        <form onSubmit={handleFormAction} className="flex flex-col ">
+          <div className="flex-grow pb-24">{renderCurrentStep()}</div>
+          {/* Уведомление о черновике только на первом шаге */}
+          {currentStep === 0 && showDraftNotice && hasDraft && (
+            <DraftNotice onLoad={restoreDraft} onIgnore={ignoreDraft} />
+          )}
+          {/* Фиксированная панель навигации внизу экрана */}
+          <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 p-4 z-10">
+            <div className="max-w-screen-md mx-auto">
+              {/* Индикатор прогресса */}
+              <ProgressIndicator
+                currentStep={currentStep}
+                totalSteps={TOTAL_STEPS}
+                progress={progress}
+              />
+              <FormNavigation
+                currentStep={currentStep}
+                totalSteps={TOTAL_STEPS}
+                onPrev={prevStep}
+                onNext={handleFormAction}
+                isSubmitting={isSubmitting}
+              />
+            </div>
+          </div>
         </form>
       </div>
-      {/* Уведомление о черновике только на первом шаге */}
-      {currentStep === 0 && showDraftNotice && hasDraft && (
-        <DraftNotice onLoad={restoreDraft} onIgnore={ignoreDraft} />
-      )}
     </>
   )
 }
