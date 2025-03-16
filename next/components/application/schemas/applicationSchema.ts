@@ -107,6 +107,77 @@ const dateRangeSchema = z
       })
     }
   })
+// Схема для выбора типа кухни
+const cuisineSchema = z
+  .object({
+    chinese: z.boolean(),
+    european: z.boolean(),
+    japanese: z.boolean(),
+    russian: z.boolean(),
+    other: z.boolean(),
+    otherDescription: z.string().optional(),
+    _error: z.any().optional(), // для хранения ошибок валидации
+  })
+  .refine(
+    (data) => {
+      // Проверка, что выбран хотя бы один тип кухни
+      return Object.entries(data)
+        .filter(([key]) => key !== "otherDescription" && key !== "_error")
+        .some(([_, value]) => value === true)
+    },
+    {
+      message: "Выберите хотя бы один тип кухни",
+      path: ["_error"],
+    }
+  )
+  .refine(
+    (data) => {
+      // Если выбрано "Другое", проверяем наличие описания
+      if (
+        data.other &&
+        (!data.otherDescription || data.otherDescription.trim() === "")
+      ) {
+        return false
+      }
+      return true
+    },
+    {
+      message: "Укажите описание для пункта 'Другое'",
+      path: ["otherDescription"],
+    }
+  )
+
+// Схема для предпочтений питания
+const foodPreferencesSchema = z
+  .object({
+    tryLocal: z.boolean(),
+    spicyOk: z.boolean(),
+    fattyOk: z.boolean(),
+    other: z.boolean(),
+    otherDescription: z.string().optional(),
+  })
+  .refine(
+    (data) => {
+      // Если выбрано "Другое", проверяем наличие описания
+      if (
+        data.other &&
+        (!data.otherDescription || data.otherDescription.trim() === "")
+      ) {
+        return false
+      }
+      return true
+    },
+    {
+      message: "Укажите особые требования к питанию",
+      path: ["otherDescription"],
+    }
+  )
+
+// Общая схема для предпочтений по питанию
+const foodSchema = z.object({
+  cuisine: cuisineSchema,
+  preferences: foodPreferencesSchema,
+})
 
 // Схема для валидации типа размещения
 const accommodationSchema = z
@@ -172,6 +243,7 @@ export const applicationSchema = z.object({
   ageGroups: ageGroupsSchema,
 
   dateRange: dateRangeSchema,
+  foodPreferences: foodSchema,
 
   accommodation: accommodationSchema,
 
@@ -286,5 +358,22 @@ export const defaultFormValues: ApplicationSchemaType = {
     poolAndSpa: false,
     other: false,
     otherDescription: "",
+  },
+  foodPreferences: {
+    cuisine: {
+      chinese: false,
+      european: false,
+      japanese: false,
+      russian: false,
+      other: false,
+      otherDescription: "",
+    },
+    preferences: {
+      tryLocal: false,
+      spicyOk: false,
+      fattyOk: false,
+      other: false,
+      otherDescription: "",
+    },
   },
 }

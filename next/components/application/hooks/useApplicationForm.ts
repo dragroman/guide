@@ -90,8 +90,9 @@ const stepValidationFields = [
   ["name", "peopleCount", "ageGroups"],
   ["dateRange", "tripPurpose"], // даты и цель поездки
   ["accommodation", "accommodationPreferences"], // размещение
+  ["cuisine", "foodPreferences"], // размещение
   ["phone", "email"], //  контактная информация
-  [], // Шаг 4 - подтверждение, проверяем всю форму
+  [], // Подтверждение, проверяем всю форму
 ]
 
 // Основной хук для управления формой
@@ -217,6 +218,48 @@ export function useApplicationForm() {
         setError("accommodationPreferences.otherDescription", {
           type: "custom",
           message: "Укажите описание для пункта 'Другое'",
+        })
+        return false
+      }
+    }
+
+    if (state.currentStep === 3) {
+      // Проверяем, что выбран хотя бы один тип кухни
+      const cuisine = getValues("foodPreferences.cuisine")
+      const hasCuisine = Object.entries(cuisine)
+        .filter(([key]) => key !== "otherDescription" && key !== "_error")
+        .some(([_, value]) => value === true)
+
+      if (!hasCuisine) {
+        setError("foodPreferences.cuisine._error", {
+          type: "custom",
+          message: "Выберите хотя бы один тип кухни",
+        })
+        return false
+      }
+
+      // Проверяем описание для "Другое"
+      if (
+        cuisine.other &&
+        (!cuisine.otherDescription || cuisine.otherDescription.trim() === "")
+      ) {
+        setError("foodPreferences.cuisine.otherDescription", {
+          type: "custom",
+          message: "Укажите описание для пункта 'Другое'",
+        })
+        return false
+      }
+
+      // Проверяем особые требования
+      const preferences = getValues("foodPreferences.preferences")
+      if (
+        preferences.other &&
+        (!preferences.otherDescription ||
+          preferences.otherDescription.trim() === "")
+      ) {
+        setError("foodPreferences.preferences.otherDescription", {
+          type: "custom",
+          message: "Укажите особые требования к питанию",
         })
         return false
       }

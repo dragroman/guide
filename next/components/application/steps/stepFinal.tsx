@@ -141,6 +141,37 @@ export function StepConfirmation({ formData }: StepProps) {
           "Продолжительность",
           `${formData.daysCount} ${getDaysText(formData.daysCount ?? 0)}`
         )}
+
+        {renderInfoBlock(
+          "Предпочтения по кухне",
+          <>
+            {getSelectedOptions(formData.foodPreferences.cuisine, [
+              "otherDescription",
+              "_error",
+            ])}
+            {formData.foodPreferences.cuisine.other &&
+            formData.foodPreferences.cuisine.otherDescription ? (
+              <div className="mt-1 text-xs italic">
+                {formData.foodPreferences.cuisine.otherDescription}
+              </div>
+            ) : null}
+          </>
+        )}
+
+        {renderInfoBlock(
+          "Дополнительная информация о питании",
+          <>
+            {getSelectedOptions(formData.foodPreferences.preferences, [
+              "otherDescription",
+            ])}
+            {formData.foodPreferences.preferences.other &&
+            formData.foodPreferences.preferences.otherDescription ? (
+              <div className="mt-1 text-xs italic">
+                {formData.foodPreferences.preferences.otherDescription}
+              </div>
+            ) : null}
+          </>
+        )}
       </div>
     </div>
   )

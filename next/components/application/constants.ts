@@ -1,12 +1,13 @@
 import { ApplicationSchemaType } from "./schemas/applicationSchema"
 
-export const TOTAL_STEPS = 5
+export const TOTAL_STEPS = 6
 
 export const STEPS = [
   { title: "Знакомство", description: "Как к вам обращаться" },
   { title: "Поездка", description: "Даты и цели" },
   { title: "Размещение", description: "Где вы хотите остановиться" },
-  { title: "Связь", description: "Как с вами связаться" },
+  { title: "Кухня", description: "Что поесть" },
+  { title: "Контакты", description: "Как с вами связаться" },
   { title: "Подтверждение", description: "Проверьте введенные данные" },
 ]
 
@@ -44,5 +45,22 @@ export const defaultFormValues: ApplicationSchemaType = {
     poolAndSpa: false,
     other: false,
     otherDescription: "",
+  },
+  foodPreferences: {
+    cuisine: {
+      chinese: false,
+      european: false,
+      japanese: false,
+      russian: false,
+      other: false,
+      otherDescription: "",
+    },
+    preferences: {
+      tryLocal: false,
+      spicyOk: false,
+      fattyOk: false,
+      other: false,
+      otherDescription: "",
+    },
   },
 }

@@ -2,25 +2,22 @@
 
 import React from "react"
 import { Alert, AlertTitle, AlertDescription } from "@/components/ui/alert"
-import { STEPS, TOTAL_STEPS } from "./constants"
 import { useApplicationForm } from "./hooks/useApplicationForm"
 import { DraftNotice } from "./components/DraftNotice"
 
 // Компоненты шагов
-import { StepPersonalInfo } from "./steps/Step1"
-import { StepContactInfo } from "./steps/Step4"
-import { StepTripPurpose } from "./steps/Step2"
-import { StepAccommodation } from "./steps/Step3"
+import { StepPersonalInfo } from "./steps/StepPersonalInfo"
+import { StepContactInfo } from "./steps/StepContactInfo"
+import { StepTripPurpose } from "./steps/StepTripPurpose"
+import { StepAccommodation } from "./steps/StepAccommodation"
 import { StepConfirmation } from "./steps/stepFinal"
 
 // Вспомогательные компоненты
 import { SuccessView } from "./components/SuccessView"
-import { ProgressIndicator } from "./components/ProgressIndicator"
-import { StepIndicator } from "./components/StepIndicator"
-import { FormNavigation } from "./components/FormNavigation"
 import { StepProps } from "./types"
 import ApplicationHeader from "./layout/Header"
 import ApplicationFooter from "./layout/Footer"
+import { StepFood } from "./steps/StepFood"
 
 export default function MultistepForm() {
   const {
@@ -31,7 +28,6 @@ export default function MultistepForm() {
     isSuccess,
     isError,
     errorMessage,
-    progress,
     errors,
 
     // React Hook Form
@@ -95,8 +91,10 @@ export default function MultistepForm() {
       case 2:
         return <StepAccommodation {...stepProps} />
       case 3:
-        return <StepContactInfo {...stepProps} />
+        return <StepFood {...stepProps} />
       case 4:
+        return <StepContactInfo {...stepProps} />
+      case 5:
         return <StepConfirmation {...stepProps} />
       default:
         return null
