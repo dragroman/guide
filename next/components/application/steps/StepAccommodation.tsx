@@ -3,8 +3,17 @@ import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
 import { StepProps } from "../types"
 import { Controller } from "react-hook-form"
-import { AccommodationCardSelector } from "../components/AccomodationCardSelector"
-import { PreferencesCardSelector } from "../components/PreferencesCardSelector"
+import { CardSelector, CardOption } from "../components/CardSelector"
+import {
+  Home,
+  Building,
+  Warehouse,
+  Star,
+  MapPin,
+  ShoppingBag,
+  Dumbbell,
+  Sparkles,
+} from "lucide-react"
 
 export function StepAccommodation({
   control,
@@ -19,6 +28,73 @@ export function StepAccommodation({
     return <div>Error: Missing required handlers</div>
   }
 
+  // Опции для типов размещения
+  const accommodationOptions: CardOption[] = [
+    {
+      name: "hotel3",
+      label: "Отель 3★",
+      description: "Комфортабельные номера с базовыми удобствами",
+      icon: <Star className="h-5 w-5" />,
+    },
+    {
+      name: "hotel4",
+      label: "Отель 4★",
+      description: "Улучшенные номера с дополнительными услугами",
+      icon: <Star className="h-5 w-5" />,
+    },
+    {
+      name: "hotel5",
+      label: "Отель 5★",
+      description: "Люксовые номера с полным спектром услуг",
+      icon: <Star className="h-5 w-5" />,
+    },
+    {
+      name: "apartment",
+      label: "Апартаменты",
+      description: "Самостоятельное проживание с кухней и гостиной",
+      icon: <Building className="h-5 w-5" />,
+    },
+    {
+      name: "hostel",
+      label: "Хостел",
+      description: "Бюджетное размещение в общих номерах",
+      icon: <Home className="h-5 w-5" />,
+    },
+    {
+      name: "other",
+      label: "Другое",
+      description: "Уточните ваши особые пожелания",
+      icon: <Warehouse className="h-5 w-5" />,
+    },
+  ]
+
+  // Опции для предпочтений к размещению
+  const preferencesOptions: CardOption[] = [
+    {
+      name: "centralLocation",
+      label: "Близость к центру",
+      description: "Удобное расположение в центральной части города",
+      icon: <MapPin className="h-5 w-5" />,
+    },
+    {
+      name: "nearShoppingCenters",
+      label: "Рядом с магазинами",
+      description: "Близкое расположение к торговым центрам и рынкам",
+      icon: <ShoppingBag className="h-5 w-5" />,
+    },
+    {
+      name: "poolAndSpa",
+      label: "Бассейн и спа",
+      description: "Наличие бассейна, спа-зоны и фитнес-центра",
+      icon: <Dumbbell className="h-5 w-5" />,
+    },
+    {
+      name: "other",
+      label: "Другое",
+      description: "Другие особые пожелания к размещению",
+      icon: <Sparkles className="h-5 w-5" />,
+    },
+  ]
   return (
     <div className="space-y-6">
       <div>
@@ -26,10 +102,12 @@ export function StepAccommodation({
           Предпочитаемый тип размещения
         </h3>
 
-        {/* Используем новый компонент с карточками вместо чекбоксов */}
-        <AccommodationCardSelector
+        {/* Используем CardSelector для типов размещения */}
+        <CardSelector
+          options={accommodationOptions}
           formData={formData}
-          handleAccommodationChange={handleAccommodationChange}
+          path="accommodation"
+          onOptionChange={handleAccommodationChange}
         />
 
         {formData.accommodation.other && (
@@ -82,10 +160,12 @@ export function StepAccommodation({
       <div>
         <h3 className="mb-4 text-sm font-medium">Пожелания к размещению</h3>
 
-        {/* Используем новый компонент с карточками для предпочтений */}
-        <PreferencesCardSelector
+        {/* Используем CardSelector для предпочтений к размещению */}
+        <CardSelector
+          options={preferencesOptions}
           formData={formData}
-          handlePreferenceChange={handlePreferenceChange}
+          path="accommodationPreferences"
+          onOptionChange={handlePreferenceChange}
         />
 
         {formData.accommodationPreferences.other && (

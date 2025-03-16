@@ -114,7 +114,7 @@ export default function MultistepForm() {
         isSubmitting={isSubmitting}
       />
 
-      <div className="w-full mx-auto mb-10 pt-48 px-4">
+      <div className="w-full mx-auto mb-10 pt-32 lg:pt-48 px-4">
         {isError && (
           <Alert variant="destructive" className="mb-6">
             <AlertTitle>Ошибка</AlertTitle>

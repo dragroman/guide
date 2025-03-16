@@ -3,10 +3,87 @@ import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
 import { StepProps } from "../types"
 import { Controller } from "react-hook-form"
-import { CuisineCardSelector } from "../components/CuisineCardSelector"
-import { FoodPreferencesCardSelector } from "../components/FoodPreferencesCardSelector"
+import { CardSelector, CardOption } from "../components/CardSelector"
+import {
+  Utensils,
+  Coffee,
+  Soup,
+  Beef,
+  Flame,
+  Leaf,
+  Star,
+  AlertTriangle,
+} from "lucide-react"
+import { FlagComponent } from "../components/PhoneInput"
+import { Country } from "react-phone-number-input"
 
 export function StepFood({ control, errors, formData, setValue }: StepProps) {
+  // Опции для типов кухни
+  const cuisineOptions: CardOption[] = [
+    {
+      name: "chinese",
+      label: "Китайская кухня",
+      description: "Традиционные блюда разных регионов Китая",
+      icon: <Utensils className="h-5 w-5" />,
+      extraData: { country: "CN" },
+    },
+    {
+      name: "european",
+      label: "Европейская кухня",
+      description: "Блюда из Италии, Франции и других стран Европы",
+      icon: <Utensils className="h-5 w-5" />,
+      extraData: { country: "EU" },
+    },
+    {
+      name: "japanese",
+      label: "Японская кухня",
+      description: "Суши, роллы и другие традиционные блюда Японии",
+      icon: <Soup className="h-5 w-5" />,
+      extraData: { country: "JP" },
+    },
+    {
+      name: "russian",
+      label: "Русская кухня",
+      description: "Традиционные русские блюда и закуски",
+      icon: <Coffee className="h-5 w-5" />,
+      extraData: { country: "RU" },
+    },
+    {
+      name: "other",
+      label: "Другое",
+      description: "Другие национальные кухни и предпочтения",
+      icon: <Utensils className="h-5 w-5" />,
+    },
+  ]
+
+  // Опции для предпочтений по питанию
+  const foodPreferencesOptions: CardOption[] = [
+    {
+      name: "tryLocal",
+      label: "Местная кухня",
+      description: "Хочу попробовать аутентичные местные блюда",
+      icon: <Star className="h-5 w-5" />,
+    },
+    {
+      name: "spicyOk",
+      label: "Острая пища",
+      description: "Нормально переношу острую пищу",
+      icon: <Flame className="h-5 w-5" />,
+    },
+    {
+      name: "fattyOk",
+      label: "Жирная пища",
+      description: "Нормально переношу жирную пищу",
+      icon: <Leaf className="h-5 w-5" />,
+    },
+    {
+      name: "other",
+      label: "Особые требования",
+      description: "Диеты, аллергии или другие предпочтения",
+      icon: <AlertTriangle className="h-5 w-5" />,
+    },
+  ]
+
   // Обработчик для выбора типа кухни
   const handleCuisineChange = (name: string, checked: boolean) => {
     const currentCuisine = formData.foodPreferences?.cuisine || {}
@@ -25,7 +102,7 @@ export function StepFood({ control, errors, formData, setValue }: StepProps) {
 
     // Если выбран хотя бы один тип кухни, снимаем ошибку
     const hasCuisine = Object.entries(updatedCuisine)
-      .filter(([key]) => key !== "otherDescription")
+      .filter(([key]) => key !== "otherDescription" && key !== "_error")
       .some(([_, value]) => value === true)
 
     if (hasCuisine && errors?.foodPreferences?.cuisine) {
@@ -50,14 +127,33 @@ export function StepFood({ control, errors, formData, setValue }: StepProps) {
     setValue("foodPreferences.preferences", updatedPreferences)
   }
 
+  // Рендер флага страны для опций кухни
+  const renderCuisineExtra = (option: CardOption) => {
+    if (option.extraData?.country) {
+      return (
+        <div className="mt-1">
+          <FlagComponent
+            country={option.extraData.country as Country}
+            countryName={option.label}
+          />
+        </div>
+      )
+    }
+    return null
+  }
+
   return (
     <div className="space-y-6">
       <div>
         <h3 className="mb-4 text-sm font-medium">Предпочтения по кухне</h3>
 
-        <CuisineCardSelector
+        {/* Используем CardSelector для типов кухни */}
+        <CardSelector
+          options={cuisineOptions}
           formData={formData}
-          handleCuisineChange={handleCuisineChange}
+          path="foodPreferences.cuisine"
+          onOptionChange={handleCuisineChange}
+          renderExtraContent={renderCuisineExtra}
         />
 
         {formData.foodPreferences?.cuisine?.other && (
@@ -106,9 +202,15 @@ export function StepFood({ control, errors, formData, setValue }: StepProps) {
           Дополнительная информация о питании
         </h3>
 
-        <FoodPreferencesCardSelector
+        {/* Используем CardSelector для предпочтений по питанию */}
+        <CardSelector
+          options={foodPreferencesOptions}
           formData={formData}
-          handleFoodPreferenceChange={handleFoodPreferenceChange}
+          path="foodPreferences.preferences"
+          onOptionChange={handleFoodPreferenceChange}
+          iconClassName={(_, isChecked) =>
+            isChecked ? "bg-primary text-primary-foreground" : "bg-muted"
+          }
         />
 
         {formData.foodPreferences?.preferences?.other && (

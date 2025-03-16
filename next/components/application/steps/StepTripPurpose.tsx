@@ -4,11 +4,8 @@ import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
 import { Badge } from "@/components/ui/badge"
 import { DatePickerWithRange } from "../components/DatePickerWithRange"
-import { PurposeCheckbox } from "../components/PurposeCheckbox"
 import { StepProps } from "../types"
 import { getDaysText } from "../utils"
-import { Card, CardContent } from "@/components/ui/card"
-import { Checkbox } from "@/components/ui/checkbox"
 import {
   Briefcase,
   Building2,
@@ -19,6 +16,7 @@ import {
   Sparkles,
   UtensilsCrossed,
 } from "lucide-react"
+import { CardSelector, CardOption } from "../components/CardSelector"
 
 export function StepTripPurpose({
   control,
@@ -29,10 +27,11 @@ export function StepTripPurpose({
   handlePurposeChange,
   handlePurposeTextChange,
 }: StepProps) {
-  const purposes = [
+  // Определяем массив опций для целей поездки
+  const purposeOptions: CardOption[] = [
     {
       name: "excursion",
-      label: "",
+      label: "Экскурсии",
       description: "Музеи, исторические места",
       icon: <Building2 className="h-6 w-6" />,
     },
@@ -73,6 +72,7 @@ export function StepTripPurpose({
       icon: <PlusCircle className="h-6 w-6" />,
     },
   ]
+
   // Проверяем, что необходимые пропсы присутствуют
   if (!handleDateChange || !handlePurposeChange || !handlePurposeTextChange) {
     console.error("Missing required props in StepTripPurpose")
@@ -126,49 +126,17 @@ export function StepTripPurpose({
           Выберите цели поездки
         </h3>
 
-        <div className="grid grid-cols-2 gap-3">
-          {purposes.map((purpose) => {
-            const isChecked =
-              formData.tripPurpose[
-                purpose.name as keyof typeof formData.tripPurpose
-              ]
-
-            return (
-              <Card
-                key={purpose.name}
-                className={`cursor-pointer transition-all ${
-                  isChecked
-                    ? "border-primary ring-2 ring-primary"
-                    : "hover:border-primary/50"
-                }`}
-                onClick={() => handlePurposeChange(purpose.name, !isChecked)}
-              >
-                <CardContent className="p-4">
-                  <div className="flex flex-col items-start">
-                    <div
-                      className={`p-2 rounded-full mb-2 ${
-                        isChecked
-                          ? "bg-primary text-primary-foreground"
-                          : "bg-muted"
-                      }`}
-                    >
-                      {purpose.icon}
-                    </div>
-                    <p className="font-medium">{purpose.label}</p>
-                    <p className="text-xs text-muted-foreground">
-                      {purpose.description}
-                    </p>
-                    {isChecked && (
-                      <div className="absolute top-2 right-2 text-primary">
-                        <Check className="h-4 w-4" />
-                      </div>
-                    )}
-                  </div>
-                </CardContent>
-              </Card>
-            )
-          })}
-        </div>
+        {/* Заменяем блок с карточками на универсальный компонент CardSelector */}
+        <CardSelector
+          options={purposeOptions}
+          formData={formData}
+          path="tripPurpose"
+          onOptionChange={handlePurposeChange}
+          // Кастомизация иконок (аналогично оригинальному компоненту)
+          iconClassName={(_, isChecked) =>
+            isChecked ? "bg-primary text-primary-foreground" : "bg-muted"
+          }
+        />
 
         {/* Ошибка при отсутствии выбора */}
         {errors.tripPurpose && !errors.tripPurpose.otherDescription && (

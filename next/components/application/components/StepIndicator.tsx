@@ -44,7 +44,7 @@ export function StepIndicator({
     <div className="w-full">
       <div
         ref={scrollContainerRef}
-        className="flex overflow-x-auto py-2 scrollbar-none"
+        className="flex overflow-x-auto lg:py-2 scrollbar-none"
         style={{
           // Скрываем стандартный скролл
           scrollbarWidth: "none",
@@ -76,7 +76,7 @@ export function StepIndicator({
               style={{ width: `${100 / Math.min(steps.length, 5)}%` }}
             >
               {/* Верхняя линия прогресса */}
-              <div className="w-full flex items-center mb-2">
+              <div className="w-full flex items-center">
                 {/* Линия слева */}
                 {index > 0 && (
                   <div
@@ -122,7 +122,7 @@ export function StepIndicator({
               {/* Метка */}
               <div
                 className={cn(
-                  "text-center transition-colors pt-1 w-full",
+                  "text-center transition-colors pt-1 w-full hidden lg:block",
                   isCurrent
                     ? "text-primary"
                     : isCompleted
@@ -134,7 +134,7 @@ export function StepIndicator({
                   {step.title}
                 </span>
                 {isCurrent && (
-                  <span className="text-[10px] text-muted-foreground mt-0.5 hidden sm:block line-clamp-1">
+                  <span className="text-[10px] text-muted-foreground mt-0.5 line-clamp-1">
                     {step.description}
                   </span>
                 )}

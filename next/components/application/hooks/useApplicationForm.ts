@@ -1,3 +1,5 @@
+// components/application/hooks/useApplicationForm.ts
+
 import { useReducer, useCallback, useEffect } from "react"
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
@@ -9,6 +11,14 @@ import {
 } from "../schemas/applicationSchema"
 import { defaultFormValues, TOTAL_STEPS } from "../constants"
 import { useDraftForm } from "./useDraftForm"
+import {
+  validatePersonalInfo,
+  validateTripInfo,
+  validateAccommodation,
+  validateTransport,
+  validateFood,
+  validateContact,
+} from "../utils/validationUtils"
 
 // Типы для состояния формы
 type FormState = {
@@ -85,17 +95,6 @@ function formReducer(state: FormState, action: FormAction): FormState {
   }
 }
 
-// Определяем поля для валидации на каждом шаге
-const stepValidationFields = [
-  ["name", "peopleCount", "ageGroups"],
-  ["dateRange", "tripPurpose"], // даты и цель поездки
-  ["accommodation", "accommodationPreferences"], // размещение
-  ["transfer", "transportPreferences"], // транспорт
-  ["cuisine", "foodPreferences"], // размещение
-  ["phone", "email"], //  контактная информация
-  [], // Подтверждение, проверяем всю форму
-]
-
 // Основной хук для управления формой
 export function useApplicationForm() {
   // React Hook Form для управления полями и валидации
@@ -129,186 +128,27 @@ export function useApplicationForm() {
   // Вычисляем прогресс заполнения формы
   const progress = Math.floor(((state.currentStep + 1) / TOTAL_STEPS) * 100)
 
-  // Валидация текущего шага
+  // Основная функция валидации текущего шага - использует функции из validationUtils
   const validateCurrentStep = useCallback(async () => {
-    // На последнем шаге проверяем всю форму
-    if (state.currentStep === TOTAL_STEPS - 1) {
-      return await trigger()
+    switch (state.currentStep) {
+      case 0:
+        return await validatePersonalInfo(trigger)
+      case 1:
+        return await validateTripInfo(trigger, getValues, setError)
+      case 2:
+        return await validateAccommodation(trigger, getValues, setError)
+      case 3:
+        return await validateTransport(getValues, setError)
+      case 4:
+        return await validateFood(getValues, setError)
+      case 5:
+        return await validateContact(trigger)
+      case 6:
+        // На последнем шаге проверяем всю форму
+        return await trigger()
+      default:
+        return true
     }
-
-    // Обязательная валидация полей текущего шага
-    const fieldsToValidate = stepValidationFields[state.currentStep]
-    const isStepValid = await trigger(fieldsToValidate as any)
-
-    // Для шага 2 (индекс 2) - даты и цель поездки - проверяем особые условия
-    if (state.currentStep === 1) {
-      // Проверяем, что дата выбрана
-      const dateRange = getValues("dateRange")
-      if (!dateRange || !dateRange.from || !dateRange.to) {
-        setError("dateRange", {
-          type: "custom",
-          message: "Пожалуйста, выберите даты поездки",
-        })
-        return false
-      }
-
-      // Проверяем, что выбрана хотя бы одна цель поездки
-      const tripPurpose = getValues("tripPurpose")
-      const hasPurpose = Object.entries(tripPurpose)
-        .filter(([key]) => key !== "otherDescription")
-        .some(([_, value]) => value === true)
-
-      if (!hasPurpose) {
-        setError("tripPurpose", {
-          type: "custom",
-          message: "Выберите хотя бы одну цель поездки",
-        })
-        return false
-      }
-
-      // Проверяем, что если выбрано "Другое", то заполнено описание
-      if (
-        tripPurpose.other &&
-        (!tripPurpose.otherDescription ||
-          tripPurpose.otherDescription.trim() === "")
-      ) {
-        setError("tripPurpose.otherDescription", {
-          type: "custom",
-          message: "Укажите описание для пункта 'Другое'",
-        })
-        return false
-      }
-    }
-
-    // Для шага 3 (индекс 3) - размещение - проверяем особые условия
-    if (state.currentStep === 2) {
-      // Проверяем, что выбран хотя бы один тип размещения
-      const accommodation = getValues("accommodation")
-      const hasAccommodation = Object.entries(accommodation)
-        .filter(([key]) => key !== "otherDescription")
-        .some(([_, value]) => value === true)
-
-      if (!hasAccommodation) {
-        setError("accommodation", {
-          type: "custom",
-          message: "Выберите хотя бы один тип размещения",
-        })
-        return false
-      }
-
-      // Проверяем, что если выбрано "Другое", то заполнено описание
-      if (
-        accommodation.other &&
-        (!accommodation.otherDescription ||
-          accommodation.otherDescription.trim() === "")
-      ) {
-        setError("accommodation.otherDescription", {
-          type: "custom",
-          message: "Укажите описание для пункта 'Другое'",
-        })
-        return false
-      }
-
-      // Проверяем предпочтения к размещению если выбрано "Другое"
-      const preferences = getValues("accommodationPreferences")
-      if (
-        preferences.other &&
-        (!preferences.otherDescription ||
-          preferences.otherDescription.trim() === "")
-      ) {
-        setError("accommodationPreferences.otherDescription", {
-          type: "custom",
-          message: "Укажите описание для пункта 'Другое'",
-        })
-        return false
-      }
-    }
-
-    if (state.currentStep === 3) {
-      // Проверяем, что выбран хотя бы один тип кухни
-      const transfer = getValues("transport.transfer")
-      const hasTransfer = Object.entries(transfer)
-        .filter(([key]) => key !== "otherDescription" && key !== "_error")
-        .some(([_, value]) => value === true)
-
-      if (!hasTransfer) {
-        setError("transport.transfer._error", {
-          type: "custom",
-          message: "Выберите хотя бы один тип трансфера",
-        })
-        return false
-      }
-
-      // Проверяем описание для "Другое"
-      if (
-        transfer.other &&
-        (!transfer.otherDescription || transfer.otherDescription.trim() === "")
-      ) {
-        setError("transport.transfer.otherDescription", {
-          type: "custom",
-          message: "Укажите описание для пункта 'Другое'",
-        })
-        return false
-      }
-
-      // Проверяем особые требования
-      const transportPreferences = getValues("transport.transportPreferences")
-      if (
-        transportPreferences.other &&
-        (!transportPreferences.otherDescription ||
-          transportPreferences.otherDescription.trim() === "")
-      ) {
-        setError("transport.transportPreferences.otherDescription", {
-          type: "custom",
-          message: "Укажите особые требования к питанию",
-        })
-        return false
-      }
-    }
-
-    if (state.currentStep === 4) {
-      // Проверяем, что выбран хотя бы один тип кухни
-      const cuisine = getValues("foodPreferences.cuisine")
-      const hasCuisine = Object.entries(cuisine)
-        .filter(([key]) => key !== "otherDescription" && key !== "_error")
-        .some(([_, value]) => value === true)
-
-      if (!hasCuisine) {
-        setError("foodPreferences.cuisine._error", {
-          type: "custom",
-          message: "Выберите хотя бы один тип кухни",
-        })
-        return false
-      }
-
-      // Проверяем описание для "Другое"
-      if (
-        cuisine.other &&
-        (!cuisine.otherDescription || cuisine.otherDescription.trim() === "")
-      ) {
-        setError("foodPreferences.cuisine.otherDescription", {
-          type: "custom",
-          message: "Укажите описание для пункта 'Другое'",
-        })
-        return false
-      }
-
-      // Проверяем особые требования
-      const preferences = getValues("foodPreferences.preferences")
-      if (
-        preferences.other &&
-        (!preferences.otherDescription ||
-          preferences.otherDescription.trim() === "")
-      ) {
-        setError("foodPreferences.preferences.otherDescription", {
-          type: "custom",
-          message: "Укажите особые требования к питанию",
-        })
-        return false
-      }
-    }
-
-    return isStepValid
   }, [state.currentStep, trigger, getValues, setError])
 
   // Обработчик для диапазона дат

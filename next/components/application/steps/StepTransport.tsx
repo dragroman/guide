@@ -1,10 +1,80 @@
 import React from "react"
+import {
+  Car,
+  Bus,
+  CarTaxiFront,
+  PlusCircle,
+  PlaneTakeoff,
+  PersonStanding,
+} from "lucide-react"
 import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
 import { StepProps } from "../types"
 import { Controller } from "react-hook-form"
-import { TransportCardSelector } from "../components/TransportCardSelector"
-import { TransferOptionsSelector } from "../components/TransferOptionsSelector"
+import { CardSelector, CardOption } from "../components/CardSelector"
+
+// Опции для трансфера из аэропорта
+const transferOptions: CardOption[] = [
+  {
+    name: "airport",
+    label: "Трансфер из аэропорта",
+    description: "Встреча в аэропорту и доставка до отеля",
+    icon: <PlaneTakeoff className="h-5 w-5" />,
+  },
+  {
+    name: "individual",
+    label: "Индивидуальный",
+    description: "Персональный автомобиль с водителем",
+    icon: <Car className="h-5 w-5" />,
+  },
+  {
+    name: "shuttle",
+    label: "Шаттл",
+    description: "Групповой трансфер по расписанию",
+    icon: <Bus className="h-5 w-5" />,
+  },
+  {
+    name: "none",
+    label: "Не нужен",
+    description: "Самостоятельное прибытие в отель",
+    icon: <PersonStanding className="h-5 w-5" />,
+  },
+  {
+    name: "other",
+    label: "Другое",
+    description: "Уточните ваши особые пожелания",
+    icon: <PlusCircle className="h-5 w-5" />,
+  },
+]
+
+// Опции для пожеланий к транспорту во время тура
+const transportOptions: CardOption[] = [
+  {
+    name: "privateDriver",
+    label: "Индивидуальный водитель",
+    description: "Аренда автомобиля с водителем для удобства перемещений",
+    icon: <Car className="h-5 w-5" />,
+  },
+  {
+    name: "publicTransport",
+    label: "Общественный транспорт",
+    description:
+      "Передвижение на автобусах, метро и другом общественном транспорте",
+    icon: <Bus className="h-5 w-5" />,
+  },
+  {
+    name: "taxi",
+    label: "Такси",
+    description: "Использование услуг такси по необходимости",
+    icon: <CarTaxiFront className="h-5 w-5" />,
+  },
+  {
+    name: "other",
+    label: "Другое",
+    description: "Уточните ваши особые пожелания к транспорту",
+    icon: <PlusCircle className="h-5 w-5" />,
+  },
+]
 
 export function StepTransport({
   control,
@@ -62,9 +132,12 @@ export function StepTransport({
           Нужен ли трансфер из аэропорта до отеля?
         </h3>
 
-        <TransferOptionsSelector
+        {/* Используем универсальный CardSelector вместо TransferOptionsSelector */}
+        <CardSelector
+          options={transferOptions}
           formData={formData}
-          handleTransferChange={handleTransferChange}
+          path="transport.transfer"
+          onOptionChange={handleTransferChange}
         />
 
         {formData.transport?.transfer?.other && (
@@ -110,9 +183,12 @@ export function StepTransport({
           Пожелания к транспорту во время тура
         </h3>
 
-        <TransportCardSelector
+        {/* Используем универсальный CardSelector вместо TransportCardSelector */}
+        <CardSelector
+          options={transportOptions}
           formData={formData}
-          handleTransportChange={handleTransportChange}
+          path="transport.transportPreferences"
+          onOptionChange={handleTransportChange}
         />
 
         {formData.transport?.transportPreferences?.other && (

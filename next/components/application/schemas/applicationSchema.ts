@@ -258,7 +258,7 @@ const accommodationSchema = z
     },
     {
       message: "Выберите хотя бы один тип размещения",
-      path: ["accommodation"],
+      path: [],
     }
   )
   .refine(
@@ -374,83 +374,3 @@ export const applicationSchema = z.object({
 
 // Тип данных формы, автоматически выводимый из схемы Zod
 export type ApplicationSchemaType = z.infer<typeof applicationSchema>
-
-// Начальные значения для формы
-export const defaultFormValues: ApplicationSchemaType = {
-  name: "",
-  peopleCount: 1,
-  ageGroups: {
-    adults: 1,
-    children: 0,
-    seniors: 0,
-    toddlers: 0,
-    infants: 0,
-    teens: 0,
-  },
-  phone: "",
-  dateRange: {
-    from: addDays(new Date(), 7),
-    to: addDays(new Date(), 14),
-  },
-  email: "",
-  daysCount: 8,
-  tripPurpose: {
-    excursion: false,
-    business: false,
-    shopping: false,
-    food: false,
-    fun: false,
-    other: false,
-    otherDescription: "",
-  },
-  accommodation: {
-    hotel3: false,
-    hotel4: false,
-    hotel5: false,
-    apartment: false,
-    hostel: false,
-    other: false,
-    otherDescription: "",
-  },
-  accommodationPreferences: {
-    centralLocation: false,
-    nearShoppingCenters: false,
-    poolAndSpa: false,
-    other: false,
-    otherDescription: "",
-  },
-  transport: {
-    transfer: {
-      airport: false,
-      individual: false,
-      shuttle: false,
-      none: false,
-      other: false,
-      otherDescription: "",
-    },
-    transportPreferences: {
-      privateDriver: false,
-      publicTransport: false,
-      taxi: false,
-      other: false,
-      otherDescription: "",
-    },
-  },
-  foodPreferences: {
-    cuisine: {
-      chinese: false,
-      european: false,
-      japanese: false,
-      russian: false,
-      other: false,
-      otherDescription: "",
-    },
-    preferences: {
-      tryLocal: false,
-      spicyOk: false,
-      fattyOk: false,
-      other: false,
-      otherDescription: "",
-    },
-  },
-}
