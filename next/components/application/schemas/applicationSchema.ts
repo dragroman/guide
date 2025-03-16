@@ -11,6 +11,65 @@ const parseDate = (value: unknown): Date | null => {
   return null
 }
 
+// Схема для трансфера из аэропорта
+const transferSchema = z
+  .object({
+    airport: z.boolean(),
+    individual: z.boolean(),
+    shuttle: z.boolean(),
+    none: z.boolean(),
+    other: z.boolean(),
+    otherDescription: z.string().optional(),
+    _error: z.any().optional(), // для хранения ошибок валидации
+  })
+  .refine(
+    (data) => {
+      // Если выбрано "Другое", проверяем наличие описания
+      if (
+        data.other &&
+        (!data.otherDescription || data.otherDescription.trim() === "")
+      ) {
+        return false
+      }
+      return true
+    },
+    {
+      message: "Укажите описание для пункта 'Другое'",
+      path: ["otherDescription"],
+    }
+  )
+
+// Схема для пожеланий к транспорту во время тура
+const transportPreferencesSchema = z
+  .object({
+    privateDriver: z.boolean(),
+    publicTransport: z.boolean(),
+    taxi: z.boolean(),
+    other: z.boolean(),
+    otherDescription: z.string().optional(),
+  })
+  .refine(
+    (data) => {
+      // Если выбрано "Другое", проверяем наличие описания
+      if (
+        data.other &&
+        (!data.otherDescription || data.otherDescription.trim() === "")
+      ) {
+        return false
+      }
+      return true
+    },
+    {
+      message: "Укажите ваши пожелания к транспорту",
+      path: ["otherDescription"],
+    }
+  )
+
+const transportSchema = z.object({
+  transfer: transferSchema,
+  transportPreferences: transportPreferencesSchema,
+})
+
 // Добавляем схему для возрастных групп
 const ageGroupsSchema = z
   .record(
@@ -243,6 +302,7 @@ export const applicationSchema = z.object({
   ageGroups: ageGroupsSchema,
 
   dateRange: dateRangeSchema,
+  transport: transportSchema,
   foodPreferences: foodSchema,
 
   accommodation: accommodationSchema,
@@ -358,6 +418,23 @@ export const defaultFormValues: ApplicationSchemaType = {
     poolAndSpa: false,
     other: false,
     otherDescription: "",
+  },
+  transport: {
+    transfer: {
+      airport: false,
+      individual: false,
+      shuttle: false,
+      none: false,
+      other: false,
+      otherDescription: "",
+    },
+    transportPreferences: {
+      privateDriver: false,
+      publicTransport: false,
+      taxi: false,
+      other: false,
+      otherDescription: "",
+    },
   },
   foodPreferences: {
     cuisine: {

@@ -90,6 +90,7 @@ const stepValidationFields = [
   ["name", "peopleCount", "ageGroups"],
   ["dateRange", "tripPurpose"], // даты и цель поездки
   ["accommodation", "accommodationPreferences"], // размещение
+  ["transfer", "transportPreferences"], // транспорт
   ["cuisine", "foodPreferences"], // размещение
   ["phone", "email"], //  контактная информация
   [], // Подтверждение, проверяем всю форму
@@ -224,6 +225,48 @@ export function useApplicationForm() {
     }
 
     if (state.currentStep === 3) {
+      // Проверяем, что выбран хотя бы один тип кухни
+      const transfer = getValues("transport.transfer")
+      const hasTransfer = Object.entries(transfer)
+        .filter(([key]) => key !== "otherDescription" && key !== "_error")
+        .some(([_, value]) => value === true)
+
+      if (!hasTransfer) {
+        setError("transport.transfer._error", {
+          type: "custom",
+          message: "Выберите хотя бы один тип трансфера",
+        })
+        return false
+      }
+
+      // Проверяем описание для "Другое"
+      if (
+        transfer.other &&
+        (!transfer.otherDescription || transfer.otherDescription.trim() === "")
+      ) {
+        setError("transport.transfer.otherDescription", {
+          type: "custom",
+          message: "Укажите описание для пункта 'Другое'",
+        })
+        return false
+      }
+
+      // Проверяем особые требования
+      const transportPreferences = getValues("transport.transportPreferences")
+      if (
+        transportPreferences.other &&
+        (!transportPreferences.otherDescription ||
+          transportPreferences.otherDescription.trim() === "")
+      ) {
+        setError("transport.transportPreferences.otherDescription", {
+          type: "custom",
+          message: "Укажите особые требования к питанию",
+        })
+        return false
+      }
+    }
+
+    if (state.currentStep === 4) {
       // Проверяем, что выбран хотя бы один тип кухни
       const cuisine = getValues("foodPreferences.cuisine")
       const hasCuisine = Object.entries(cuisine)

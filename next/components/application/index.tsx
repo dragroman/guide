@@ -10,6 +10,8 @@ import { StepPersonalInfo } from "./steps/StepPersonalInfo"
 import { StepContactInfo } from "./steps/StepContactInfo"
 import { StepTripPurpose } from "./steps/StepTripPurpose"
 import { StepAccommodation } from "./steps/StepAccommodation"
+import { StepFood } from "./steps/StepFood"
+import { StepTransport } from "./steps/StepTransport"
 import { StepConfirmation } from "./steps/stepFinal"
 
 // Вспомогательные компоненты
@@ -17,7 +19,6 @@ import { SuccessView } from "./components/SuccessView"
 import { StepProps } from "./types"
 import ApplicationHeader from "./layout/Header"
 import ApplicationFooter from "./layout/Footer"
-import { StepFood } from "./steps/StepFood"
 
 export default function MultistepForm() {
   const {
@@ -91,10 +92,12 @@ export default function MultistepForm() {
       case 2:
         return <StepAccommodation {...stepProps} />
       case 3:
-        return <StepFood {...stepProps} />
+        return <StepTransport {...stepProps} />
       case 4:
-        return <StepContactInfo {...stepProps} />
+        return <StepFood {...stepProps} />
       case 5:
+        return <StepContactInfo {...stepProps} />
+      case 6:
         return <StepConfirmation {...stepProps} />
       default:
         return null
