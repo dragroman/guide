@@ -6,7 +6,6 @@ interface Step {
   title: string
   description: string
 }
-
 interface StepIndicatorProps {
   steps: Step[]
   currentStep: number
@@ -42,7 +41,7 @@ export function StepIndicator({
   }, [currentStep]) // Запускаем эффект при изменении currentStep
 
   return (
-    <div className="w-full mb-8">
+    <div className="w-full">
       <div
         ref={scrollContainerRef}
         className="flex overflow-x-auto py-2 scrollbar-none"

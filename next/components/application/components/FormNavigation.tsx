@@ -5,7 +5,6 @@ import { Loader2 } from "lucide-react"
 interface FormNavigationProps {
   currentStep: number
   totalSteps: number
-  onPrev: () => void
   onNext: (e: React.FormEvent) => void
   isSubmitting: boolean
 }
@@ -13,30 +12,17 @@ interface FormNavigationProps {
 export function FormNavigation({
   currentStep,
   totalSteps,
-  onPrev,
   onNext,
   isSubmitting,
 }: FormNavigationProps) {
   return (
     <div className="flex justify-between">
-      {currentStep > 0 && (
-        <Button
-          type="button"
-          size={"lg"}
-          variant="outline"
-          onClick={onPrev}
-          disabled={isSubmitting}
-        >
-          Назад
-        </Button>
-      )}
-
       {currentStep < totalSteps - 1 ? (
         <Button
           type="submit"
           size={"lg"}
           onClick={(e) => onNext(e)}
-          className={currentStep === 0 ? "w-full" : "ml-auto"}
+          className="w-full"
           disabled={isSubmitting}
         >
           Далее
@@ -46,7 +32,7 @@ export function FormNavigation({
           type="submit"
           onClick={(e) => onNext(e)}
           size={"lg"}
-          className="ml-auto"
+          className="w-full"
           disabled={isSubmitting}
         >
           {isSubmitting ? (

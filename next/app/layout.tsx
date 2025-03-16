@@ -1,4 +1,4 @@
-import { HeaderNav } from "@/components/navigation/HeaderNav"
+import type { Viewport } from "next"
 import type { Metadata } from "next"
 import type { ReactNode } from "react"
 
@@ -13,8 +13,13 @@ export const metadata: Metadata = {
   icons: {
     icon: "/favicon.ico",
   },
-  viewport:
-    "width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no",
+}
+
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  maximumScale: 1,
+  userScalable: false,
 }
 
 export default function RootLayout({
@@ -26,12 +31,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body>
-        <div className="max-w-screen-md px-6 mx-auto">
-          <HeaderNav />
-          <main className="container py-10 mx-auto">{children}</main>
-        </div>
-      </body>
+      <body>{children}</body>
     </html>
   )
 }

@@ -19,6 +19,8 @@ import { ProgressIndicator } from "./components/ProgressIndicator"
 import { StepIndicator } from "./components/StepIndicator"
 import { FormNavigation } from "./components/FormNavigation"
 import { StepProps } from "./types"
+import ApplicationHeader from "./layout/Header"
+import ApplicationFooter from "./layout/Footer"
 
 export default function MultistepForm() {
   const {
@@ -104,13 +106,14 @@ export default function MultistepForm() {
   return (
     <>
       {/* Навигация по шагам */}
-      <StepIndicator
-        steps={STEPS}
+      <ApplicationHeader
         currentStep={currentStep}
         goToStep={goToStep}
+        onPrev={prevStep}
+        isSubmitting={isSubmitting}
       />
 
-      <div className="w-full mx-auto mb-10">
+      <div className="w-full mx-auto mb-10 pt-48 px-4">
         {isError && (
           <Alert variant="destructive" className="mb-6">
             <AlertTitle>Ошибка</AlertTitle>
@@ -125,24 +128,11 @@ export default function MultistepForm() {
           {currentStep === 0 && showDraftNotice && hasDraft && (
             <DraftNotice onLoad={restoreDraft} onIgnore={ignoreDraft} />
           )}
-          {/* Фиксированная панель навигации внизу экрана */}
-          <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 p-4 z-10">
-            <div className="max-w-screen-md mx-auto">
-              {/* Индикатор прогресса */}
-              <ProgressIndicator
-                currentStep={currentStep}
-                totalSteps={TOTAL_STEPS}
-                progress={progress}
-              />
-              <FormNavigation
-                currentStep={currentStep}
-                totalSteps={TOTAL_STEPS}
-                onPrev={prevStep}
-                onNext={handleFormAction}
-                isSubmitting={isSubmitting}
-              />
-            </div>
-          </div>
+          <ApplicationFooter
+            currentStep={currentStep}
+            onNext={handleFormAction}
+            isSubmitting={isSubmitting}
+          />
         </form>
       </div>
     </>
