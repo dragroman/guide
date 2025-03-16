@@ -17,7 +17,13 @@ import {
 import { FlagComponent } from "../components/PhoneInput"
 import { Country } from "react-phone-number-input"
 
-export function StepFood({ control, errors, formData, setValue }: StepProps) {
+export function StepFood({
+  control,
+  errors,
+  formData,
+  handleOptionChange,
+  handleTextChange,
+}: StepProps) {
   // Опции для типов кухни
   const cuisineOptions: CardOption[] = [
     {
@@ -84,47 +90,21 @@ export function StepFood({ control, errors, formData, setValue }: StepProps) {
     },
   ]
 
-  // Обработчик для выбора типа кухни
+  // Используем универсальные обработчики, делегируя им конкретные пути
   const handleCuisineChange = (name: string, checked: boolean) => {
-    const currentCuisine = formData.foodPreferences?.cuisine || {}
-
-    const updatedCuisine = {
-      ...currentCuisine,
-      [name]: checked,
-    }
-
-    // Если снимаем галочку "Другое", очищаем описание
-    if (name === "other" && !checked) {
-      setValue("foodPreferences.cuisine.otherDescription", "")
-    }
-
-    setValue("foodPreferences.cuisine", updatedCuisine)
-
-    // Если выбран хотя бы один тип кухни, снимаем ошибку
-    const hasCuisine = Object.entries(updatedCuisine)
-      .filter(([key]) => key !== "otherDescription" && key !== "_error")
-      .some(([_, value]) => value === true)
-
-    if (hasCuisine && errors?.foodPreferences?.cuisine) {
-      setValue("foodPreferences.cuisine._error", undefined)
-    }
+    handleOptionChange?.("foodPreferences.cuisine", name, checked)
   }
 
-  // Обработчик для выбора предпочтений по питанию
+  const handleCuisineTextChange = (value: string) => {
+    handleTextChange?.("foodPreferences.cuisine", value)
+  }
+
   const handleFoodPreferenceChange = (name: string, checked: boolean) => {
-    const currentPreferences = formData.foodPreferences?.preferences || {}
+    handleOptionChange?.("foodPreferences.preferences", name, checked)
+  }
 
-    const updatedPreferences = {
-      ...currentPreferences,
-      [name]: checked,
-    }
-
-    // Если снимаем галочку "Другое", очищаем описание
-    if (name === "other" && !checked) {
-      setValue("foodPreferences.preferences.otherDescription", "")
-    }
-
-    setValue("foodPreferences.preferences", updatedPreferences)
+  const handleFoodPreferenceTextChange = (value: string) => {
+    handleTextChange?.("foodPreferences.preferences", value)
   }
 
   // Рендер флага страны для опций кухни
@@ -170,6 +150,10 @@ export function StepFood({ control, errors, formData, setValue }: StepProps) {
                   placeholder="Опишите ваши предпочтения по кухне"
                   {...field}
                   value={field.value || ""}
+                  onChange={(e) => {
+                    field.onChange(e)
+                    handleCuisineTextChange(e.target.value)
+                  }}
                   className={
                     errors?.foodPreferences?.cuisine?.otherDescription
                       ? "border-destructive"
@@ -227,6 +211,10 @@ export function StepFood({ control, errors, formData, setValue }: StepProps) {
                   placeholder="Опишите ваши диеты, аллергии или другие требования к питанию"
                   {...field}
                   value={field.value || ""}
+                  onChange={(e) => {
+                    field.onChange(e)
+                    handleFoodPreferenceTextChange(e.target.value)
+                  }}
                   className={
                     errors?.foodPreferences?.preferences?.otherDescription
                       ? "border-destructive"

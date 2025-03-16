@@ -34,6 +34,7 @@ export default function MultistepForm() {
     // React Hook Form
     control,
     setValue,
+    getValues,
 
     // Функционал черновика
     hasDraft,
@@ -41,14 +42,12 @@ export default function MultistepForm() {
     restoreDraft,
     ignoreDraft,
 
-    // Обработчики
+    // Универсальные обработчики
+    handleOptionChange,
+    handleTextChange,
+
+    // Специфичные обработчики
     handleDateChange,
-    handlePurposeChange,
-    handlePurposeTextChange,
-    handleAccommodationChange,
-    handleAccommodationTextChange,
-    handlePreferenceChange,
-    handlePreferenceTextChange,
 
     // Навигация
     nextStep,
@@ -75,13 +74,11 @@ export default function MultistepForm() {
       errors,
       control,
       setValue,
+      // Универсальные обработчики
+      handleOptionChange,
+      handleTextChange,
+      // Специфичные обработчики (для обратной совместимости)
       handleDateChange,
-      handlePurposeChange,
-      handlePurposeTextChange,
-      handleAccommodationChange,
-      handleAccommodationTextChange,
-      handlePreferenceChange,
-      handlePreferenceTextChange,
     }
 
     switch (currentStep) {

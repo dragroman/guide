@@ -19,15 +19,9 @@ export function StepAccommodation({
   control,
   errors,
   formData,
-  handleAccommodationChange,
-  handlePreferenceChange,
+  handleOptionChange,
+  handleTextChange,
 }: StepProps) {
-  // Проверяем, что необходимые пропсы присутствуют
-  if (!handleAccommodationChange || !handlePreferenceChange) {
-    console.error("Missing required props in StepAccommodation")
-    return <div>Error: Missing required handlers</div>
-  }
-
   // Опции для типов размещения
   const accommodationOptions: CardOption[] = [
     {
@@ -95,6 +89,24 @@ export function StepAccommodation({
       icon: <Sparkles className="h-5 w-5" />,
     },
   ]
+
+  // Используем универсальные обработчики, делегируя им конкретные пути
+  const handleAccommodationOptionChange = (name: string, checked: boolean) => {
+    handleOptionChange?.("accommodation", name, checked)
+  }
+
+  const handleAccommodationTextChange = (value: string) => {
+    handleTextChange?.("accommodation", value)
+  }
+
+  const handlePreferenceOptionChange = (name: string, checked: boolean) => {
+    handleOptionChange?.("accommodationPreferences", name, checked)
+  }
+
+  const handlePreferenceTextChange = (value: string) => {
+    handleTextChange?.("accommodationPreferences", value)
+  }
+
   return (
     <div className="space-y-6">
       <div>
@@ -107,7 +119,7 @@ export function StepAccommodation({
           options={accommodationOptions}
           formData={formData}
           path="accommodation"
-          onOptionChange={handleAccommodationChange}
+          onOptionChange={handleAccommodationOptionChange}
         />
 
         {formData.accommodation.other && (
@@ -124,6 +136,10 @@ export function StepAccommodation({
                   placeholder="Опишите предпочитаемый тип размещения"
                   {...field}
                   value={field.value || ""}
+                  onChange={(e) => {
+                    field.onChange(e)
+                    handleAccommodationTextChange(e.target.value)
+                  }}
                   className={
                     errors.accommodation?.otherDescription
                       ? "border-destructive"
@@ -165,7 +181,7 @@ export function StepAccommodation({
           options={preferencesOptions}
           formData={formData}
           path="accommodationPreferences"
-          onOptionChange={handlePreferenceChange}
+          onOptionChange={handlePreferenceOptionChange}
         />
 
         {formData.accommodationPreferences.other && (
@@ -182,6 +198,10 @@ export function StepAccommodation({
                   placeholder="Опишите ваши пожелания к размещению"
                   {...field}
                   value={field.value || ""}
+                  onChange={(e) => {
+                    field.onChange(e)
+                    handlePreferenceTextChange(e.target.value)
+                  }}
                   className={
                     errors.accommodationPreferences?.otherDescription
                       ? "border-destructive"

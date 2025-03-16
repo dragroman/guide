@@ -22,10 +22,9 @@ export function StepTripPurpose({
   control,
   errors,
   formData,
-  setValue,
   handleDateChange,
-  handlePurposeChange,
-  handlePurposeTextChange,
+  handleOptionChange,
+  handleTextChange,
 }: StepProps) {
   // Определяем массив опций для целей поездки
   const purposeOptions: CardOption[] = [
@@ -73,10 +72,13 @@ export function StepTripPurpose({
     },
   ]
 
-  // Проверяем, что необходимые пропсы присутствуют
-  if (!handleDateChange || !handlePurposeChange || !handlePurposeTextChange) {
-    console.error("Missing required props in StepTripPurpose")
-    return <div>Error: Missing required handlers</div>
+  // Используем универсальные обработчики, делегируя им конкретные пути
+  const handlePurposeOptionChange = (name: string, checked: boolean) => {
+    handleOptionChange?.("tripPurpose", name, checked)
+  }
+
+  const handlePurposeTextChange = (value: string) => {
+    handleTextChange?.("tripPurpose", value)
   }
 
   return (
@@ -90,7 +92,7 @@ export function StepTripPurpose({
           render={({ field }) => (
             <DatePickerWithRange
               value={field.value}
-              onDateChange={handleDateChange}
+              onDateChange={handleDateChange!}
               className="w-full"
               error={Boolean(errors.dateRange)}
             />
@@ -131,7 +133,7 @@ export function StepTripPurpose({
           options={purposeOptions}
           formData={formData}
           path="tripPurpose"
-          onOptionChange={handlePurposeChange}
+          onOptionChange={handlePurposeOptionChange}
           // Кастомизация иконок (аналогично оригинальному компоненту)
           iconClassName={(_, isChecked) =>
             isChecked ? "bg-primary text-primary-foreground" : "bg-muted"

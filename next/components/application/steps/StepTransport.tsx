@@ -80,49 +80,24 @@ export function StepTransport({
   control,
   errors,
   formData,
-  setValue,
+  handleOptionChange,
+  handleTextChange,
 }: StepProps) {
-  // Обработчик для выбора трансфера из аэропорта
+  // Используем универсальные обработчики, делегируя им конкретные пути
   const handleTransferChange = (name: string, checked: boolean) => {
-    const currentTransfer = formData.transport?.transfer || {}
-
-    const updatedTransfer = {
-      ...currentTransfer,
-      [name]: checked,
-    }
-
-    // Если снимаем галочку "Другое", очищаем описание
-    if (name === "other" && !checked) {
-      setValue("transport.transfer.otherDescription", "")
-    }
-
-    setValue("transport.transfer", updatedTransfer)
-
-    // Если выбран хотя бы один вид трансфера, снимаем ошибку
-    const hasTransfer = Object.entries(updatedTransfer)
-      .filter(([key]) => key !== "otherDescription")
-      .some(([_, value]) => value === true)
-
-    if (hasTransfer && errors?.transport?.transfer) {
-      setValue("transport.transfer._error", undefined)
-    }
+    handleOptionChange?.("transport.transfer", name, checked)
   }
 
-  // Обработчик для выбора пожеланий к транспорту во время тура
+  const handleTransferTextChange = (value: string) => {
+    handleTextChange?.("transport.transfer", value)
+  }
+
   const handleTransportChange = (name: string, checked: boolean) => {
-    const currentTransport = formData.transport?.transportPreferences || {}
+    handleOptionChange?.("transport.transportPreferences", name, checked)
+  }
 
-    const updatedTransport = {
-      ...currentTransport,
-      [name]: checked,
-    }
-
-    // Если снимаем галочку "Другое", очищаем описание
-    if (name === "other" && !checked) {
-      setValue("transport.transportPreferences.otherDescription", "")
-    }
-
-    setValue("transport.transportPreferences", updatedTransport)
+  const handleTransportTextChange = (value: string) => {
+    handleTextChange?.("transport.transportPreferences", value)
   }
 
   return (
@@ -154,6 +129,10 @@ export function StepTransport({
                   placeholder="Опишите ваши пожелания к трансферу из аэропорта"
                   {...field}
                   value={field.value || ""}
+                  onChange={(e) => {
+                    field.onChange(e)
+                    handleTransferTextChange(e.target.value)
+                  }}
                   className={
                     errors?.transport?.transfer?.otherDescription
                       ? "border-destructive"
@@ -205,6 +184,10 @@ export function StepTransport({
                   placeholder="Опишите ваши пожелания к транспорту во время тура"
                   {...field}
                   value={field.value || ""}
+                  onChange={(e) => {
+                    field.onChange(e)
+                    handleTransportTextChange(e.target.value)
+                  }}
                   className={
                     errors?.transport?.transportPreferences?.otherDescription
                       ? "border-destructive"

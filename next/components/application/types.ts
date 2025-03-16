@@ -30,7 +30,7 @@ export type FormAction =
   | { type: "SET_DATES_SELECTED"; selected: boolean }
   | { type: "RESET_FORM" }
 
-// Типы для компонентов шагов
+// Типы для компонентов шагов с добавлением новых универсальных обработчиков
 export interface StepProps {
   // React Hook Form props
   control: Control<ApplicationSchemaType>
@@ -38,34 +38,21 @@ export interface StepProps {
   formData: ApplicationSchemaType
   setValue: (name: any, value: any) => void
 
+  // Универсальные обработчики для опций и текстовых полей
+  handleOptionChange?: (path: string, name: string, checked: boolean) => void
+  handleTextChange?: (path: string, value: string) => void
+
   // Обработчики для старых компонентов (для обратной совместимости)
   handleChange?: (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => void
   updateFormData?: (fieldName: string, value: any) => void
 
-  // Специфичные обработчики
+  // Специфичные обработчики (для обратной совместимости)
   handleDateChange?: (dateRange: DateRange | undefined) => void
-  handlePurposeChange?: (name: string, checked: boolean) => void
-  handlePurposeTextChange?: (value: string) => void
-  handleAccommodationChange?: (name: string, checked: boolean) => void
-  handleAccommodationTextChange?: (value: string) => void
-  handlePreferenceChange?: (name: string, checked: boolean) => void
-  handlePreferenceTextChange?: (value: string) => void
 }
 
 // Дополнительные пропсы для специфичных шагов
 export interface TripPurposeStepProps extends StepProps {
-  handlePurposeChange: (name: string, checked: boolean) => void
-  handlePurposeTextChange: (value: string) => void
   handleDateChange: (dateRange: RDPDateRange | undefined) => void
 }
-
-export interface AccommodationStepProps extends StepProps {
-  handleAccommodationChange: (name: string, checked: boolean) => void
-  handleAccommodationTextChange: (value: string) => void
-  handlePreferenceChange: (name: string, checked: boolean) => void
-  handlePreferenceTextChange: (value: string) => void
-}
-
-export interface TripDatesStepProps extends StepProps {}

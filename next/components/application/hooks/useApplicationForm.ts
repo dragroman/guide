@@ -151,6 +151,61 @@ export function useApplicationForm() {
     }
   }, [state.currentStep, trigger, getValues, setError])
 
+  // Принимает путь к данным в форме, имя опции и новое состояние
+  const handleOptionChange = useCallback(
+    (path: string, name: string, checked: boolean) => {
+      try {
+        // Получаем текущие значения по пути
+        const currentValues = getValues(path as any) || {}
+
+        // Создаем обновленный объект с новым значением
+        const updatedValues = {
+          ...currentValues,
+          [name]: checked,
+        }
+
+        // Если снимаем галочку "Другое", очищаем описание
+        if (name === "other" && !checked) {
+          updatedValues.otherDescription = ""
+        }
+
+        // Обновляем значение в форме
+        setValue(path as any, updatedValues)
+
+        // Проверяем, есть ли хотя бы один выбранный вариант
+        const hasSelection = Object.entries(updatedValues)
+          .filter(([key]) => key !== "otherDescription" && key !== "_error")
+          .some(([_, value]) => value === true)
+
+        // Если выбран хотя бы один вариант, снимаем ошибку
+        if (hasSelection) {
+          clearErrors(`${path}._error` as any)
+          clearErrors(path as any)
+        }
+      } catch (error) {
+        console.error(`Ошибка в handleOptionChange для пути ${path}:`, error)
+      }
+    },
+    [getValues, setValue, clearErrors]
+  )
+
+  // Универсальный обработчик для изменения текстовых описаний
+  const handleTextChange = useCallback(
+    (path: string, value: string) => {
+      try {
+        setValue(`${path}.otherDescription` as any, value)
+
+        // Если поле заполнено, снимаем ошибку
+        if (value.trim() !== "") {
+          clearErrors(`${path}.otherDescription` as any)
+        }
+      } catch (error) {
+        console.error(`Ошибка в handleTextChange для пути ${path}:`, error)
+      }
+    },
+    [setValue, clearErrors]
+  )
+
   // Обработчик для диапазона дат
   const handleDateChange = useCallback(
     (dateRange: DateRange | undefined) => {
@@ -170,138 +225,6 @@ export function useApplicationForm() {
       }
     },
     [setValue, clearErrors]
-  )
-
-  // Обработчик для чекбоксов типа поездки
-  const handlePurposeChange = useCallback(
-    (name: string, checked: boolean) => {
-      const currentPurpose = getValues("tripPurpose")
-
-      const updatedPurpose = {
-        ...currentPurpose,
-        [name]: checked,
-      }
-
-      // Если снимаем галочку "Другое", очищаем описание
-      if (name === "other" && !checked) {
-        updatedPurpose.otherDescription = ""
-      }
-
-      setValue("tripPurpose", updatedPurpose)
-
-      // Если выбрана хотя бы одна цель, снимаем ошибку
-      const hasPurpose = Object.entries(updatedPurpose)
-        .filter(([key]) => key !== "otherDescription")
-        .some(([_, value]) => value === true)
-
-      if (hasPurpose) {
-        clearErrors("tripPurpose")
-      }
-    },
-    [getValues, setValue, clearErrors]
-  )
-
-  // Обработчик для текстового описания цели поездки
-  const handlePurposeTextChange = useCallback(
-    (value: string) => {
-      const currentPurpose = getValues("tripPurpose")
-
-      setValue("tripPurpose", {
-        ...currentPurpose,
-        otherDescription: value,
-      })
-
-      // Если поле заполнено, снимаем ошибку
-      if (value.trim() !== "") {
-        clearErrors("tripPurpose.otherDescription")
-      }
-    },
-    [getValues, setValue, clearErrors]
-  )
-
-  // Обработчик для чекбоксов типа размещения
-  const handleAccommodationChange = useCallback(
-    (name: string, checked: boolean) => {
-      const currentAccommodation = getValues("accommodation")
-
-      const updatedAccommodation = {
-        ...currentAccommodation,
-        [name]: checked,
-      }
-
-      // Если снимаем галочку "Другое", очищаем описание
-      if (name === "other" && !checked) {
-        updatedAccommodation.otherDescription = ""
-      }
-
-      setValue("accommodation", updatedAccommodation)
-
-      // Если выбран хотя бы один тип размещения, снимаем ошибку
-      const hasAccommodation = Object.entries(updatedAccommodation)
-        .filter(([key]) => key !== "otherDescription")
-        .some(([_, value]) => value === true)
-
-      if (hasAccommodation) {
-        clearErrors("accommodation")
-      }
-    },
-    [getValues, setValue, clearErrors]
-  )
-
-  // Обработчик для текстового описания типа размещения
-  const handleAccommodationTextChange = useCallback(
-    (value: string) => {
-      const currentAccommodation = getValues("accommodation")
-
-      setValue("accommodation", {
-        ...currentAccommodation,
-        otherDescription: value,
-      })
-
-      // Если поле заполнено, снимаем ошибку
-      if (value.trim() !== "") {
-        clearErrors("accommodation.otherDescription")
-      }
-    },
-    [getValues, setValue, clearErrors]
-  )
-
-  // Обработчик для чекбоксов предпочтений размещения
-  const handlePreferenceChange = useCallback(
-    (name: string, checked: boolean) => {
-      const currentPreferences = getValues("accommodationPreferences")
-
-      const updatedPreferences = {
-        ...currentPreferences,
-        [name]: checked,
-      }
-
-      // Если снимаем галочку "Другое", очищаем описание
-      if (name === "other" && !checked) {
-        updatedPreferences.otherDescription = ""
-      }
-
-      setValue("accommodationPreferences", updatedPreferences)
-    },
-    [getValues, setValue]
-  )
-
-  // Обработчик для текстового описания предпочтений
-  const handlePreferenceTextChange = useCallback(
-    (value: string) => {
-      const currentPreferences = getValues("accommodationPreferences")
-
-      setValue("accommodationPreferences", {
-        ...currentPreferences,
-        otherDescription: value,
-      })
-
-      // Если поле заполнено, снимаем ошибку
-      if (value.trim() !== "") {
-        clearErrors("accommodationPreferences.otherDescription")
-      }
-    },
-    [getValues, setValue, clearErrors]
   )
 
   // Переход к следующему шагу с валидацией
@@ -448,14 +371,12 @@ export function useApplicationForm() {
     restoreDraft,
     ignoreDraft,
 
+    // Универсальные обработчики
+    handleOptionChange,
+    handleTextChange,
+
     // Обработчики ввода
     handleDateChange,
-    handlePurposeChange,
-    handlePurposeTextChange,
-    handleAccommodationChange,
-    handleAccommodationTextChange,
-    handlePreferenceChange,
-    handlePreferenceTextChange,
 
     // Навигация
     nextStep,
