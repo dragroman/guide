@@ -88,6 +88,32 @@ export type ApplicationSchemaType = {
       otherDescription: string
     }
   }
+
+  // Покупки
+  shopping: {
+    budget: {
+      economy: boolean
+      medium: boolean
+      luxury: boolean
+    }
+    shoppingPlaces: {
+      malls: boolean
+      boutiques: boolean
+      markets: boolean
+      outlets: boolean
+      other: boolean
+      otherDescription: string
+    }
+    specialWishes?: string
+    shoppingTime: {
+      fewHours: boolean
+      halfDay: boolean
+      fullDay: boolean
+    }
+    deliveryServices: {
+      needed: boolean
+    }
+  }
 }
 
 export type DateRange = {
@@ -177,6 +203,31 @@ export const defaultFormValues: ApplicationSchemaType = {
       fattyOk: false,
       other: false,
       otherDescription: "",
+    },
+  },
+
+  shopping: {
+    budget: {
+      economy: false,
+      medium: false,
+      luxury: false,
+    },
+    shoppingPlaces: {
+      malls: false,
+      boutiques: false,
+      markets: false,
+      outlets: false,
+      other: false,
+      otherDescription: "",
+    },
+    specialWishes: "",
+    shoppingTime: {
+      fewHours: false,
+      halfDay: false,
+      fullDay: false,
+    },
+    deliveryServices: {
+      needed: false,
     },
   },
 }
@@ -484,5 +535,91 @@ export const applicationSchema = z.object({
           path: ["otherDescription"],
         }
       ),
+  }),
+
+  // Шоппинг
+
+  shopping: z.object({
+    budget: z
+      .object({
+        economy: z.boolean(),
+        medium: z.boolean(),
+        luxury: z.boolean(),
+      })
+      .refine(
+        (data) => {
+          // Проверяем, что выбран ровно один вариант
+          const selectedCount = [data.economy, data.medium, data.luxury].filter(
+            Boolean
+          ).length
+          return selectedCount === 1
+        },
+        {
+          message: "Выберите один бюджетный вариант",
+          path: ["_error"],
+        }
+      ),
+
+    shoppingPlaces: z
+      .object({
+        malls: z.boolean(),
+        boutiques: z.boolean(),
+        markets: z.boolean(),
+        outlets: z.boolean(),
+        other: z.boolean(),
+        otherDescription: z.string(),
+      })
+      .refine(
+        (data) => {
+          const hasSelectedOptions = Object.entries(data)
+            .filter(([key]) => key !== "otherDescription")
+            .some(([_, value]) => value === true)
+          return hasSelectedOptions
+        },
+        {
+          message: "Выберите хотя бы одно место для шоппинга",
+          path: ["_error"],
+        }
+      )
+      .refine(
+        (data) => {
+          if (data.other) {
+            return data.otherDescription.trim() !== ""
+          }
+          return true
+        },
+        {
+          message: "Укажите описание для пункта 'Другое'",
+          path: ["otherDescription"],
+        }
+      ),
+
+    specialWishes: z.string().optional(),
+
+    shoppingTime: z
+      .object({
+        fewHours: z.boolean(),
+        halfDay: z.boolean(),
+        fullDay: z.boolean(),
+      })
+      .refine(
+        (data) => {
+          // Проверяем, что выбран ровно один вариант
+          const selectedCount = [
+            data.fewHours,
+            data.halfDay,
+            data.fullDay,
+          ].filter(Boolean).length
+          return selectedCount === 1
+        },
+        {
+          message: "Выберите одну продолжительность шоппинга",
+          path: ["_error"],
+        }
+      ),
+
+    deliveryServices: z.object({
+      needed: z.boolean(),
+    }),
   }),
 })

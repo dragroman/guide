@@ -216,6 +216,37 @@ export function StepConfirmation({ formData }: StepProps) {
             )}
           </div>
         )}
+        {renderInfoBlock(
+          "Бюджет для покупок",
+          <>{getSelectedOptions(formData.shopping.budget, ["_error"])}</>
+        )}
+        {renderInfoBlock(
+          "Места для покупок",
+          <>
+            {getSelectedOptions(formData.shopping.shoppingPlaces, [
+              "otherDescription",
+              "_error",
+            ])}
+            {formData.shopping.shoppingPlaces.other &&
+            formData.shopping.shoppingPlaces.otherDescription ? (
+              <div className="mt-1 text-xs italic">
+                {formData.shopping.shoppingPlaces.otherDescription}
+              </div>
+            ) : null}
+          </>
+        )}
+        {renderInfoBlock(
+          "Бюджет для покупок",
+          <>{getSelectedOptions(formData.shopping.shoppingTime, ["_error"])}</>
+        )}
+        {formData.shopping.specialWishes && (
+          <div>
+            {renderInfoBlock(
+              "Особые желания",
+              <>{formData.shopping.specialWishes}</>
+            )}
+          </div>
+        )}
       </div>
     </div>
   )

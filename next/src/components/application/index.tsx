@@ -19,6 +19,7 @@ import { SuccessView } from "./components/SuccessView"
 import { StepProps } from "./types"
 import ApplicationHeader from "./layout/Header"
 import ApplicationFooter from "./layout/Footer"
+import { StepShopping } from "./steps/StepShopping"
 
 export default function MultistepForm() {
   const {
@@ -93,8 +94,10 @@ export default function MultistepForm() {
       case 4:
         return <StepFood {...stepProps} />
       case 5:
-        return <StepContactInfo {...stepProps} />
+        return <StepShopping {...stepProps} />
       case 6:
+        return <StepContactInfo {...stepProps} />
+      case 7:
         return <StepConfirmation {...stepProps} />
       default:
         return null

@@ -1,6 +1,4 @@
-// components/application/hooks/useApplicationForm.ts
-
-import { useReducer, useCallback, useEffect } from "react"
+import { useReducer, useCallback } from "react"
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { DateRange } from "react-day-picker"
@@ -8,8 +6,9 @@ import { differenceInDays } from "date-fns"
 import {
   applicationSchema,
   ApplicationSchemaType,
+  defaultFormValues,
 } from "../schemas/applicationSchema"
-import { defaultFormValues, TOTAL_STEPS } from "../constants"
+import { TOTAL_STEPS } from "../constants"
 import { useDraftForm } from "./useDraftForm"
 import {
   validatePersonalInfo,
@@ -18,6 +17,7 @@ import {
   validateTransport,
   validateFood,
   validateContact,
+  validateShopping,
 } from "../utils/validationUtils"
 
 // Типы для состояния формы
@@ -142,8 +142,10 @@ export function useApplicationForm() {
       case 4:
         return await validateFood(trigger, getValues, setError)
       case 5:
-        return await validateContact(trigger)
+        return await validateShopping(trigger, getValues, setError)
       case 6:
+        return await validateContact(trigger)
+      case 7:
         // На последнем шаге проверяем всю форму
         return await trigger()
       default:
@@ -282,6 +284,7 @@ export function useApplicationForm() {
             accommodation: data.accommodation,
             transport: data.transport,
             food: data.food,
+            shopping: data.shopping,
           }),
         })
 

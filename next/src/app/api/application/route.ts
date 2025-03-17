@@ -43,6 +43,7 @@ export async function POST(request: NextRequest) {
         accommodation: body.accommodation,
         transport: body.transport,
         food: body.food,
+        shopping: body.shopping,
       })
     } catch (error) {
       if (error instanceof Error) {
@@ -79,6 +80,20 @@ export async function POST(request: NextRequest) {
     const transportPreferencesArray = Object.entries(body.transport.preferences)
       .filter(([key, value]) => key !== "otherDescription" && value === true)
       .map(([key]) => key)
+
+    const shoppingBudgetArray =
+      Object.entries(body.shopping.budget).find(
+        ([_, value]) => value === true
+      )?.[0] || ""
+
+    const shoppingPlacesArray = Object.entries(body.shopping.shoppingPlaces)
+      .filter(([key, value]) => key !== "otherDescription" && value === true)
+      .map(([key]) => key)
+
+    const shoppingTimeArray =
+      Object.entries(body.shopping.shoppingTime).find(
+        ([_, value]) => value === true
+      )?.[0] || ""
 
     const drupalResponse = await fetch(
       `${process.env.NEXT_PUBLIC_DRUPAL_BASE_URL}/webform_rest/submit`,
@@ -130,6 +145,13 @@ export async function POST(request: NextRequest) {
           transport_preferences_other: body.transport.preferences.other
             ? body.transport.preferences.otherDescription
             : "",
+          shopping_budget: shoppingBudgetArray,
+          shopping_places: shoppingPlacesArray,
+          shopping_places_other: body.shopping.shoppingPlaces.other
+            ? body.shopping.shoppingPlaces.otherDescription
+            : "",
+          shopping_time: shoppingTimeArray,
+          shopping_special_wishes: body.shopping.specialWishes,
         }),
       }
     )
