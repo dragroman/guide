@@ -138,7 +138,7 @@ export function useDraftForm(
           const path = prefix ? `${prefix}.${key}` : key
 
           // Специальная обработка для dateRange
-          if (path === "dateRange" && value && typeof value === "object") {
+          if (path === "trip.dateRange" && value && typeof value === "object") {
             const dateRange: Record<string, Date> = {}
 
             const dateObj = value as Record<string, unknown>
@@ -169,7 +169,7 @@ export function useDraftForm(
               }
 
               if (Object.keys(dateRange).length > 0) {
-                setValue("dateRange", dateRange)
+                setValue("trip.dateRange", dateRange)
               }
             }
           }

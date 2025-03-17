@@ -2,6 +2,7 @@ import { DateRange } from "react-day-picker"
 import { NextRequest, NextResponse } from "next/server"
 import { applicationSchema } from "@/components/application/schemas/applicationSchema"
 import { date } from "zod"
+import { tr } from "date-fns/locale"
 
 export async function POST(request: NextRequest) {
   try {
@@ -22,10 +23,6 @@ export async function POST(request: NextRequest) {
     }
 
     console.log(body)
-
-    const trip = body.trip.purpose || {}
-    const accommodation = body.accommodation || {}
-    const accommodationPreferences = body.accommodationPreferences || {}
 
     // Дополнительная валидация с помощью Zod
     try {
@@ -75,6 +72,14 @@ export async function POST(request: NextRequest) {
       .filter(([key, value]) => key !== "otherDescription" && value === true)
       .map(([key]) => key)
 
+    const transportTransferArray = Object.entries(body.transport.transfer)
+      .filter(([key, value]) => key !== "otherDescription" && value === true)
+      .map(([key]) => key)
+
+    const transportPreferencesArray = Object.entries(body.transport.preferences)
+      .filter(([key, value]) => key !== "otherDescription" && value === true)
+      .map(([key]) => key)
+
     const drupalResponse = await fetch(
       `${process.env.NEXT_PUBLIC_DRUPAL_BASE_URL}/webform_rest/submit`,
       {
@@ -107,7 +112,7 @@ export async function POST(request: NextRequest) {
             : "",
           accommodation_preferences: accommodationPreferencesArray,
           accommodation_preferences_other: body.accommodation.preferences.other
-            ? accommodation.options.otherDescription
+            ? body.accommodation.options.otherDescription
             : "",
           cuisines: foodCuisinesArray,
           cuisines_other: body.food.cuisine.other
@@ -116,6 +121,14 @@ export async function POST(request: NextRequest) {
           food_preferences: foodPreferencesArray,
           food_preferences_other: body.food.preferences.other
             ? body.food.preferences.otherDescription
+            : "",
+          transport_transfer: transportTransferArray,
+          transport_transfer_other: body.transport.transfer.other
+            ? body.transport.transfer.otherDescription
+            : "",
+          transport_preferences: transportPreferencesArray,
+          transport_preferences_other: body.transport.preferences.other
+            ? body.transport.preferences.otherDescription
             : "",
         }),
       }

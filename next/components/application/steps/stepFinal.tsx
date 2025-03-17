@@ -183,6 +183,39 @@ export function StepConfirmation({ formData }: StepProps) {
             )}
           </div>
         )}
+        {renderInfoBlock(
+          "Трансфер",
+          <>
+            {getSelectedOptions(formData.transport.transfer, [
+              "otherDescription",
+              "_error",
+            ])}
+            {formData.transport.transfer.other &&
+            formData.transport.transfer.otherDescription ? (
+              <div className="mt-1 text-xs italic">
+                {formData.transport.transfer.otherDescription}
+              </div>
+            ) : null}
+          </>
+        )}
+        {formData.transport.preferences.other && (
+          <div className="mt-2">
+            {renderInfoBlock(
+              "Дополнительная информация о транспорте",
+              <>
+                {getSelectedOptions(formData.transport.preferences, [
+                  "otherDescription",
+                ])}
+                {formData.transport.preferences.other &&
+                formData.transport.preferences.otherDescription ? (
+                  <div className="mt-1 text-xs italic">
+                    {formData.transport.preferences.otherDescription}
+                  </div>
+                ) : null}
+              </>
+            )}
+          </div>
+        )}
       </div>
     </div>
   )
