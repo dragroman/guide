@@ -85,18 +85,20 @@ export function StepConfirmation({ formData }: StepProps) {
             )
           )}
 
-        {renderInfoBlock("Телефон", formData.phone)}
+        {renderInfoBlock("Телефон", formData.contact.phone)}
 
-        {renderInfoBlock("Email", formData.email)}
+        {renderInfoBlock("Email", formData.contact.email)}
 
         {renderInfoBlock(
           "Цель поездки",
           <>
-            {getSelectedOptions(formData.tripPurpose, ["otherDescription"])}
-            {formData.tripPurpose.other &&
-            formData.tripPurpose.otherDescription ? (
+            {getSelectedOptions(formData.trip.purpose.options, [
+              "otherDescription",
+            ])}
+            {formData.trip.purpose.options.other &&
+            formData.trip.purpose.otherDescription ? (
               <div className="mt-1 text-xs italic">
-                {formData.tripPurpose.otherDescription}
+                {formData.trip.purpose.otherDescription}
               </div>
             ) : null}
           </>
@@ -105,72 +107,81 @@ export function StepConfirmation({ formData }: StepProps) {
         {renderInfoBlock(
           "Тип размещения",
           <>
-            {getSelectedOptions(formData.accommodation, ["otherDescription"])}
-            {formData.accommodation.other &&
-            formData.accommodation.otherDescription ? (
+            {getSelectedOptions(formData.accommodation.options, [
+              "otherDescription",
+            ])}
+            {formData.accommodation.options.other &&
+            formData.accommodation.options.otherDescription ? (
               <div className="mt-1 text-xs italic">
-                {formData.accommodation.otherDescription}
+                {formData.accommodation.options.otherDescription}
               </div>
             ) : null}
           </>
         )}
 
-        {renderInfoBlock(
-          "Пожелания к размещению",
-          <>
-            {getSelectedOptions(formData.accommodationPreferences, [
-              "otherDescription",
-            ])}
-            {formData.accommodationPreferences.other &&
-            formData.accommodationPreferences.otherDescription ? (
-              <div className="mt-1 text-xs italic">
-                {formData.accommodationPreferences.otherDescription}
-              </div>
-            ) : null}
-          </>
+        {formData.accommodation.preferences.other && (
+          <div className="mt-2">
+            {renderInfoBlock(
+              "Пожелания к размещению",
+              <>
+                {getSelectedOptions(formData.accommodation.preferences, [
+                  "otherDescription",
+                ])}
+                {formData.accommodation.preferences.other &&
+                formData.accommodation.preferences.otherDescription ? (
+                  <div className="mt-1 text-xs italic">
+                    {formData.accommodation.preferences.otherDescription}
+                  </div>
+                ) : null}
+              </>
+            )}
+          </div>
         )}
 
         {renderInfoBlock(
           "Даты",
-          formData.dateRange?.from && formData.dateRange?.to
-            ? `${format(formData.dateRange.from, "dd.MM.yyyy")} - ${format(formData.dateRange.to, "dd.MM.yyyy")}`
+          formData.trip.dateRange?.from && formData.trip.dateRange?.to
+            ? `${format(formData.trip.dateRange.from, "dd.MM.yyyy")} - ${format(formData.trip.dateRange.to, "dd.MM.yyyy")}`
             : "Не выбраны"
         )}
 
         {renderInfoBlock(
           "Продолжительность",
-          `${formData.daysCount} ${getDaysText(formData.daysCount ?? 0)}`
+          `${formData.trip.daysCount} ${getDaysText(formData.trip.daysCount ?? 0)}`
         )}
 
         {renderInfoBlock(
           "Предпочтения по кухне",
           <>
-            {getSelectedOptions(formData.foodPreferences.cuisine, [
+            {getSelectedOptions(formData.food.cuisine, [
               "otherDescription",
               "_error",
             ])}
-            {formData.foodPreferences.cuisine.other &&
-            formData.foodPreferences.cuisine.otherDescription ? (
+            {formData.food.cuisine.other &&
+            formData.food.cuisine.otherDescription ? (
               <div className="mt-1 text-xs italic">
-                {formData.foodPreferences.cuisine.otherDescription}
+                {formData.food.cuisine.otherDescription}
               </div>
             ) : null}
           </>
         )}
-
-        {renderInfoBlock(
-          "Дополнительная информация о питании",
-          <>
-            {getSelectedOptions(formData.foodPreferences.preferences, [
-              "otherDescription",
-            ])}
-            {formData.foodPreferences.preferences.other &&
-            formData.foodPreferences.preferences.otherDescription ? (
-              <div className="mt-1 text-xs italic">
-                {formData.foodPreferences.preferences.otherDescription}
-              </div>
-            ) : null}
-          </>
+        {formData.food.preferences.other && (
+          <div className="mt-2">
+            {renderInfoBlock(
+              "Дополнительная информация о питании",
+              <>
+                {getSelectedOptions(formData.food.preferences, [
+                  "otherDescription",
+                ])}
+                {formData.food.preferences.other &&
+                formData.food.preferences.otherDescription ? (
+                  <div className="mt-1 text-xs italic">
+                    {formData.food.preferences.otherDescription}
+                  </div>
+                ) : null}
+              </>
+            )}
+          </div>
         )}
       </div>
     </div>

@@ -14,6 +14,11 @@ import {
   Dumbbell,
   Sparkles,
 } from "lucide-react"
+import {
+  hasOptionsError,
+  hasOtherDescriptionError,
+  getErrorMessage,
+} from "../utils/errorHelpers"
 
 export function StepAccommodation({
   control,
@@ -22,6 +27,16 @@ export function StepAccommodation({
   handleOptionChange,
   handleTextChange,
 }: StepProps) {
+  // Проверки наличия ошибок для конкретных полей
+  const hasAccommodationOptionsError = () =>
+    hasOptionsError(errors, "accommodation.options")
+  const hasAccommodationOtherError = () =>
+    hasOtherDescriptionError(errors, "accommodation.options")
+  const hasPreferencesError = () =>
+    hasOptionsError(errors, "accommodation.preferences")
+  const hasPreferencesOtherError = () =>
+    hasOtherDescriptionError(errors, "accommodation.preferences")
+
   // Опции для типов размещения
   const accommodationOptions: CardOption[] = [
     {
@@ -107,33 +122,6 @@ export function StepAccommodation({
     handleTextChange?.("accommodation.preferences", value)
   }
 
-  // Функции-помощники для упрощения проверки наличия ошибок
-  const hasOptionsError = () => {
-    // Проверяем все уровни ошибок для options
-    return (
-      errors.accommodation?.options &&
-      typeof errors.accommodation.options === "object" &&
-      !errors.accommodation.options.otherDescription
-    )
-  }
-
-  const hasOptionsOtherError = () => {
-    return errors.accommodation?.options?.otherDescription
-  }
-
-  const hasPreferencesError = () => {
-    // Проверяем все уровни ошибок для preferences
-    return (
-      errors.accommodation?.preferences &&
-      typeof errors.accommodation.preferences === "object" &&
-      !errors.accommodation.preferences.otherDescription
-    )
-  }
-
-  const hasPreferencesOtherError = () => {
-    return errors.accommodation?.preferences?.otherDescription
-  }
-
   return (
     <div className="space-y-6">
       <div>
@@ -148,6 +136,14 @@ export function StepAccommodation({
           path="accommodation.options"
           onOptionChange={handleAccommodationOptionChange}
         />
+
+        {/* Отображаем ошибку, если есть */}
+        {hasAccommodationOptionsError() && (
+          <p className="text-sm font-medium text-destructive mt-2">
+            {getErrorMessage(errors, "accommodation.options") ||
+              "Выберите хотя бы один тип размещения"}
+          </p>
+        )}
 
         {formData.accommodation.options.other && (
           <div className="space-y-2 mt-3">
@@ -167,30 +163,21 @@ export function StepAccommodation({
                     field.onChange(e)
                     handleAccommodationTextChange(e.target.value)
                   }}
-                  className={hasOptionsOtherError() ? "border-destructive" : ""}
+                  className={
+                    hasAccommodationOtherError() ? "border-destructive" : ""
+                  }
                 />
               )}
             />
-            {hasOptionsOtherError() && (
+            {hasAccommodationOtherError() && (
               <p className="text-sm font-medium text-destructive">
-                {(errors.accommodation?.options?.otherDescription
-                  ?.message as string) ||
-                  "Укажите описание для пункта 'Другое'"}
+                {getErrorMessage(
+                  errors,
+                  "accommodation.options.otherDescription"
+                ) || "Укажите описание для пункта 'Другое'"}
               </p>
             )}
           </div>
-        )}
-
-        {/* Обновленная проверка и отображение ошибок для типа размещения */}
-        {(hasOptionsError() ||
-          (errors.accommodation?.options &&
-            typeof errors.accommodation.options === "string")) && (
-          <p className="text-sm font-medium text-destructive mt-2">
-            {typeof errors.accommodation?.options === "string"
-              ? errors.accommodation.options
-              : errors.accommodation?.options?.message ||
-                "Выберите хотя бы один тип размещения"}
-          </p>
         )}
       </div>
 
@@ -204,6 +191,14 @@ export function StepAccommodation({
           path="accommodation.preferences"
           onOptionChange={handlePreferenceOptionChange}
         />
+
+        {/* Отображаем ошибку, если есть */}
+        {hasPreferencesError() && (
+          <p className="text-sm font-medium text-destructive mt-2">
+            {getErrorMessage(errors, "accommodation.preferences") ||
+              "Выберите хотя бы одно предпочтение по размещению"}
+          </p>
+        )}
 
         {formData.accommodation.preferences.other && (
           <div className="space-y-2 mt-3">
@@ -231,24 +226,13 @@ export function StepAccommodation({
             />
             {hasPreferencesOtherError() && (
               <p className="text-sm font-medium text-destructive">
-                {(errors.accommodation?.preferences?.otherDescription
-                  ?.message as string) ||
-                  "Укажите описание для пункта 'Другое'"}
+                {getErrorMessage(
+                  errors,
+                  "accommodation.preferences.otherDescription"
+                ) || "Укажите описание для пункта 'Другое'"}
               </p>
             )}
           </div>
-        )}
-
-        {/* Обновленная проверка и отображение ошибок для предпочтений */}
-        {(hasPreferencesError() ||
-          (errors.accommodation?.preferences &&
-            typeof errors.accommodation.preferences === "string")) && (
-          <p className="text-sm font-medium text-destructive mt-2">
-            {typeof errors.accommodation?.preferences === "string"
-              ? errors.accommodation.preferences
-              : errors.accommodation?.preferences?.message ||
-                "Выберите хотя бы одно предпочтение по размещению"}
-          </p>
         )}
       </div>
 

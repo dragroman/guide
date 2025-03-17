@@ -23,6 +23,57 @@ export function StepFood({
   handleOptionChange,
   handleTextChange,
 }: StepProps) {
+  // Вспомогательная функция для получения значения из вложенного объекта по строковому пути
+  const getNestedValue = (obj: any, path: string) => {
+    return path
+      .split(".")
+      .reduce((prev, curr) => (prev ? prev[curr] : undefined), obj)
+  }
+
+  // Проверка ошибки в группе опций (когда ничего не выбрано)
+  const hasOptionsError = (path: string) => {
+    const errorObj = getNestedValue(errors, path)
+    return (
+      errorObj &&
+      typeof errorObj === "object" &&
+      !errorObj.otherDescription &&
+      (errorObj._error || errorObj.message)
+    )
+  }
+
+  // Проверка ошибки в поле "другое"
+  const hasOtherDescriptionError = (path: string) => {
+    const errorPath = `${path}.otherDescription`
+    return getNestedValue(errors, errorPath)
+  }
+
+  // Функция для получения текста ошибки
+  const getErrorMessage = (path: string): string => {
+    const errorObj = getNestedValue(errors, path)
+
+    if (!errorObj) return ""
+
+    if (typeof errorObj === "string") {
+      return errorObj
+    }
+
+    if (errorObj._error?.message) {
+      return errorObj._error.message
+    }
+
+    if (errorObj.message) {
+      return errorObj.message
+    }
+
+    return "Пожалуйста, проверьте введенные данные"
+  }
+
+  // Проверки наличия ошибок для конкретных полей
+  const hasCuisineError = () => hasOptionsError("food.cuisine")
+  const hasCuisineOtherError = () => hasOtherDescriptionError("food.cuisine")
+  const hasPreferencesOtherError = () =>
+    hasOtherDescriptionError("food.preferences")
+
   // Опции для типов кухни
   const cuisineOptions: CardOption[] = [
     {
@@ -135,6 +186,14 @@ export function StepFood({
           renderExtraContent={renderCuisineExtra}
         />
 
+        {/* Ошибка валидации типа кухни */}
+        {hasCuisineError() && (
+          <p className="text-sm font-medium text-destructive mt-2">
+            {getErrorMessage("food.cuisine") ||
+              "Выберите хотя бы один тип кухни"}
+          </p>
+        )}
+
         {formData.food.cuisine.other && (
           <div className="space-y-2 mt-3">
             <Label htmlFor="cuisineOtherDescription">
@@ -153,27 +212,17 @@ export function StepFood({
                     field.onChange(e)
                     handleCuisineTextChange(e.target.value)
                   }}
-                  className={
-                    errors?.food?.cuisine?.otherDescription
-                      ? "border-destructive"
-                      : ""
-                  }
+                  className={hasCuisineOtherError() ? "border-destructive" : ""}
                 />
               )}
             />
-            {errors?.food?.cuisine?.otherDescription && (
+            {hasCuisineOtherError() && (
               <p className="text-sm font-medium text-destructive">
-                {errors.food.cuisine.otherDescription.message as string}
+                {getErrorMessage("food.cuisine.otherDescription") ||
+                  "Укажите описание для пункта 'Другое'"}
               </p>
             )}
           </div>
-        )}
-
-        {/* Ошибка валидации типа кухни */}
-        {errors?.food?.cuisine && typeof errors.food.cuisine === "object" && (
-          <p className="text-sm font-medium text-destructive mt-2">
-            {errors.food.cuisine.message as string}
-          </p>
         )}
       </div>
 
@@ -212,16 +261,15 @@ export function StepFood({
                     handleFoodPreferenceTextChange(e.target.value)
                   }}
                   className={
-                    errors?.food?.preferences?.otherDescription
-                      ? "border-destructive"
-                      : ""
+                    hasPreferencesOtherError() ? "border-destructive" : ""
                   }
                 />
               )}
             />
-            {errors?.food?.preferences?.otherDescription && (
+            {hasPreferencesOtherError() && (
               <p className="text-sm font-medium text-destructive">
-                {errors.food.preferences.otherDescription.message as string}
+                {getErrorMessage("food.preferences.otherDescription") ||
+                  "Укажите описание для пункта 'Другое'"}
               </p>
             )}
           </div>

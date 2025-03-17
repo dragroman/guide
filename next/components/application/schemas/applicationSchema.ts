@@ -324,7 +324,7 @@ export const applicationSchema = z.object({
         },
         {
           message: "Выберите хотя бы один тип размещения",
-          path: ["hotel3"],
+          path: ["_error"],
         }
       )
       .refine(
@@ -386,7 +386,7 @@ export const applicationSchema = z.object({
         },
         {
           message: "Выберите хотя бы один тип трансфера",
-          path: ["airport"],
+          path: ["_error"],
         }
       )
       .refine(

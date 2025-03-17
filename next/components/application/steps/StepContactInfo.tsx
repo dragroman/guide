@@ -11,14 +11,14 @@ export function StepContactInfo({ control, errors }: StepProps) {
       <div className="space-y-2">
         <Label htmlFor="phone">Телефон *</Label>
         <Controller
-          name="phone"
+          name="contact.phone"
           control={control}
           render={({ field }) => (
             <PhoneInput
               id="phone"
               value={field.value}
               onChange={field.onChange}
-              className={errors.phone ? "border-destructive" : ""}
+              className={errors.contact?.phone ? "border-destructive" : ""}
               defaultCountry="RU"
               international
             />
@@ -27,22 +27,22 @@ export function StepContactInfo({ control, errors }: StepProps) {
         <p className="text-xs text-muted-foreground">
           Введите номер телефона в международном формате
         </p>
-        {errors.phone && (
+        {errors.contact?.phone && (
           <p className="text-sm font-medium text-destructive">
-            {errors.phone.message}
+            {errors.contact.phone.message}
           </p>
         )}
       </div>
 
       <Controller
-        name="email"
+        name="contact.email"
         control={control}
         render={({ field }) => (
           <FormField
             label="Электронная почта *"
             {...field}
             placeholder="Электронная почта"
-            error={errors.email?.message}
+            error={errors.contact?.email?.message}
           />
         )}
       />

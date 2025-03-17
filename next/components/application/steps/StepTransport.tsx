@@ -12,6 +12,11 @@ import { Textarea } from "@/components/ui/textarea"
 import { StepProps } from "../types"
 import { Controller } from "react-hook-form"
 import { CardSelector, CardOption } from "../components/CardSelector"
+import {
+  hasOptionsError,
+  hasOtherDescriptionError,
+  getErrorMessage,
+} from "../utils/errorHelpers"
 
 // Опции для трансфера из аэропорта
 const transferOptions: CardOption[] = [
@@ -83,29 +88,14 @@ export function StepTransport({
   handleOptionChange,
   handleTextChange,
 }: StepProps) {
-  // Функция для отображения ошибок
-  const getErrorMessage = (errorObj: any): string | null => {
-    if (!errorObj) return null
-
-    if (typeof errorObj === "string") {
-      return errorObj
-    }
-
-    if (errorObj.message) {
-      return errorObj.message
-    }
-
-    // Для глубоких объектов с ошибками
-    if (typeof errorObj === "object") {
-      // Проверяем все свойства
-      for (const key in errorObj) {
-        const error = getErrorMessage(errorObj[key])
-        if (error) return error
-      }
-    }
-
-    return null
-  }
+  // Проверки наличия ошибок для конкретных полей
+  const hasTransferError = () => hasOptionsError(errors, "transport.transfer")
+  const hasTransferOtherError = () =>
+    hasOtherDescriptionError(errors, "transport.transfer")
+  const hasTransportPreferencesError = () =>
+    hasOptionsError(errors, "transport.preferences")
+  const hasTransportPreferencesOtherError = () =>
+    hasOtherDescriptionError(errors, "transport.preferences")
 
   // Используем универсальные обработчики, делегируя им конкретные пути
   const handleTransferChange = (name: string, checked: boolean) => {
@@ -124,16 +114,6 @@ export function StepTransport({
     handleTextChange?.("transport.preferences", value)
   }
 
-  // Получаем сообщения об ошибках
-  const transferError = getErrorMessage(errors?.transport?.transfer)
-  const transferDescriptionError = getErrorMessage(
-    errors?.transport?.transfer?.otherDescription
-  )
-  const preferencesError = getErrorMessage(errors?.transport?.preferences)
-  const preferencesDescriptionError = getErrorMessage(
-    errors?.transport?.preferences?.otherDescription
-  )
-
   return (
     <div className="space-y-6">
       <div>
@@ -150,9 +130,10 @@ export function StepTransport({
         />
 
         {/* Отображаем ошибку, если есть */}
-        {transferError && (
+        {hasTransferError() && (
           <p className="text-sm font-medium text-destructive mt-2">
-            {transferError}
+            {getErrorMessage(errors, "transport.transfer") ||
+              "Выберите хотя бы один тип трансфера"}
           </p>
         )}
 
@@ -175,14 +156,17 @@ export function StepTransport({
                     handleTransferTextChange(e.target.value)
                   }}
                   className={
-                    transferDescriptionError ? "border-destructive" : ""
+                    hasTransferOtherError() ? "border-destructive" : ""
                   }
                 />
               )}
             />
-            {transferDescriptionError && (
+            {hasTransferOtherError() && (
               <p className="text-sm font-medium text-destructive">
-                {transferDescriptionError}
+                {getErrorMessage(
+                  errors,
+                  "transport.transfer.otherDescription"
+                ) || "Укажите описание для пункта 'Другое'"}
               </p>
             )}
           </div>
@@ -203,9 +187,10 @@ export function StepTransport({
         />
 
         {/* Отображаем ошибку, если есть */}
-        {preferencesError && (
+        {hasTransportPreferencesError() && (
           <p className="text-sm font-medium text-destructive mt-2">
-            {preferencesError}
+            {getErrorMessage(errors, "transport.preferences") ||
+              "Выберите хотя бы один вариант транспорта"}
           </p>
         )}
 
@@ -228,14 +213,19 @@ export function StepTransport({
                     handleTransportTextChange(e.target.value)
                   }}
                   className={
-                    preferencesDescriptionError ? "border-destructive" : ""
+                    hasTransportPreferencesOtherError()
+                      ? "border-destructive"
+                      : ""
                   }
                 />
               )}
             />
-            {preferencesDescriptionError && (
+            {hasTransportPreferencesOtherError() && (
               <p className="text-sm font-medium text-destructive">
-                {preferencesDescriptionError}
+                {getErrorMessage(
+                  errors,
+                  "transport.preferences.otherDescription"
+                ) || "Укажите описание для пункта 'Другое'"}
               </p>
             )}
           </div>
