@@ -37,6 +37,7 @@ elements: |-
   days_count:
     '#type': number
     '#title': days_count
+    '#required': true
   purpose:
     '#type': checkboxes
     '#title': purpose
@@ -46,6 +47,7 @@ elements: |-
       shopping: shopping
       food: food
       fun: fun
+      health: health
       other: other
     '#required': true
   purpose_other:
@@ -61,9 +63,117 @@ elements: |-
       apartment: apartment
       hostel: hostel
       other: other
+    '#required': true
   accommodation_other:
     '#type': textarea
     '#title': accommodation_other
+  accommodation_preferences:
+    '#type': checkboxes
+    '#title': accommodation_preferences
+    '#options':
+      centralLocation: centralLocation
+      nearShoppingCenters: nearShoppingCenters
+      poolAndSpa: poolAndSpa
+      other: other
+  accommodation_preferences_other:
+    '#type': textarea
+    '#title': accommodation_preferences_other
+  adults:
+    '#type': number
+    '#title': adults
+    '#required': true
+  infants:
+    '#type': number
+    '#title': infants
+    '#max': 10
+  toddlers:
+    '#type': number
+    '#title': toddlers
+    '#max': 10
+  children:
+    '#type': number
+    '#title': children
+  teens:
+    '#type': number
+    '#title': teens
+  seniors:
+    '#type': number
+    '#title': seniors
+  cuisines:
+    '#type': checkboxes
+    '#title': cuisines
+    '#options':
+      chinese: chinese
+      european: european
+      japanese: japanese
+      russian: russian
+      other: other
+  cuisines_other:
+    '#type': textarea
+    '#title': cuisines_other
+  food_preferences:
+    '#type': checkboxes
+    '#title': food_preferences
+    '#options':
+      tryLocal: tryLocal
+      spicyOk: spicyOk
+      fattyOk: fattyOk
+      other: other
+  food_preferences_other:
+    '#type': textarea
+    '#title': food_preferences_other
+  transport_transfer:
+    '#type': checkboxes
+    '#title': transport_transfer
+    '#options':
+      airport: airport
+      individual: individual
+      shuttle: shuttle
+      none: none
+      other: other
+  transport_transfer_other:
+    '#type': textarea
+    '#title': transport_transfer_other
+  transport_preferences:
+    '#type': checkboxes
+    '#title': transport_preferences
+    '#options':
+      privateDriver: privateDriver
+      publicTransport: publicTransport
+      taxi: taxi
+      other: other
+  transport_preferences_other:
+    '#type': textarea
+    '#title': transport_preferences_other
+  shopping_budget:
+    '#type': radios
+    '#title': shopping_budget
+    '#options':
+      economy: economy
+      medium: medium
+      luxury: luxury
+  shopping_places:
+    '#type': checkboxes
+    '#title': shopping_places
+    '#options':
+      malls: malls
+      boutiques: boutiques
+      markets: markets
+      outlets: outlets
+      other: other
+  shopping_places_other:
+    '#type': textarea
+    '#title': shopping_places_other
+  shopping_time:
+    '#type': radios
+    '#title': shopping_time
+    '#options':
+      fewHours: fewHours
+      halfDay: halfDay
+      fullDay: fullDay
+  shopping_special_wishes:
+    '#type': textarea
+    '#title': shopping_special_wishes
 css: ''
 javascript: ''
 settings:

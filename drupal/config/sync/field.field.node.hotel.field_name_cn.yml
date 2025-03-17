@@ -1,0 +1,19 @@
+uuid: e4906ffa-6858-4ca2-a358-1443c623420a
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_name_cn
+    - node.type.hotel
+id: node.hotel.field_name_cn
+field_name: field_name_cn
+entity_type: node
+bundle: hotel
+label: 'Название на китайском'
+description: ''
+required: true
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string

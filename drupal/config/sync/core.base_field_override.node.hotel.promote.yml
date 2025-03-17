@@ -1,0 +1,22 @@
+uuid: d4f3ba63-5fb3-415e-9d05-57b1940ecb4b
+langcode: en
+status: true
+dependencies:
+  config:
+    - node.type.hotel
+id: node.hotel.promote
+field_name: promote
+entity_type: node
+bundle: hotel
+label: 'Promoted to front page'
+description: ''
+required: false
+translatable: true
+default_value:
+  -
+    value: 0
+default_value_callback: ''
+settings:
+  on_label: 'On'
+  off_label: 'Off'
+field_type: boolean
