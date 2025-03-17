@@ -6,10 +6,10 @@ import { Badge } from "@/components/ui/badge"
 import { DatePickerWithRange } from "../components/DatePickerWithRange"
 import { StepProps } from "../types"
 import { getDaysText } from "../utils"
+import { DateRange as RDPDateRange } from "react-day-picker"
 import {
   Briefcase,
   Building2,
-  Check,
   PlusCircle,
   ScanHeart,
   ShoppingBag,
@@ -72,13 +72,24 @@ export function StepTripPurpose({
     },
   ]
 
-  // Используем универсальные обработчики, делегируя им конкретные пути
+  // Адаптер для работы с новой структурой данных
   const handlePurposeOptionChange = (name: string, checked: boolean) => {
-    handleOptionChange?.("tripPurpose", name, checked)
+    if (handleOptionChange) {
+      handleOptionChange("trip.purpose.options", name, checked)
+    }
   }
 
   const handlePurposeTextChange = (value: string) => {
-    handleTextChange?.("tripPurpose", value)
+    if (handleTextChange) {
+      handleTextChange("trip.purpose", value)
+    }
+  }
+
+  // Адаптер для DatePickerWithRange
+  const handleDateRangeChange = (range: RDPDateRange | undefined) => {
+    if (handleDateChange) {
+      handleDateChange(range)
+    }
   }
 
   return (
@@ -87,36 +98,36 @@ export function StepTripPurpose({
       <div className="space-y-4">
         <Label htmlFor="dateRange">Предполагаемые даты поездки *</Label>
         <Controller
-          name="dateRange"
+          name="trip.dateRange"
           control={control}
           render={({ field }) => (
             <DatePickerWithRange
               value={field.value}
-              onDateChange={handleDateChange!}
+              onDateChange={handleDateRangeChange}
               className="w-full"
-              error={Boolean(errors.dateRange)}
+              error={Boolean(errors.trip?.dateRange)}
             />
           )}
         />
-        {formData.daysCount && (
+        {formData.trip.daysCount && (
           <div className="mt-2 text-sm">
             <Badge variant="outline">
-              Продолжительность: {formData.daysCount}{" "}
-              {getDaysText(formData.daysCount)}
+              Продолжительность: {formData.trip.daysCount}{" "}
+              {getDaysText(formData.trip.daysCount)}
             </Badge>
           </div>
         )}
         {/* Улучшенный вывод ошибок для дат */}
-        {errors.dateRange && (
+        {errors.trip?.dateRange && (
           <p className="text-sm font-medium text-destructive">
-            {typeof errors.dateRange === "string"
-              ? errors.dateRange
-              : errors.dateRange.message
-                ? errors.dateRange.message
-                : errors.dateRange.from
-                  ? errors.dateRange.from.message
-                  : errors.dateRange.to
-                    ? errors.dateRange.to.message
+            {typeof errors.trip.dateRange === "string"
+              ? errors.trip.dateRange
+              : errors.trip.dateRange.message
+                ? errors.trip.dateRange.message
+                : errors.trip.dateRange.from
+                  ? errors.trip.dateRange.from.message
+                  : errors.trip.dateRange.to
+                    ? errors.trip.dateRange.to.message
                     : "Пожалуйста, выберите даты поездки"}
           </p>
         )}
@@ -128,34 +139,32 @@ export function StepTripPurpose({
           Выберите цели поездки
         </h3>
 
-        {/* Заменяем блок с карточками на универсальный компонент CardSelector */}
+        {/* Обновленный путь для CardSelector */}
         <CardSelector
           options={purposeOptions}
           formData={formData}
-          path="tripPurpose"
+          path="trip.purpose.options" // Новый путь к опциям
           onOptionChange={handlePurposeOptionChange}
-          // Кастомизация иконок (аналогично оригинальному компоненту)
           iconClassName={(_, isChecked) =>
             isChecked ? "bg-primary text-primary-foreground" : "bg-muted"
           }
         />
 
         {/* Ошибка при отсутствии выбора */}
-        {errors.tripPurpose && !errors.tripPurpose.otherDescription && (
+        {errors.trip?.purpose?.options && (
           <p className="text-sm font-medium text-destructive mt-2">
-            {typeof errors.tripPurpose === "string"
-              ? errors.tripPurpose
-              : errors.tripPurpose.message ||
-                "Выберите хотя бы одну цель поездки"}
+            {typeof errors.trip.purpose.options === "string"
+              ? errors.trip.purpose.options
+              : "Выберите хотя бы одну цель поездки"}
           </p>
         )}
 
         {/* Поле для ввода собственного варианта */}
-        {formData.tripPurpose.other && (
+        {formData.trip.purpose.options.other && (
           <div className="space-y-2 mt-4">
             <Label htmlFor="otherDescription">Опишите вашу цель</Label>
             <Controller
-              name="tripPurpose.otherDescription"
+              name="trip.purpose.otherDescription"
               control={control}
               render={({ field }) => (
                 <Textarea
@@ -163,7 +172,7 @@ export function StepTripPurpose({
                   placeholder="Расскажите подробнее о вашей цели поездки"
                   {...field}
                   className={
-                    errors.tripPurpose?.otherDescription
+                    errors.trip?.purpose?.otherDescription
                       ? "border-destructive"
                       : ""
                   }
@@ -174,9 +183,9 @@ export function StepTripPurpose({
                 />
               )}
             />
-            {errors.tripPurpose?.otherDescription && (
+            {errors.trip?.purpose?.otherDescription && (
               <p className="text-sm font-medium text-destructive">
-                {errors.tripPurpose.otherDescription.message as string}
+                {errors.trip.purpose.otherDescription.message as string}
               </p>
             )}
           </div>

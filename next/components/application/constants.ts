@@ -18,36 +18,67 @@ export const defaultFormValues: ApplicationSchemaType = {
   ageGroups: {
     adults: 1,
   },
-  phone: "",
-  email: "",
-  tripPurpose: {
-    excursion: false,
-    business: false,
-    shopping: false,
-    food: false,
-    fun: false,
-    other: false,
-    otherDescription: "",
+
+  contact: {
+    phone: "",
+    email: "",
   },
-  dateRange: undefined,
-  daysCount: null,
+
+  trip: {
+    dateRange: undefined,
+    daysCount: null,
+    purpose: {
+      options: {
+        excursion: false,
+        business: false,
+        shopping: false,
+        food: false,
+        fun: false,
+        health: false,
+        other: false,
+      },
+      otherDescription: "",
+    },
+  },
+
   accommodation: {
-    hotel3: false,
-    hotel4: false,
-    hotel5: false,
-    apartment: false,
-    hostel: false,
-    other: false,
-    otherDescription: "",
+    options: {
+      hotel3: false,
+      hotel4: false,
+      hotel5: false,
+      apartment: false,
+      hostel: false,
+      other: false,
+      otherDescription: "",
+    },
+    preferences: {
+      centralLocation: false,
+      nearShoppingCenters: false,
+      poolAndSpa: false,
+      other: false,
+      otherDescription: "",
+    },
   },
-  accommodationPreferences: {
-    centralLocation: false,
-    nearShoppingCenters: false,
-    poolAndSpa: false,
-    other: false,
-    otherDescription: "",
+
+  transport: {
+    transfer: {
+      airport: false,
+      individual: false,
+      shuttle: false,
+      none: false,
+      other: false,
+      otherDescription: "",
+    },
+    preferences: {
+      privateDriver: false,
+      publicTransport: false,
+      taxi: false,
+      other: false,
+      otherDescription: "",
+    },
   },
-  foodPreferences: {
+
+  food: {
     cuisine: {
       chinese: false,
       european: false,
@@ -60,23 +91,6 @@ export const defaultFormValues: ApplicationSchemaType = {
       tryLocal: false,
       spicyOk: false,
       fattyOk: false,
-      other: false,
-      otherDescription: "",
-    },
-  },
-  transport: {
-    transfer: {
-      airport: false,
-      individual: false,
-      shuttle: false,
-      none: false,
-      other: false,
-      otherDescription: "",
-    },
-    transportPreferences: {
-      privateDriver: false,
-      publicTransport: false,
-      taxi: false,
       other: false,
       otherDescription: "",
     },

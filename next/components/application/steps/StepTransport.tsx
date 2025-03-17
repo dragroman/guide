@@ -83,6 +83,30 @@ export function StepTransport({
   handleOptionChange,
   handleTextChange,
 }: StepProps) {
+  // Функция для отображения ошибок
+  const getErrorMessage = (errorObj: any): string | null => {
+    if (!errorObj) return null
+
+    if (typeof errorObj === "string") {
+      return errorObj
+    }
+
+    if (errorObj.message) {
+      return errorObj.message
+    }
+
+    // Для глубоких объектов с ошибками
+    if (typeof errorObj === "object") {
+      // Проверяем все свойства
+      for (const key in errorObj) {
+        const error = getErrorMessage(errorObj[key])
+        if (error) return error
+      }
+    }
+
+    return null
+  }
+
   // Используем универсальные обработчики, делегируя им конкретные пути
   const handleTransferChange = (name: string, checked: boolean) => {
     handleOptionChange?.("transport.transfer", name, checked)
@@ -93,12 +117,22 @@ export function StepTransport({
   }
 
   const handleTransportChange = (name: string, checked: boolean) => {
-    handleOptionChange?.("transport.transportPreferences", name, checked)
+    handleOptionChange?.("transport.preferences", name, checked)
   }
 
   const handleTransportTextChange = (value: string) => {
-    handleTextChange?.("transport.transportPreferences", value)
+    handleTextChange?.("transport.preferences", value)
   }
+
+  // Получаем сообщения об ошибках
+  const transferError = getErrorMessage(errors?.transport?.transfer)
+  const transferDescriptionError = getErrorMessage(
+    errors?.transport?.transfer?.otherDescription
+  )
+  const preferencesError = getErrorMessage(errors?.transport?.preferences)
+  const preferencesDescriptionError = getErrorMessage(
+    errors?.transport?.preferences?.otherDescription
+  )
 
   return (
     <div className="space-y-6">
@@ -107,13 +141,20 @@ export function StepTransport({
           Нужен ли трансфер из аэропорта до отеля?
         </h3>
 
-        {/* Используем универсальный CardSelector вместо TransferOptionsSelector */}
+        {/* Используем CardSelector с обновленными путями */}
         <CardSelector
           options={transferOptions}
           formData={formData}
           path="transport.transfer"
           onOptionChange={handleTransferChange}
         />
+
+        {/* Отображаем ошибку, если есть */}
+        {transferError && (
+          <p className="text-sm font-medium text-destructive mt-2">
+            {transferError}
+          </p>
+        )}
 
         {formData.transport?.transfer?.other && (
           <div className="space-y-2 mt-3">
@@ -134,26 +175,17 @@ export function StepTransport({
                     handleTransferTextChange(e.target.value)
                   }}
                   className={
-                    errors?.transport?.transfer?.otherDescription
-                      ? "border-destructive"
-                      : ""
+                    transferDescriptionError ? "border-destructive" : ""
                   }
                 />
               )}
             />
-            {errors?.transport?.transfer?.otherDescription && (
+            {transferDescriptionError && (
               <p className="text-sm font-medium text-destructive">
-                {errors.transport.transfer.otherDescription.message as string}
+                {transferDescriptionError}
               </p>
             )}
           </div>
-        )}
-
-        {/* Ошибка валидации типа трансфера */}
-        {errors?.transport?.transfer?._error && (
-          <p className="text-sm font-medium text-destructive mt-2">
-            {errors.transport.transfer._error.message as string}
-          </p>
         )}
       </div>
 
@@ -162,21 +194,28 @@ export function StepTransport({
           Пожелания к транспорту во время тура
         </h3>
 
-        {/* Используем универсальный CardSelector вместо TransportCardSelector */}
+        {/* Используем CardSelector с обновленными путями */}
         <CardSelector
           options={transportOptions}
           formData={formData}
-          path="transport.transportPreferences"
+          path="transport.preferences"
           onOptionChange={handleTransportChange}
         />
 
-        {formData.transport?.transportPreferences?.other && (
+        {/* Отображаем ошибку, если есть */}
+        {preferencesError && (
+          <p className="text-sm font-medium text-destructive mt-2">
+            {preferencesError}
+          </p>
+        )}
+
+        {formData.transport?.preferences?.other && (
           <div className="space-y-2 mt-3">
             <Label htmlFor="transportPreferencesOtherDescription">
               Укажите ваши пожелания к транспорту
             </Label>
             <Controller
-              name="transport.transportPreferences.otherDescription"
+              name="transport.preferences.otherDescription"
               control={control}
               render={({ field }) => (
                 <Textarea
@@ -189,19 +228,14 @@ export function StepTransport({
                     handleTransportTextChange(e.target.value)
                   }}
                   className={
-                    errors?.transport?.transportPreferences?.otherDescription
-                      ? "border-destructive"
-                      : ""
+                    preferencesDescriptionError ? "border-destructive" : ""
                   }
                 />
               )}
             />
-            {errors?.transport?.transportPreferences?.otherDescription && (
+            {preferencesDescriptionError && (
               <p className="text-sm font-medium text-destructive">
-                {
-                  errors.transport.transportPreferences.otherDescription
-                    .message as string
-                }
+                {preferencesDescriptionError}
               </p>
             )}
           </div>

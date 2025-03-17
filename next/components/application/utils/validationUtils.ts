@@ -31,13 +31,16 @@ export function validateOtherDescription(
  * Проверяет, что выбран хотя бы один элемент из списка чекбоксов
  */
 export function validateAtLeastOneSelected(
-  data: Record<string, any>,
+  options: Record<string, any>,
   fieldPath: string,
   errorMessage: string,
   setError: UseFormSetError<ApplicationSchemaType>
 ): boolean {
-  const hasSelection = Object.entries(data)
-    .filter(([key]) => key !== "otherDescription" && key !== "_error")
+  const hasSelection = Object.entries(options)
+    .filter(
+      ([key]) =>
+        key !== "otherDescription" && key !== "other" && key !== "_error"
+    )
     .some(([_, value]) => value === true)
 
   if (!hasSelection) {
@@ -58,7 +61,7 @@ export function validateDateRange(
   setError: UseFormSetError<ApplicationSchemaType>
 ): boolean {
   if (!dateRange || !dateRange.from || !dateRange.to) {
-    setError("dateRange", {
+    setError("trip.dateRange", {
       type: "custom",
       message: "Пожалуйста, выберите даты поездки",
     })
@@ -84,21 +87,28 @@ export async function validateTripInfo(
   getValues: UseFormGetValues<ApplicationSchemaType>,
   setError: UseFormSetError<ApplicationSchemaType>
 ): Promise<boolean> {
-  // Сначала проверяем стандартные поля
-  const isStepValid = await trigger(["dateRange", "tripPurpose"])
+  const dateRange = getValues("trip.dateRange")
+  const dateRangeValid = validateDateRange(dateRange, setError)
+
+  // Если даты не заполнены, показываем ошибку сразу
+  if (!dateRangeValid) {
+    return false
+  }
+  // Сначала проверяем стандартные поля через схему
+  const isStepValid = await trigger(["trip"])
   if (!isStepValid) return false
 
   // Проверяем даты поездки
-  if (!validateDateRange(getValues("dateRange"), setError)) {
+  if (!validateDateRange(getValues("trip.dateRange"), setError)) {
     return false
   }
 
   // Проверяем, что выбрана хотя бы одна цель поездки
-  const tripPurpose = getValues("tripPurpose")
+  const tripPurposeOptions = getValues("trip.purpose.options")
   if (
     !validateAtLeastOneSelected(
-      tripPurpose,
-      "tripPurpose",
+      tripPurposeOptions,
+      "trip.purpose.options",
       "Выберите хотя бы одну цель поездки",
       setError
     )
@@ -107,7 +117,16 @@ export async function validateTripInfo(
   }
 
   // Проверяем поле "Другое" если оно выбрано
-  if (!validateOtherDescription(tripPurpose, "tripPurpose", setError)) {
+  if (
+    !validateOtherDescription(
+      {
+        other: tripPurposeOptions.other,
+        otherDescription: getValues("trip.purpose.otherDescription"),
+      },
+      "trip.purpose",
+      setError
+    )
+  ) {
     return false
   }
 
@@ -123,18 +142,15 @@ export async function validateAccommodation(
   setError: UseFormSetError<ApplicationSchemaType>
 ): Promise<boolean> {
   // Сначала проверяем стандартные поля
-  const isStepValid = await trigger([
-    "accommodation",
-    "accommodationPreferences",
-  ])
+  const isStepValid = await trigger(["accommodation"])
   if (!isStepValid) return false
 
   // Проверяем тип размещения
-  const accommodation = getValues("accommodation")
+  const accommodationOptions = getValues("accommodation.options")
   if (
     !validateAtLeastOneSelected(
-      accommodation,
-      "accommodation",
+      accommodationOptions,
+      "accommodation.options",
       "Выберите хотя бы один тип размещения",
       setError
     )
@@ -143,14 +159,32 @@ export async function validateAccommodation(
   }
 
   // Проверяем поле "Другое" для типа размещения
-  if (!validateOtherDescription(accommodation, "accommodation", setError)) {
+  if (
+    !validateOtherDescription(
+      {
+        other: accommodationOptions.other,
+        otherDescription: getValues("accommodation.options.otherDescription"),
+      },
+      "accommodation.options",
+      setError
+    )
+  ) {
     return false
   }
 
   // Проверяем поле "Другое" для предпочтений размещения
-  const preferences = getValues("accommodationPreferences")
+  const accommodationPreferences = getValues("accommodation.preferences")
   if (
-    !validateOtherDescription(preferences, "accommodationPreferences", setError)
+    !validateOtherDescription(
+      {
+        other: accommodationPreferences.other,
+        otherDescription: getValues(
+          "accommodation.preferences.otherDescription"
+        ),
+      },
+      "accommodation.preferences",
+      setError
+    )
   ) {
     return false
   }
@@ -162,15 +196,20 @@ export async function validateAccommodation(
  * Валидация для шага с транспортом (шаг 3)
  */
 export async function validateTransport(
+  trigger: UseFormTrigger<ApplicationSchemaType>,
   getValues: UseFormGetValues<ApplicationSchemaType>,
   setError: UseFormSetError<ApplicationSchemaType>
 ): Promise<boolean> {
+  // Сначала проверяем стандартные поля
+  const isStepValid = await trigger(["transport"])
+  if (!isStepValid) return false
+
   // Валидируем трансфер
   const transfer = getValues("transport.transfer")
   if (
     !validateAtLeastOneSelected(
       transfer,
-      "transport.transfer._error",
+      "transport.transfer",
       "Выберите хотя бы один тип трансфера",
       setError
     )
@@ -179,16 +218,28 @@ export async function validateTransport(
   }
 
   // Проверяем описание для "Другое" в трансфере
-  if (!validateOtherDescription(transfer, "transport.transfer", setError)) {
+  if (
+    !validateOtherDescription(
+      {
+        other: transfer.other,
+        otherDescription: getValues("transport.transfer.otherDescription"),
+      },
+      "transport.transfer",
+      setError
+    )
+  ) {
     return false
   }
 
   // Проверяем предпочтения по транспорту
-  const transportPreferences = getValues("transport.transportPreferences")
+  const transportPreferences = getValues("transport.preferences")
   if (
     !validateOtherDescription(
-      transportPreferences,
-      "transport.transportPreferences",
+      {
+        other: transportPreferences.other,
+        otherDescription: getValues("transport.preferences.otherDescription"),
+      },
+      "transport.preferences",
       setError
     )
   ) {
@@ -202,15 +253,20 @@ export async function validateTransport(
  * Валидация для шага с питанием (шаг 4)
  */
 export async function validateFood(
+  trigger: UseFormTrigger<ApplicationSchemaType>,
   getValues: UseFormGetValues<ApplicationSchemaType>,
   setError: UseFormSetError<ApplicationSchemaType>
 ): Promise<boolean> {
+  // Сначала проверяем стандартные поля
+  const isStepValid = await trigger(["food"])
+  if (!isStepValid) return false
+
   // Проверяем выбор типа кухни
-  const cuisine = getValues("foodPreferences.cuisine")
+  const cuisine = getValues("food.cuisine")
   if (
     !validateAtLeastOneSelected(
       cuisine,
-      "foodPreferences.cuisine._error",
+      "food.cuisine",
       "Выберите хотя бы один тип кухни",
       setError
     )
@@ -219,16 +275,28 @@ export async function validateFood(
   }
 
   // Проверяем описание для "Другое" в выборе кухни
-  if (!validateOtherDescription(cuisine, "foodPreferences.cuisine", setError)) {
+  if (
+    !validateOtherDescription(
+      {
+        other: cuisine.other,
+        otherDescription: getValues("food.cuisine.otherDescription"),
+      },
+      "food.cuisine",
+      setError
+    )
+  ) {
     return false
   }
 
   // Проверяем особые требования к питанию
-  const preferences = getValues("foodPreferences.preferences")
+  const preferences = getValues("food.preferences")
   if (
     !validateOtherDescription(
-      preferences,
-      "foodPreferences.preferences",
+      {
+        other: preferences.other,
+        otherDescription: getValues("food.preferences.otherDescription"),
+      },
+      "food.preferences",
       setError
     )
   ) {
@@ -244,5 +312,5 @@ export async function validateFood(
 export async function validateContact(
   trigger: UseFormTrigger<ApplicationSchemaType>
 ): Promise<boolean> {
-  return await trigger(["phone", "email"])
+  return await trigger(["contact"])
 }

@@ -92,19 +92,46 @@ export function StepAccommodation({
 
   // Используем универсальные обработчики, делегируя им конкретные пути
   const handleAccommodationOptionChange = (name: string, checked: boolean) => {
-    handleOptionChange?.("accommodation", name, checked)
+    handleOptionChange?.("accommodation.options", name, checked)
   }
 
   const handleAccommodationTextChange = (value: string) => {
-    handleTextChange?.("accommodation", value)
+    handleTextChange?.("accommodation.options", value)
   }
 
   const handlePreferenceOptionChange = (name: string, checked: boolean) => {
-    handleOptionChange?.("accommodationPreferences", name, checked)
+    handleOptionChange?.("accommodation.preferences", name, checked)
   }
 
   const handlePreferenceTextChange = (value: string) => {
-    handleTextChange?.("accommodationPreferences", value)
+    handleTextChange?.("accommodation.preferences", value)
+  }
+
+  // Функции-помощники для упрощения проверки наличия ошибок
+  const hasOptionsError = () => {
+    // Проверяем все уровни ошибок для options
+    return (
+      errors.accommodation?.options &&
+      typeof errors.accommodation.options === "object" &&
+      !errors.accommodation.options.otherDescription
+    )
+  }
+
+  const hasOptionsOtherError = () => {
+    return errors.accommodation?.options?.otherDescription
+  }
+
+  const hasPreferencesError = () => {
+    // Проверяем все уровни ошибок для preferences
+    return (
+      errors.accommodation?.preferences &&
+      typeof errors.accommodation.preferences === "object" &&
+      !errors.accommodation.preferences.otherDescription
+    )
+  }
+
+  const hasPreferencesOtherError = () => {
+    return errors.accommodation?.preferences?.otherDescription
   }
 
   return (
@@ -114,21 +141,21 @@ export function StepAccommodation({
           Предпочитаемый тип размещения
         </h3>
 
-        {/* Используем CardSelector для типов размещения */}
+        {/* Обновленный путь для CardSelector */}
         <CardSelector
           options={accommodationOptions}
           formData={formData}
-          path="accommodation"
+          path="accommodation.options"
           onOptionChange={handleAccommodationOptionChange}
         />
 
-        {formData.accommodation.other && (
+        {formData.accommodation.options.other && (
           <div className="space-y-2 mt-3">
             <Label htmlFor="accommodationOtherDescription">
               Укажите предпочтения
             </Label>
             <Controller
-              name="accommodation.otherDescription"
+              name="accommodation.options.otherDescription"
               control={control}
               render={({ field }) => (
                 <Textarea
@@ -140,35 +167,29 @@ export function StepAccommodation({
                     field.onChange(e)
                     handleAccommodationTextChange(e.target.value)
                   }}
-                  className={
-                    errors.accommodation?.otherDescription
-                      ? "border-destructive"
-                      : ""
-                  }
+                  className={hasOptionsOtherError() ? "border-destructive" : ""}
                 />
               )}
             />
-            {errors.accommodation?.otherDescription && (
+            {hasOptionsOtherError() && (
               <p className="text-sm font-medium text-destructive">
-                {errors.accommodation.otherDescription.message as string}
+                {(errors.accommodation?.options?.otherDescription
+                  ?.message as string) ||
+                  "Укажите описание для пункта 'Другое'"}
               </p>
             )}
           </div>
         )}
 
-        {/* Ошибка валидации типа размещения */}
-        {errors.accommodation &&
-          typeof errors.accommodation === "object" &&
-          !errors.accommodation.otherDescription && (
-            <p className="text-sm font-medium text-destructive mt-2">
-              {errors.accommodation.message}
-            </p>
-          )}
-
-        {/* Ошибка валидации, если в схеме указан строковый формат ошибки */}
-        {errors.accommodation && typeof errors.accommodation === "string" && (
+        {/* Обновленная проверка и отображение ошибок для типа размещения */}
+        {(hasOptionsError() ||
+          (errors.accommodation?.options &&
+            typeof errors.accommodation.options === "string")) && (
           <p className="text-sm font-medium text-destructive mt-2">
-            {errors.accommodation}
+            {typeof errors.accommodation?.options === "string"
+              ? errors.accommodation.options
+              : errors.accommodation?.options?.message ||
+                "Выберите хотя бы один тип размещения"}
           </p>
         )}
       </div>
@@ -176,21 +197,21 @@ export function StepAccommodation({
       <div>
         <h3 className="mb-4 text-sm font-medium">Пожелания к размещению</h3>
 
-        {/* Используем CardSelector для предпочтений к размещению */}
+        {/* Обновленный путь для CardSelector предпочтений */}
         <CardSelector
           options={preferencesOptions}
           formData={formData}
-          path="accommodationPreferences"
+          path="accommodation.preferences"
           onOptionChange={handlePreferenceOptionChange}
         />
 
-        {formData.accommodationPreferences.other && (
+        {formData.accommodation.preferences.other && (
           <div className="space-y-2 mt-3">
             <Label htmlFor="preferencesOtherDescription">
               Укажите ваши пожелания
             </Label>
             <Controller
-              name="accommodationPreferences.otherDescription"
+              name="accommodation.preferences.otherDescription"
               control={control}
               render={({ field }) => (
                 <Textarea
@@ -203,39 +224,40 @@ export function StepAccommodation({
                     handlePreferenceTextChange(e.target.value)
                   }}
                   className={
-                    errors.accommodationPreferences?.otherDescription
-                      ? "border-destructive"
-                      : ""
+                    hasPreferencesOtherError() ? "border-destructive" : ""
                   }
                 />
               )}
             />
-            {errors.accommodationPreferences?.otherDescription && (
+            {hasPreferencesOtherError() && (
               <p className="text-sm font-medium text-destructive">
-                {
-                  errors.accommodationPreferences.otherDescription
-                    .message as string
-                }
+                {(errors.accommodation?.preferences?.otherDescription
+                  ?.message as string) ||
+                  "Укажите описание для пункта 'Другое'"}
               </p>
             )}
           </div>
         )}
 
-        {errors.accommodationPreferences &&
-          typeof errors.accommodationPreferences === "object" &&
-          !errors.accommodationPreferences.otherDescription && (
-            <p className="text-sm font-medium text-destructive mt-2">
-              {errors.accommodationPreferences.message}
-            </p>
-          )}
-
-        {errors.accommodationPreferences &&
-          typeof errors.accommodationPreferences === "string" && (
-            <p className="text-sm font-medium text-destructive mt-2">
-              {errors.accommodationPreferences}
-            </p>
-          )}
+        {/* Обновленная проверка и отображение ошибок для предпочтений */}
+        {(hasPreferencesError() ||
+          (errors.accommodation?.preferences &&
+            typeof errors.accommodation.preferences === "string")) && (
+          <p className="text-sm font-medium text-destructive mt-2">
+            {typeof errors.accommodation?.preferences === "string"
+              ? errors.accommodation.preferences
+              : errors.accommodation?.preferences?.message ||
+                "Выберите хотя бы одно предпочтение по размещению"}
+          </p>
+        )}
       </div>
+
+      {/* Общие ошибки для раздела accommodation */}
+      {errors.accommodation && typeof errors.accommodation === "string" && (
+        <p className="text-sm font-medium text-destructive mt-2">
+          {errors.accommodation}
+        </p>
+      )}
     </div>
   )
 }

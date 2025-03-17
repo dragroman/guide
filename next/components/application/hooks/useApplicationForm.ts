@@ -138,9 +138,9 @@ export function useApplicationForm() {
       case 2:
         return await validateAccommodation(trigger, getValues, setError)
       case 3:
-        return await validateTransport(getValues, setError)
+        return await validateTransport(trigger, getValues, setError)
       case 4:
-        return await validateFood(getValues, setError)
+        return await validateFood(trigger, getValues, setError)
       case 5:
         return await validateContact(trigger)
       case 6:
@@ -209,19 +209,19 @@ export function useApplicationForm() {
   // Обработчик для диапазона дат
   const handleDateChange = useCallback(
     (dateRange: DateRange | undefined) => {
-      setValue("dateRange", dateRange as any)
+      setValue("trip.dateRange", dateRange as any)
 
       // Очищаем ошибки после выбора дат
       if (dateRange?.from && dateRange?.to) {
-        clearErrors("dateRange")
+        clearErrors("trip.dateRange")
       }
 
       if (dateRange?.from && dateRange?.to) {
         // Рассчитываем количество дней, включая начальный и конечный дни
         const daysCount = differenceInDays(dateRange.to, dateRange.from) + 1
-        setValue("daysCount", daysCount)
+        setValue("trip.daysCount", daysCount)
       } else {
-        setValue("daysCount", null)
+        setValue("trip.daysCount", null)
       }
     },
     [setValue, clearErrors]
@@ -268,11 +268,11 @@ export function useApplicationForm() {
       try {
         // Форматируем даты для отправки
         const formattedDates = {
-          from: data.dateRange?.from
-            ? format(data.dateRange.from, "yyyy-MM-dd")
+          from: data.trip.dateRange?.from
+            ? format(data.trip.dateRange.from, "yyyy-MM-dd")
             : undefined,
-          to: data.dateRange?.to
-            ? format(data.dateRange.to, "yyyy-MM-dd")
+          to: data.trip.dateRange?.to
+            ? format(data.trip.dateRange.to, "yyyy-MM-dd")
             : undefined,
         }
 
@@ -285,15 +285,15 @@ export function useApplicationForm() {
           body: JSON.stringify({
             name: data.name,
             peopleCount: data.peopleCount,
-            phone: data.phone,
+            ageGroups: data.ageGroups,
+            phone: data.contact.phone,
             date_from: formattedDates.from,
             date_to: formattedDates.to,
-            email: data.email,
-            daysCount: data.daysCount,
-            tripPurpose: data.tripPurpose,
-            accommodation: data.accommodation,
-            accommodationPreferences: data.accommodationPreferences,
-            ageGroups: data.ageGroups,
+            email: data.contact.email,
+            daysCount: data.trip.daysCount,
+            tripPurpose: data.trip.purpose,
+            accommodation: data.accommodation.options,
+            accommodationPreferences: data.accommodation.preferences,
           }),
         })
 

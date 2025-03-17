@@ -48,18 +48,16 @@ export function useDraftForm(
             return true
           }
 
-          // Проверка булевых значений в объектах типа checkboxes
+          // Проверка объектов с options и otherDescription (новая структура)
           if (
-            key === "tripPurpose" ||
-            key === "accommodation" ||
-            key === "accommodationPreferences"
+            key === "options" &&
+            typeof value === "object" &&
+            value !== null
           ) {
-            return (
-              typeof value === "object" &&
-              value !== null &&
-              Object.entries(value).some(
-                ([k, v]) => k !== "otherDescription" && v === true
-              )
+            // Приводим value к типу Record<string, any> для доступа к произвольным свойствам
+            const optionsObj = value as Record<string, any>
+            return Object.entries(optionsObj).some(
+              ([k, v]) => k !== "otherDescription" && v === true
             )
           }
 
@@ -77,6 +75,7 @@ export function useDraftForm(
         })
       }
 
+      // Проверяем наличие данных в черновике
       const hasData = hasAnyData(draftData)
       setShowDraftNotice(hasData)
     }
@@ -92,14 +91,21 @@ export function useDraftForm(
     // Проверяем, есть ли в форме хоть какие-то данные, которые стоит сохранить
     const hasAnyValue =
       formData.name ||
-      formData.email ||
-      formData.phone ||
-      (formData.dateRange &&
-        (formData.dateRange.from || formData.dateRange.to)) ||
-      Object.values(formData.tripPurpose).some((val) => val === true) ||
-      Object.values(formData.accommodation).some((val) => val === true) ||
-      Object.values(formData.accommodationPreferences).some(
+      formData.contact.email ||
+      formData.contact.phone ||
+      (formData.trip.dateRange &&
+        (formData.trip.dateRange.from || formData.trip.dateRange.to)) ||
+      // Проверка целей поездки
+      Object.values(formData.trip.purpose.options).some(
         (val) => val === true
+      ) ||
+      // Проверка типов размещения
+      Object.values(formData.accommodation.options).some(
+        (val) => typeof val === "boolean" && val === true
+      ) ||
+      // Проверка предпочтений размещения
+      Object.values(formData.accommodation.preferences).some(
+        (val) => typeof val === "boolean" && val === true
       )
 
     if (hasAnyValue) {
@@ -124,7 +130,6 @@ export function useDraftForm(
   }, [formData, saveDraft, showDraftNotice])
 
   // Восстановление черновика
-  // В функции useDraftForm.ts
   const restoreDraft = useCallback(() => {
     if (draftData) {
       // Рекурсивная функция для обхода вложенных объектов

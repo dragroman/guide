@@ -8,7 +8,6 @@ import {
   Utensils,
   Coffee,
   Soup,
-  Beef,
   Flame,
   Leaf,
   Star,
@@ -90,25 +89,25 @@ export function StepFood({
     },
   ]
 
-  // Используем универсальные обработчики, делегируя им конкретные пути
+  // Используем универсальные обработчики с новыми путями
   const handleCuisineChange = (name: string, checked: boolean) => {
-    handleOptionChange?.("foodPreferences.cuisine", name, checked)
+    handleOptionChange?.("food.cuisine", name, checked)
   }
 
   const handleCuisineTextChange = (value: string) => {
-    handleTextChange?.("foodPreferences.cuisine", value)
+    handleTextChange?.("food.cuisine", value)
   }
 
   const handleFoodPreferenceChange = (name: string, checked: boolean) => {
-    handleOptionChange?.("foodPreferences.preferences", name, checked)
+    handleOptionChange?.("food.preferences", name, checked)
   }
 
   const handleFoodPreferenceTextChange = (value: string) => {
-    handleTextChange?.("foodPreferences.preferences", value)
+    handleTextChange?.("food.preferences", value)
   }
 
   // Рендер флага страны для опций кухни
-  const renderCuisineExtra = (option: CardOption) => {
+  const renderCuisineExtra = (option: CardOption, isChecked: boolean) => {
     if (option.extraData?.country) {
       return (
         <div className="mt-1">
@@ -127,22 +126,22 @@ export function StepFood({
       <div>
         <h3 className="mb-4 text-sm font-medium">Предпочтения по кухне</h3>
 
-        {/* Используем CardSelector для типов кухни */}
+        {/* Используем CardSelector для типов кухни с обновленным путем */}
         <CardSelector
           options={cuisineOptions}
           formData={formData}
-          path="foodPreferences.cuisine"
+          path="food.cuisine"
           onOptionChange={handleCuisineChange}
           renderExtraContent={renderCuisineExtra}
         />
 
-        {formData.foodPreferences?.cuisine?.other && (
+        {formData.food.cuisine.other && (
           <div className="space-y-2 mt-3">
             <Label htmlFor="cuisineOtherDescription">
               Укажите ваши предпочтения по кухне
             </Label>
             <Controller
-              name="foodPreferences.cuisine.otherDescription"
+              name="food.cuisine.otherDescription"
               control={control}
               render={({ field }) => (
                 <Textarea
@@ -155,28 +154,25 @@ export function StepFood({
                     handleCuisineTextChange(e.target.value)
                   }}
                   className={
-                    errors?.foodPreferences?.cuisine?.otherDescription
+                    errors?.food?.cuisine?.otherDescription
                       ? "border-destructive"
                       : ""
                   }
                 />
               )}
             />
-            {errors?.foodPreferences?.cuisine?.otherDescription && (
+            {errors?.food?.cuisine?.otherDescription && (
               <p className="text-sm font-medium text-destructive">
-                {
-                  errors.foodPreferences.cuisine.otherDescription
-                    .message as string
-                }
+                {errors.food.cuisine.otherDescription.message as string}
               </p>
             )}
           </div>
         )}
 
         {/* Ошибка валидации типа кухни */}
-        {errors?.foodPreferences?.cuisine?._error && (
+        {errors?.food?.cuisine && typeof errors.food.cuisine === "object" && (
           <p className="text-sm font-medium text-destructive mt-2">
-            {errors.foodPreferences.cuisine._error.message as string}
+            {errors.food.cuisine.message as string}
           </p>
         )}
       </div>
@@ -186,24 +182,24 @@ export function StepFood({
           Дополнительная информация о питании
         </h3>
 
-        {/* Используем CardSelector для предпочтений по питанию */}
+        {/* Используем CardSelector для предпочтений по питанию с обновленным путем */}
         <CardSelector
           options={foodPreferencesOptions}
           formData={formData}
-          path="foodPreferences.preferences"
+          path="food.preferences"
           onOptionChange={handleFoodPreferenceChange}
           iconClassName={(_, isChecked) =>
             isChecked ? "bg-primary text-primary-foreground" : "bg-muted"
           }
         />
 
-        {formData.foodPreferences?.preferences?.other && (
+        {formData.food.preferences.other && (
           <div className="space-y-2 mt-3">
             <Label htmlFor="foodPreferencesOtherDescription">
               Укажите особые требования к питанию
             </Label>
             <Controller
-              name="foodPreferences.preferences.otherDescription"
+              name="food.preferences.otherDescription"
               control={control}
               render={({ field }) => (
                 <Textarea
@@ -216,19 +212,16 @@ export function StepFood({
                     handleFoodPreferenceTextChange(e.target.value)
                   }}
                   className={
-                    errors?.foodPreferences?.preferences?.otherDescription
+                    errors?.food?.preferences?.otherDescription
                       ? "border-destructive"
                       : ""
                   }
                 />
               )}
             />
-            {errors?.foodPreferences?.preferences?.otherDescription && (
+            {errors?.food?.preferences?.otherDescription && (
               <p className="text-sm font-medium text-destructive">
-                {
-                  errors.foodPreferences.preferences.otherDescription
-                    .message as string
-                }
+                {errors.food.preferences.otherDescription.message as string}
               </p>
             )}
           </div>
