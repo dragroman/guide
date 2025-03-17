@@ -3,6 +3,7 @@ import { StepIndicator } from "../components/StepIndicator"
 import { STEPS } from "../constants"
 import { Button } from "@/components/ui/button"
 import { ChevronLeft } from "lucide-react"
+import Link from "next/link"
 
 interface ApplicationHeaderProps {
   currentStep: number
@@ -35,7 +36,11 @@ export default function ApplicationHeader({
                 </Button>
               )}
             </div>
-            <div>Анкета</div>
+            <div>
+              <Link href="/" title="На главную" className="text-blue-600">
+                На сайт
+              </Link>
+            </div>
           </div>
         </div>
         <StepIndicator

@@ -1,7 +1,7 @@
 "use client"
 
 import * as React from "react"
-import { format } from "date-fns"
+import { format, addDays } from "date-fns"
 import { ru } from "date-fns/locale"
 import { CalendarIcon, CheckCircle, X } from "lucide-react"
 import { DateRange } from "react-day-picker"
@@ -88,15 +88,18 @@ export function DatePickerWithRange({
       : format(value.from, "dd.MM.yyyy", { locale: ru })
     : "Выберите даты"
 
+  // Текущая дата для запрета выбора прошедших дат
+  const today = new Date()
+
   return (
     <div className={cn("grid gap-2", className)}>
       <Drawer open={open} onOpenChange={setOpen}>
         <DrawerTrigger asChild>
           <Button
             id="date"
+            size={"lg"}
             variant={"outline"}
             className={cn(
-              "w-full justify-start text-left font-normal",
               !value?.from && "text-muted-foreground",
               error && "border-destructive"
             )}
@@ -119,6 +122,7 @@ export function DatePickerWithRange({
               onSelect={handleRangeChange}
               numberOfMonths={1}
               locale={ru}
+              disabled={{ before: today }}
               className="rounded-md border mx-auto"
             />
 
