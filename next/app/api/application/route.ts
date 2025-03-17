@@ -1,5 +1,7 @@
+import { DateRange } from "react-day-picker"
 import { NextRequest, NextResponse } from "next/server"
 import { applicationSchema } from "@/components/application/schemas/applicationSchema"
+import { date } from "zod"
 
 export async function POST(request: NextRequest) {
   try {
@@ -7,7 +9,12 @@ export async function POST(request: NextRequest) {
     console.log(body)
 
     // Проверяем что получены все необходимые данные
-    if (!body.name || !body.phone || !body.date_from || !body.date_to) {
+    if (
+      !body.name ||
+      !body.phone ||
+      !body.trip.dateRange.from ||
+      !body.trip.dateRange.to
+    ) {
       return NextResponse.json(
         { message: "Все обязательные поля должны быть заполнены" },
         { status: 400 }
@@ -16,7 +23,7 @@ export async function POST(request: NextRequest) {
 
     console.log(body)
 
-    const tripPurpose = body.tripPurpose || {}
+    const trip = body.trip.purpose || {}
     const accommodation = body.accommodation || {}
     const accommodationPreferences = body.accommodationPreferences || {}
 
@@ -25,18 +32,20 @@ export async function POST(request: NextRequest) {
       // Преобразуем данные в формат, ожидаемый схемой
       applicationSchema.parse({
         name: body.name,
-        phone: body.phone,
-        dateRange: {
-          from: new Date(body.date_from),
-          to: new Date(body.date_to),
-        },
-        email: body.email,
-        daysCount: body.daysCount,
-        tripPurpose: body.tripPurpose,
-        accommodation: body.accommodation,
-        accommodationPreferences: body.accommodationPreferences,
         peopleCount: body.peopleCount,
         ageGroups: body.ageGroups,
+        contact: body.contact,
+        trip: {
+          dateRange: {
+            from: new Date(body.trip.dateRange.from),
+            to: new Date(body.trip.dateRange.to),
+          },
+          daysCount: body.trip.daysCount,
+          purpose: body.trip.purpose,
+        },
+        accommodation: body.accommodation,
+        transport: body.transport,
+        food: body.food,
       })
     } catch (error) {
       if (error instanceof Error) {
@@ -44,17 +53,27 @@ export async function POST(request: NextRequest) {
       }
     }
 
-    const purposeArray = Object.entries(tripPurpose)
-      .filter(([key, value]) => key !== "otherDescription" && value === true)
-      .map(([key]) => key)
+    const purposeArray = Object.entries(body.trip.purpose.options).map(
+      ([key]) => key
+    )
 
-    const accommodationArray = Object.entries(accommodation)
+    const accommodationArray = Object.entries(body.accommodation.options)
       .filter(([key, value]) => key !== "otherDescription" && value === true)
       .map(([key]) => key)
 
     const accommodationPreferencesArray = Object.entries(
-      accommodationPreferences
-    ).map(([key]) => key)
+      body.accommodation.preferences
+    )
+      .filter(([key, value]) => key !== "otherDescription" && value === true)
+      .map(([key]) => key)
+
+    const foodPreferencesArray = Object.entries(body.food.preferences)
+      .filter(([key, value]) => key !== "otherDescription" && value === true)
+      .map(([key]) => key)
+
+    const foodCuisinesArray = Object.entries(body.food.cuisine)
+      .filter(([key, value]) => key !== "otherDescription" && value === true)
+      .map(([key]) => key)
 
     const drupalResponse = await fetch(
       `${process.env.NEXT_PUBLIC_DRUPAL_BASE_URL}/webform_rest/submit`,
@@ -67,17 +86,7 @@ export async function POST(request: NextRequest) {
           webform_id: "application",
           name: body.name,
           phone: body.phone,
-          date_from: body.date_from,
-          date_to: body.date_to,
-          email: body.email,
-          days_count: body.daysCount,
-          purpose: purposeArray,
-          purpose_other: tripPurpose.other ? tripPurpose.otherDescription : "",
-          accommodation: accommodationArray,
-          accommodation_other: accommodation.other
-            ? accommodation.otherDescription
-            : "",
-          accommodation_preferences: accommodationPreferencesArray,
+          email: body.contact.email,
           people_count: body.peopleCount,
           adults: body.ageGroups.adults,
           children: body.ageGroups.children,
@@ -85,6 +94,29 @@ export async function POST(request: NextRequest) {
           toddlers: body.ageGroups.toddlers,
           infants: body.ageGroups.infants,
           teens: body.ageGroups.teens,
+          date_from: body.trip.dateRange.from,
+          date_to: body.trip.dateRange.to,
+          days_count: body.trip.daysCount,
+          purpose: purposeArray,
+          purpose_other: body.trip.purpose.options.other
+            ? body.trip.purpose.otherDescription
+            : "",
+          accommodation: accommodationArray,
+          accommodation_other: body.accommodation.options.other
+            ? body.accommodation.options.otherDescription
+            : "",
+          accommodation_preferences: accommodationPreferencesArray,
+          accommodation_preferences_other: body.accommodation.preferences.other
+            ? accommodation.options.otherDescription
+            : "",
+          cuisines: foodCuisinesArray,
+          cuisines_other: body.food.cuisine.other
+            ? body.food.cuisine.otherDescription
+            : "",
+          food_preferences: foodPreferencesArray,
+          food_preferences_other: body.food.preferences.other
+            ? body.food.preferences.otherDescription
+            : "",
         }),
       }
     )

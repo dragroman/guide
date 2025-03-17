@@ -4,7 +4,7 @@ import { useReducer, useCallback, useEffect } from "react"
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { DateRange } from "react-day-picker"
-import { differenceInDays, format } from "date-fns"
+import { differenceInDays } from "date-fns"
 import {
   applicationSchema,
   ApplicationSchemaType,
@@ -266,16 +266,6 @@ export function useApplicationForm() {
   const submitForm = useCallback(
     async (data: ApplicationSchemaType) => {
       try {
-        // Форматируем даты для отправки
-        const formattedDates = {
-          from: data.trip.dateRange?.from
-            ? format(data.trip.dateRange.from, "yyyy-MM-dd")
-            : undefined,
-          to: data.trip.dateRange?.to
-            ? format(data.trip.dateRange.to, "yyyy-MM-dd")
-            : undefined,
-        }
-
         // Отправка данных на сервер
         const response = await fetch("/api/application", {
           method: "POST",
@@ -287,15 +277,15 @@ export function useApplicationForm() {
             peopleCount: data.peopleCount,
             ageGroups: data.ageGroups,
             phone: data.contact.phone,
-            date_from: formattedDates.from,
-            date_to: formattedDates.to,
-            email: data.contact.email,
-            daysCount: data.trip.daysCount,
-            tripPurpose: data.trip.purpose,
-            accommodation: data.accommodation.options,
-            accommodationPreferences: data.accommodation.preferences,
+            contact: data.contact,
+            trip: data.trip,
+            accommodation: data.accommodation,
+            transport: data.transport,
+            food: data.food,
           }),
         })
+
+        console.log(response)
 
         if (!response.ok) {
           const errorData = await response.json()
