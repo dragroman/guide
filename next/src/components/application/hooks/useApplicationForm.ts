@@ -266,6 +266,11 @@ export function useApplicationForm() {
     [state.currentStep, validateCurrentStep]
   )
 
+  const skipStep = useCallback(() => {
+    const nextStep = state.currentStep + 1
+    dispatch({ type: "SET_STEP", step: nextStep })
+  }, [state.currentStep, dispatch])
+
   // Обработчик отправки формы
   const submitForm = useCallback(
     async (data: ApplicationSchemaType) => {
@@ -378,6 +383,7 @@ export function useApplicationForm() {
     nextStep,
     prevStep,
     goToStep,
+    skipStep,
 
     // Отправка формы
     handleFormAction,

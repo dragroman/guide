@@ -1,6 +1,6 @@
 "use client"
 
-import React from "react"
+import React, { useCallback } from "react"
 import { Alert, AlertTitle, AlertDescription } from "@/components/ui/alert"
 import { useApplicationForm } from "./hooks/useApplicationForm"
 import { DraftNotice } from "./components/DraftNotice"
@@ -24,7 +24,7 @@ import { StepBudget } from "./steps/StepBudget"
 
 export default function MultistepForm() {
   const {
-    // Состояние формы
+    // Состояние форм
     formData,
     currentStep,
     isSubmitting,
@@ -55,6 +55,7 @@ export default function MultistepForm() {
     nextStep,
     prevStep,
     goToStep,
+    skipStep,
 
     // Управление формой
     handleFormAction,
@@ -136,6 +137,7 @@ export default function MultistepForm() {
             currentStep={currentStep}
             onNext={handleFormAction}
             isSubmitting={isSubmitting}
+            onSkip={skipStep}
           />
         </form>
       </div>
