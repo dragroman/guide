@@ -2,6 +2,7 @@ import React from "react"
 import { format } from "date-fns"
 import { getDaysText } from "../utils"
 import { StepProps } from "../types"
+import { SmilePlus } from "lucide-react"
 
 export function StepConfirmation({ formData }: StepProps) {
   // Функция для отображения выбранных опций
@@ -47,6 +48,8 @@ export function StepConfirmation({ formData }: StepProps) {
             return "Наличие бассейна, спа, фитнеса"
           case "other":
             return "Другое"
+          case "malls":
+            return "Торговые центры"
           default:
             return key
         }
@@ -56,34 +59,43 @@ export function StepConfirmation({ formData }: StepProps) {
 
   // Функция для рендеринга информационного блока
   const renderInfoBlock = (label: string, value: React.ReactNode) => (
-    <div className="p-3 border-b border-gray-100 last:border-b-0">
+    <div className="py-2 border-b border-gray-100 last:border-b-0">
       <div className="text-xs text-muted-foreground mb-1">{label}</div>
       <div className="font-medium text-sm break-words">{value}</div>
     </div>
   )
 
   return (
-    <div className="touch-action-manipulation">
-      <h3 className="font-medium text-lg mb-4">Проверьте данные:</h3>
+    <div className="touch-action-manipulation space-y-8">
+      <div className="text-muted-foreground">
+        {formData.peopleCount > 1 ? (
+          <div>Вот что у нас получилось для командира группы</div>
+        ) : (
+          <div>Вот что у нас получилось для лучшего путешественника</div>
+        )}
+        <div className="font-bold text-2xl">{formData.name}</div>
+      </div>
 
-      <div className="bg-muted/30 rounded-md overflow-hidden">
+      <div className="rounded-md overflow-hidden">
         {/* Используем отдельные карточки для каждого блока данных */}
-        {renderInfoBlock("Имя", formData.name)}
 
-        {renderInfoBlock("Количество участников", formData.peopleCount)}
-
-        {formData.ageGroups &&
-          renderInfoBlock(
-            "Возрастные группы",
-            Object.entries(formData.ageGroups).map(
-              ([key, value], index, arr) => (
-                <span key={key}>
-                  {`${key}: ${value}`}
-                  {index < arr.length - 1 ? ", " : ""}
-                </span>
-              )
-            )
-          )}
+        {formData.peopleCount > 1 && (
+          <div>
+            {renderInfoBlock("В группе", formData.peopleCount)}
+            {formData.ageGroups &&
+              renderInfoBlock(
+                "Возрастные группы",
+                Object.entries(formData.ageGroups).map(
+                  ([key, value], index, arr) => (
+                    <span key={key}>
+                      {`${key}: ${value}`}
+                      {index < arr.length - 1 ? ", " : ""}
+                    </span>
+                  )
+                )
+              )}
+          </div>
+        )}
 
         {renderInfoBlock("Телефон", formData.contact.phone)}
 
@@ -251,6 +263,22 @@ export function StepConfirmation({ formData }: StepProps) {
           "Примерный бюджет на человека в день",
           <>{formData.budget} ₽</>
         )}
+        {formData.needVisa && (
+          <div>{renderInfoBlock("Оформление визы", "Требуется")}</div>
+        )}
+        {formData.needInsurance && (
+          <div>{renderInfoBlock("Нужна страховка", <>Требуется</>)}</div>
+        )}
+      </div>
+      <div className="text-muted-foreground flex items-start border border-gray-200 rounded-md p-3">
+        <SmilePlus className="flex-shrink-0 mr-4 w-6 h-6 mt-1" />
+        <div>
+          <div className="mb-1">Помни!</div>
+          <div className="text-muted-foreground text-xs">
+            Ты в любой момент можешь вернуться и исправить любые данные,
+            воспользовавшись навигацией вверху экрана
+          </div>
+        </div>
       </div>
     </div>
   )

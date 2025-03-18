@@ -6,8 +6,7 @@ export interface CardOption {
   name: string
   label: string
   description: string
-  icon: React.ReactNode
-  // Дополнительные данные, которые могут быть использованы при рендеринге
+  icon?: React.ReactNode
   extraData?: Record<string, any>
 }
 
@@ -73,11 +72,13 @@ export function CardSelector({
           >
             <CardContent className="p-4">
               <div className="flex flex-col items-start">
-                <div
-                  className={`p-2 rounded-full mb-2 ${iconClassName(option, isChecked)}`}
-                >
-                  {option.icon}
-                </div>
+                {option.icon && (
+                  <div
+                    className={`p-2 rounded-full mb-2 ${iconClassName(option, isChecked)}`}
+                  >
+                    {option.icon}
+                  </div>
+                )}
                 <p className="font-medium">{option.label}</p>
                 <p className="text-xs text-muted-foreground">
                   {option.description}

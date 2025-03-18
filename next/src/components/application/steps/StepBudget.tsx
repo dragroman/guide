@@ -14,16 +14,28 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog"
+import { Switch } from "@/components/ui/switch"
+import { Label } from "@/components/ui/label"
 
 export function StepBudget({ control, formData, setValue }: StepProps) {
   const [localBudget, setLocalBudget] = useState<number>(
     formData.budget || 30000
   )
+
   const [isDragging, setIsDragging] = useState(false)
 
   // Получаем общие данные из формы
   const peopleCount = formData.peopleCount || 1
   const daysCount = formData.trip?.daysCount || 1
+
+  // Вычисляем стоимость визы
+  const VISA_COST_PER_PERSON = 10000
+  const INSURANCE_COST_PER_PERSON = 8000
+
+  const visaCost = formData.needVisa ? VISA_COST_PER_PERSON * peopleCount : 0
+  const insuranceCost = formData.needInsurance
+    ? INSURANCE_COST_PER_PERSON * peopleCount
+    : 0
 
   // Вычисляем коэффициенты ageGroups
   const ageGroupCoefficients = {
@@ -52,13 +64,13 @@ export function StepBudget({ control, formData, setValue }: StepProps) {
 
   // Вычисляем общий бюджет на всех участников
   const totalBudgetPerDay = Math.round(localBudget * effectivePeopleCount)
-  const totalBudget = totalBudgetPerDay * daysCount
+  const totalBudget = totalBudgetPerDay * daysCount + visaCost + insuranceCost
 
   // Что включено
 
   const services = [
     { icon: Check, title: "Проживание" },
-    { icon: Check, title: "Наземный транспорт" },
+    { icon: Check, title: "Транспорт внутри страны" },
     { icon: Check, title: "Незабываемые впечатления" },
     { icon: Check, title: "Дорожный путеводитель с рекомендациями" },
     { icon: Check, title: "Круглосуточная поддержка" },
@@ -97,7 +109,44 @@ export function StepBudget({ control, formData, setValue }: StepProps) {
         Укажите примерный бюджет на одного человека. Это поможет нам лучше
         спланировать ваше путешествие.
       </p>
-
+      <Controller
+        name="needVisa"
+        control={control}
+        render={({ field }) => (
+          <div className="flex items-center space-x-2">
+            <Switch
+              id="needVisa"
+              checked={field.value}
+              onChange={field.onChange}
+              onCheckedChange={(checked) => {
+                field.onChange(checked)
+                setValue("needVisa", checked)
+              }}
+            />
+            <Label htmlFor="needVisa">
+              Требуются ли услуги оформления виз?
+            </Label>
+          </div>
+        )}
+      />
+      <Controller
+        name="needInsurance"
+        control={control}
+        render={({ field }) => (
+          <div className="flex items-center space-x-2">
+            <Switch
+              id="needInsurance"
+              checked={field.value}
+              onChange={field.onChange}
+              onCheckedChange={(checked) => {
+                field.onChange(checked)
+                setValue("needInsurance", checked) // Важно: явно обновляем значение в форме
+              }}
+            />
+            <Label htmlFor="needInsurance">Страховка нужна?</Label>
+          </div>
+        )}
+      />
       <div>
         <div
           className={`flex ${formData.peopleCount > 1 ? "justify-between" : "justify-end"} items-center mb-8 mt-4`}
@@ -138,6 +187,7 @@ export function StepBudget({ control, formData, setValue }: StepProps) {
               onMouseUp={() => setIsDragging(false)}
               onTouchStart={() => setIsDragging(true)}
               onTouchEnd={() => setIsDragging(false)}
+              onChange={field.onChange}
               className="mb-8"
             />
           )}

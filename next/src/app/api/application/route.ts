@@ -43,6 +43,8 @@ export async function POST(request: NextRequest) {
         food: body.food,
         shopping: body.shopping,
         budget: body.budget,
+        needVisa: body.needVisa,
+        needInsurance: body.needInsurance,
       })
     } catch (error) {
       if (error instanceof Error) {
@@ -152,6 +154,8 @@ export async function POST(request: NextRequest) {
           shopping_time: shoppingTimeArray,
           shopping_special_wishes: body.shopping.specialWishes,
           budget: body.budget,
+          need_visa: body.needVisa,
+          need_insurance: body.needInsurance,
         }),
       }
     )

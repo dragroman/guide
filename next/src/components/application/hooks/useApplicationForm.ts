@@ -288,6 +288,8 @@ export function useApplicationForm() {
             food: data.food,
             shopping: data.shopping,
             budget: data.budget,
+            needVisa: data.needVisa,
+            needInsurance: data.needInsurance,
           }),
         })
 

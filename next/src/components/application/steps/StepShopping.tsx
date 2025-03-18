@@ -68,31 +68,26 @@ export function StepShopping({
       name: "malls",
       label: "Торговые центры",
       description: "Большие торговые центры с разнообразием магазинов",
-      icon: <Building className="h-5 w-5" />,
     },
     {
       name: "boutiques",
       label: "Брендовые бутики",
       description: "Специализированные магазины с брендовыми товарами",
-      icon: <Store className="h-5 w-5" />,
     },
     {
       name: "markets",
       label: "Местные рынки и лавки",
       description: "Традиционные рынки с аутентичными товарами",
-      icon: <ShoppingCart className="h-5 w-5" />,
     },
     {
       name: "outlets",
       label: "Аутлеты",
       description: "Магазины со скидками на известные бренды",
-      icon: <ShoppingBag className="h-5 w-5" />,
     },
     {
       name: "other",
       label: "Другое",
       description: "Укажите свой вариант",
-      icon: <PlusCircle className="h-5 w-5" />,
     },
   ]
 

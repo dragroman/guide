@@ -18,6 +18,7 @@ export function StepPersonalInfo({
         render={({ field }) => (
           <FormField
             label="Давайте знакомится"
+            type="email"
             name="name"
             value={field.value}
             onChange={field.onChange}
@@ -30,13 +31,15 @@ export function StepPersonalInfo({
       {/* Компонент с возрастными группами */}
       <div className="space-y-8">
         <div className="space-y-2">
-          <label className="text-sm font-medium">Состав группы</label>
+          <label className="text-sm font-medium">
+            Выберите путешественников
+          </label>
           <Controller
             name="ageGroups"
             control={control}
             render={({ field }) => (
               <AgeGroupDrawer
-                label="Выберите путешественников"
+                label="Возрастные группы"
                 description="Укажите сколько людей и какого возраста поедут в тур"
                 value={field.value}
                 onChange={(groups) => {

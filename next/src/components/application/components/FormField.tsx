@@ -6,6 +6,8 @@ interface FormFieldProps {
   label: string
   name: string
   value: string
+  type?: string
+  autocomplete?: string
   onChange: (e: React.ChangeEvent<HTMLInputElement> | string) => void
   placeholder?: string
   error?: string
@@ -16,8 +18,10 @@ interface FormFieldProps {
 
 export function FormField({
   label,
+  type,
   name,
   value,
+  autocomplete,
   onChange,
   placeholder,
   error,
@@ -39,6 +43,8 @@ export function FormField({
           id={name}
           name={name}
           value={value}
+          type={type}
+          autoComplete={autocomplete}
           onChange={handleChange}
           onBlur={onBlur}
           ref={ref}

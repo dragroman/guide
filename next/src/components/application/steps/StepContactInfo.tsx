@@ -10,8 +10,7 @@ export function StepContactInfo({ control, errors }: StepProps) {
     <div className="space-y-4">
       <h2 className="text-2xl font-bold">Почти готово!</h2>
       <p className="text-muted-foreground text-md">
-        Оставьте контактные данные и наш эксперт свяжется с вами для уточнения
-        деталей
+        Оставь телефон и почту, чтобы мы могли отправить предложение:
       </p>
       <div className="space-y-2">
         <Label htmlFor="phone">Телефон *</Label>
@@ -45,6 +44,8 @@ export function StepContactInfo({ control, errors }: StepProps) {
         render={({ field }) => (
           <FormField
             label="Электронная почта *"
+            type="email"
+            autocomplete="email"
             {...field}
             placeholder="Электронная почта"
             error={errors.contact?.email?.message}
