@@ -13,12 +13,14 @@ export function StepContactInfo({ control, errors }: StepProps) {
       <p className="text-muted-foreground text-md">
         Оставь телефон и почту, чтобы мы могли отправить предложение:
       </p>
-      {/* Отображение общей ошибки */}
 
-      {errors.contact &&
-        typeof errors.contact === "object" &&
-        getErrorMessage(errors, "contact", "Введите хотя бы один контакт")}
       <div className="space-y-2">
+        {/* Отображение общей ошибки */}
+        {errors.contact && typeof errors.contact === "object" && (
+          <p className="text-sm font-medium text-destructive mt-2">
+            {getErrorMessage(errors, "contact", "Введите хотя бы один контакт")}
+          </p>
+        )}
         <Label htmlFor="phone">Телефон</Label>
         <Controller
           name="contact.phone"
@@ -54,6 +56,7 @@ export function StepContactInfo({ control, errors }: StepProps) {
             autocomplete="email"
             name="email"
             onChange={field.onChange}
+            onBlur={field.onBlur}
             placeholder="Электронная почта"
             error={errors.contact?.email?.message}
           />
@@ -68,7 +71,7 @@ export function StepContactInfo({ control, errors }: StepProps) {
             name="wechat"
             onChange={field.onChange}
             value={field.value ?? ""}
-            placeholder="WeCha ID или номер телефона"
+            placeholder="WeChat ID или номер телефона"
           />
         )}
       />
@@ -76,14 +79,26 @@ export function StepContactInfo({ control, errors }: StepProps) {
         name="contact.whatsapp"
         control={control}
         render={({ field }) => (
-          <FormField label="Whatsapp" {...field} placeholder="+7999999999" />
+          <FormField
+            onChange={field.onChange}
+            value={field.value ?? ""}
+            label="Whatsapp"
+            name="Whatsapp"
+            placeholder="+7999999999"
+          />
         )}
       />
       <Controller
         name="contact.telegram"
         control={control}
         render={({ field }) => (
-          <FormField label="Telegram" {...field} placeholder="@haohub" />
+          <FormField
+            label="Telegram"
+            name="Telegram"
+            onChange={field.onChange}
+            value={field.value ?? ""}
+            placeholder="@haohub"
+          />
         )}
       />
     </div>

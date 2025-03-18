@@ -280,10 +280,10 @@ export const applicationSchema = z.object({
   contact: z
     .object({
       phone: z
-        .string({ required_error: "Телефон обязателен для заполнения" })
+        .string()
         .min(8, "Введите полный номер телефона")
         .refine(
-          (value) => /^\+[1-9]\d{1,14}$/.test(value),
+          (value) => !value || /^\+[1-9]\d{1,14}$/.test(value),
           "Телефон должен быть в международном формате, например +79123456789"
         )
         .optional(),

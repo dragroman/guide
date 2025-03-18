@@ -36,25 +36,21 @@ export function FormField({
   }
 
   return (
-    <div className="space-y-4">
-      <div className="space-y-2">
-        <Label htmlFor={name}>{label}</Label>
-        <Input
-          id={name}
-          name={name}
-          value={value}
-          type={type}
-          autoComplete={autocomplete}
-          onChange={handleChange}
-          onBlur={onBlur}
-          ref={ref}
-          placeholder={placeholder}
-          className={error ? "border-destructive" : ""}
-        />
-        {error && (
-          <p className="text-sm font-medium text-destructive">{error}</p>
-        )}
-      </div>
+    <div className="space-y-2">
+      <Label htmlFor={name}>{label}</Label>
+      <Input
+        id={name}
+        name={name}
+        value={value}
+        type={type}
+        autoComplete={autocomplete}
+        onChange={handleChange}
+        onBlur={onBlur}
+        ref={ref}
+        placeholder={placeholder}
+        className={error ? "border-destructive" : ""}
+      />
+      {error && <p className="text-sm font-medium text-destructive">{error}</p>}
     </div>
   )
 }

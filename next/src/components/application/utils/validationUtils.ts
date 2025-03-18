@@ -300,28 +300,27 @@ export async function validateFood(
 export async function validateContact(
   trigger: UseFormTrigger<ApplicationSchemaType>,
   getValues: UseFormGetValues<ApplicationSchemaType>,
-  setError: UseFormSetError<ApplicationSchemaType>
+  setError: UseFormSetError<ApplicationSchemaType>,
+  clearErrors: Function
 ): Promise<boolean> {
-  const isStepValid = await trigger(["contact"])
-  if (!isStepValid) return false
-
-  // Проверяем наличие хотя бы одного контакта
   const contact = getValues("contact")
   if (
-    !contact.phone &&
-    !contact.email &&
-    !contact.wechat &&
-    !contact.telegram &&
-    !contact.whatsapp
+    contact.phone ||
+    contact.email ||
+    contact.wechat ||
+    contact.telegram ||
+    contact.whatsapp
   ) {
-    setError("contact", {
-      type: "custom",
-      message: "Укажите хотя бы один способ связи",
-    })
-    return false
+    clearErrors("contact")
+    return true
   }
 
-  return true
+  // Если ни одно поле не заполнено, устанавливаем ошибку
+  setError("contact", {
+    type: "custom",
+    message: "Укажите хотя бы один способ связи",
+  })
+  return false
 }
 
 export async function validateShopping(

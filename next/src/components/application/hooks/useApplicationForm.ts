@@ -147,13 +147,13 @@ export function useApplicationForm() {
       case 6:
         return await validateBudget(trigger)
       case 7:
-        return await validateContact(trigger, getValues, setError)
+        return await validateContact(trigger, getValues, setError, clearErrors)
       case 8:
         return await trigger()
       default:
         return true
     }
-  }, [state.currentStep, trigger, getValues, setError])
+  }, [state.currentStep, trigger, getValues, setError, clearErrors])
 
   // Принимает путь к данным в форме, имя опции и новое состояние
   const handleOptionChange = useCallback(
