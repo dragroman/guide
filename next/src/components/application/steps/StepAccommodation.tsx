@@ -125,10 +125,12 @@ export function StepAccommodation({
   return (
     <div className="space-y-6">
       <div>
-        <h3 className="mb-4 text-sm font-medium">
-          Предпочитаемый тип размещения
-        </h3>
-
+        <h3 className="text-lg">Где вы предпочитаете останавливаться?</h3>
+        <div className="text-xs text-muted-foreground">
+          (можно выбрать несколько)
+        </div>
+      </div>
+      <div>
         {/* Обновленный путь для CardSelector */}
         <CardSelector
           options={accommodationOptions}
@@ -182,8 +184,12 @@ export function StepAccommodation({
       </div>
 
       <div>
-        <h3 className="mb-4 text-sm font-medium">Пожелания к размещению</h3>
-
+        <h3 className="text-lg">Может быть есть дополнительные пожелания?</h3>
+        <div className="text-xs text-muted-foreground">
+          (можно выбрать несколько)
+        </div>
+      </div>
+      <div>
         {/* Обновленный путь для CardSelector предпочтений */}
         <CardSelector
           options={preferencesOptions}

@@ -164,16 +164,15 @@ export function StepShopping({
   }
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-8">
       {/* Бюджет */}
       <div>
-        <h3 className="mb-4 text-sm font-medium">
-          Какой у тебя примерный бюджет на шоппинг?{" "}
-          <span className="text-xs text-muted-foreground">
-            (выберите один вариант)
-          </span>
-        </h3>
-
+        <h3 className="text-lg">Какой у тебя примерный бюджет на шоппинг? </h3>
+        <div className="text-xs text-muted-foreground">
+          (выберите один вариант)
+        </div>
+      </div>
+      <div>
         <CardSelector
           options={budgetOptions}
           formData={formData}
@@ -193,10 +192,12 @@ export function StepShopping({
 
       {/* Места для шоппинга */}
       <div>
-        <h3 className="mb-4 text-sm font-medium">
-          Где тебе больше нравится делать покупки?
-        </h3>
-
+        <h3 className="text-lg">Где тебе больше нравится делать покупки?</h3>
+        <div className="text-xs text-muted-foreground">
+          (можно выбрать несколько)
+        </div>
+      </div>
+      <div>
         <CardSelector
           options={shoppingPlacesOptions}
           formData={formData}
@@ -249,34 +250,16 @@ export function StepShopping({
         )}
       </div>
 
-      {/* Особые пожелания */}
-      <div className="space-y-2">
-        <Label htmlFor="specialWishes">
-          Есть ли что-то, что ты точно хочешь купить в этой поездке?
-        </Label>
-        <Controller
-          name="shopping.specialWishes"
-          control={control}
-          render={({ field }) => (
-            <Textarea
-              id="specialWishes"
-              placeholder="Например, местные продукты, украшения или что-то уникальное"
-              {...field}
-              value={field.value || ""}
-            />
-          )}
-        />
-      </div>
-
       {/* Время на шоппинг */}
       <div>
-        <h3 className="mb-4 text-sm font-medium">
+        <h3 className="text-lg font-medium">
           Сколько времени ты готов выделить на шоппинг?{" "}
-          <span className="text-xs text-muted-foreground">
-            (выберите один вариант)
-          </span>
         </h3>
-
+        <div className="text-xs text-muted-foreground">
+          (выберите один вариант)
+        </div>
+      </div>
+      <div>
         <CardSelector
           options={shoppingTimeOptions}
           formData={formData}
@@ -292,6 +275,25 @@ export function StepShopping({
               "Выберите одну продолжительность шоппинга"}
           </p>
         )}
+      </div>
+
+      {/* Особые пожелания */}
+      <div className="space-y-2">
+        <Label htmlFor="specialWishes" className="text-lg">
+          Есть ли что-то, что ты точно хочешь купить в этой поездке?
+        </Label>
+        <Controller
+          name="shopping.specialWishes"
+          control={control}
+          render={({ field }) => (
+            <Textarea
+              id="specialWishes"
+              placeholder="Например, местные продукты, украшения или что-то уникальное"
+              {...field}
+              value={field.value || ""}
+            />
+          )}
+        />
       </div>
 
       {/* Дополнительные услуги */}

@@ -28,11 +28,11 @@ export default function ApplicationHeader({
                 <Button
                   type="button"
                   variant={"outline"}
-                  size="icon"
+                  size="sm"
                   onClick={onPrev}
                   disabled={isSubmitting}
                 >
-                  <ChevronLeft className="h-4 w-4" />
+                  <ChevronLeft className="h-4 w-4" /> Назад
                 </Button>
               )}
             </div>

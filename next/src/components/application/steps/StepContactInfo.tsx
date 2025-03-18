@@ -8,6 +8,11 @@ import { PhoneInput } from "../components/PhoneInput"
 export function StepContactInfo({ control, errors }: StepProps) {
   return (
     <div className="space-y-4">
+      <h2 className="text-2xl font-bold">Почти готово!</h2>
+      <p className="text-muted-foreground text-md">
+        Оставьте контактные данные и наш эксперт свяжется с вами для уточнения
+        деталей
+      </p>
       <div className="space-y-2">
         <Label htmlFor="phone">Телефон *</Label>
         <Controller

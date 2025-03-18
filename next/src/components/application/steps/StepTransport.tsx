@@ -33,12 +33,6 @@ const transferOptions: CardOption[] = [
     icon: <Car className="h-5 w-5" />,
   },
   {
-    name: "shuttle",
-    label: "Шаттл",
-    description: "Групповой трансфер по расписанию",
-    icon: <Bus className="h-5 w-5" />,
-  },
-  {
     name: "none",
     label: "Не нужен",
     description: "Самостоятельное прибытие в отель",
@@ -99,6 +93,15 @@ export function StepTransport({
 
   // Используем универсальные обработчики, делегируя им конкретные пути
   const handleTransferChange = (name: string, checked: boolean) => {
+    // Если опция включена, выключаем все остальные опции
+    if (checked) {
+      // Сначала выключаем все опции
+      transferOptions.forEach((option) => {
+        if (option.name !== name) {
+          handleOptionChange?.("transport.transfer", option.name, false)
+        }
+      })
+    }
     handleOptionChange?.("transport.transfer", name, checked)
   }
 
@@ -117,10 +120,12 @@ export function StepTransport({
   return (
     <div className="space-y-6">
       <div>
-        <h3 className="mb-4 text-sm font-medium">
-          Нужен ли трансфер из аэропорта до отеля?
-        </h3>
-
+        <h3 className="text-lg">Нужна ли встреча в аэропорту?</h3>
+        <div className="text-xs text-muted-foreground">
+          (можно выбрать только один)
+        </div>
+      </div>
+      <div>
         {/* Используем CardSelector с обновленными путями */}
         <CardSelector
           options={transferOptions}

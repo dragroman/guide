@@ -37,10 +37,7 @@ export function validateAtLeastOneSelected(
   setError: UseFormSetError<ApplicationSchemaType>
 ): boolean {
   const hasSelection = Object.entries(options)
-    .filter(
-      ([key]) =>
-        key !== "otherDescription" && key !== "other" && key !== "_error"
-    )
+    .filter(([key]) => key !== "otherDescription" && key !== "_error")
     .some(([_, value]) => value === true)
 
   if (!hasSelection) {
@@ -206,14 +203,15 @@ export async function validateTransport(
 
   // Валидируем трансфер
   const transfer = getValues("transport.transfer")
-  if (
-    !validateAtLeastOneSelected(
-      transfer,
-      "transport.transfer",
-      "Выберите хотя бы один тип трансфера",
-      setError
-    )
-  ) {
+  const transferSelected = Object.entries(transfer)
+    .filter(([key]) => key !== "otherDescription" && key !== "_error")
+    .filter(([_, value]) => value === true).length
+
+  if (transferSelected !== 1) {
+    setError("transport.transfer", {
+      type: "custom",
+      message: "Выберите один вариант трансфера",
+    })
     return false
   }
 
@@ -327,7 +325,7 @@ export async function validateShopping(
   // Проверка бюджета - должен быть выбран только один вариант
   const budget = getValues("shopping.budget")
   const budgetSelected = Object.values(budget).filter(Boolean).length
-
+  console.log(budget)
   if (budgetSelected !== 1) {
     setError("shopping.budget", {
       type: "custom",

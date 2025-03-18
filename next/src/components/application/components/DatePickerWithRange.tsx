@@ -120,7 +120,7 @@ export function DatePickerWithRange({
               defaultMonth={value?.from || tempRange?.from || undefined}
               selected={tempRange}
               onSelect={handleRangeChange}
-              numberOfMonths={1}
+              numberOfMonths={2}
               locale={ru}
               disabled={{ before: today }}
               className="rounded-md border mx-auto"
@@ -149,12 +149,6 @@ export function DatePickerWithRange({
               </Button>
             </div>
           </div>
-
-          <DrawerFooter className="pt-2">
-            <DrawerClose asChild>
-              <Button variant="outline">Отмена</Button>
-            </DrawerClose>
-          </DrawerFooter>
         </DrawerContent>
       </Drawer>
     </div>

@@ -56,7 +56,6 @@ export type ApplicationSchemaType = {
     transfer: {
       airport: boolean
       individual: boolean
-      shuttle: boolean
       none: boolean
       other: boolean
       otherDescription: string
@@ -174,7 +173,6 @@ export const defaultFormValues: ApplicationSchemaType = {
     transfer: {
       airport: false,
       individual: false,
-      shuttle: false,
       none: false,
       other: false,
       otherDescription: "",
@@ -419,7 +417,6 @@ export const applicationSchema = z.object({
       .object({
         airport: z.boolean(),
         individual: z.boolean(),
-        shuttle: z.boolean(),
         none: z.boolean(),
         other: z.boolean(),
         otherDescription: z.string(),
@@ -429,11 +426,10 @@ export const applicationSchema = z.object({
           const hasSelectedOptions = [
             data.airport,
             data.individual,
-            data.shuttle,
             data.none,
             data.other,
-          ].some((value) => value === true)
-          return hasSelectedOptions
+          ].filter(Boolean).length
+          return hasSelectedOptions === 1
         },
         {
           message: "Выберите хотя бы один тип трансфера",

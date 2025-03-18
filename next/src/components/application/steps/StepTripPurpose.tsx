@@ -30,44 +30,44 @@ export function StepTripPurpose({
   const purposeOptions: CardOption[] = [
     {
       name: "excursion",
-      label: "Экскурсии",
-      description: "Музеи, исторические места",
+      label: "История и культура",
+      description: "музеи, архитектура, знаковые места",
       icon: <Building2 className="h-6 w-6" />,
     },
     {
       name: "business",
       label: "Деловая поездка",
-      description: "Бизнес-встречи, конференции",
+      description: "Конференции, встречи, работа ",
       icon: <Briefcase className="h-6 w-6" />,
     },
     {
       name: "shopping",
-      label: "Шоппинг",
-      description: "Магазины, рынки, сувениры",
+      label: "Шоппинг и сувениры",
+      description: "Торговые центры, рынки, местные товары",
       icon: <ShoppingBag className="h-6 w-6" />,
     },
     {
       name: "food",
       label: "Гастрономия",
-      description: "Местная кухня, рестораны",
+      description: "Местная кухня, рестораны, уличная еда, дегустации",
       icon: <UtensilsCrossed className="h-6 w-6" />,
     },
     {
       name: "fun",
-      label: "Развлечения",
-      description: "Парки, мероприятия",
+      label: "Развлечения и события",
+      description: "Парки, мероприятия, вечеринки",
       icon: <Sparkles className="h-6 w-6" />,
     },
     {
       name: "health",
-      label: "Оздоровление",
+      label: "Оздоровление и релакс",
       description: "Массажи, спа-центры, стоматология, косметология",
       icon: <ScanHeart className="h-6 w-6" />,
     },
     {
       name: "other",
       label: "Другое",
-      description: "Свой вариант",
+      description: "Что-то другое? Расскажи нам!",
       icon: <PlusCircle className="h-6 w-6" />,
     },
   ]
@@ -96,7 +96,9 @@ export function StepTripPurpose({
     <div className="space-y-10">
       {/* Календарь */}
       <div className="space-y-4">
-        <Label htmlFor="dateRange">Предполагаемые даты поездки *</Label>
+        <Label htmlFor="dateRange" className="text-lg">
+          Предполагаемые даты поездки *
+        </Label>
         <Controller
           name="trip.dateRange"
           control={control}
@@ -135,9 +137,14 @@ export function StepTripPurpose({
 
       {/* Цель поездки */}
       <div className="space-y-4">
-        <h3 className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
-          Выберите цели поездки
-        </h3>
+        <div>
+          <h3 className="text-lg font-medium">
+            Что приносит вам удовольствие в путешествии?
+          </h3>
+          <div className="text-xs text-muted-foreground">
+            (можно выбрать несколько)
+          </div>
+        </div>
 
         {/* Обновленный путь для CardSelector */}
         <CardSelector
