@@ -5,7 +5,7 @@ import { Slider } from "@/components/ui/slider"
 import { Badge } from "@/components/ui/badge"
 import { getDaysText } from "../utils"
 import { formatNumberWithSpaces } from "../utils/formatUtils"
-import { HandCoins, HelpCircle, Check } from "lucide-react"
+import { HandCoins, HelpCircle, Check, CircleX } from "lucide-react"
 import {
   Dialog,
   DialogContent,
@@ -78,7 +78,7 @@ export function StepBudget({ control, formData, setValue }: StepProps) {
     { icon: Check, title: "Индивидуальное планирование путешествия" },
     { icon: Check, title: "Помощь при въезде и выезде" },
     {
-      icon: Check,
+      icon: CircleX,
       title: "Международный перелеты и страховка не включены",
       excluded: true,
     },

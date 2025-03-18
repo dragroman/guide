@@ -490,22 +490,6 @@ export const applicationSchema = z.object({
       })
       .refine(
         (data) => {
-          const hasSelectedOptions = [
-            data.chinese,
-            data.european,
-            data.japanese,
-            data.russian,
-            data.other,
-          ].some((value) => value === true)
-          return hasSelectedOptions
-        },
-        {
-          message: "Выберите хотя бы один тип кухни",
-          path: ["_error"],
-        }
-      )
-      .refine(
-        (data) => {
           if (data.other) {
             return data.otherDescription.trim() !== ""
           }
@@ -542,25 +526,11 @@ export const applicationSchema = z.object({
   // Шоппинг
 
   shopping: z.object({
-    budget: z
-      .object({
-        economy: z.boolean(),
-        medium: z.boolean(),
-        luxury: z.boolean(),
-      })
-      .refine(
-        (data) => {
-          // Проверяем, что выбран ровно один вариант
-          const selectedCount = [data.economy, data.medium, data.luxury].filter(
-            Boolean
-          ).length
-          return selectedCount === 1
-        },
-        {
-          message: "Выберите один бюджетный вариант",
-          path: ["_error"],
-        }
-      ),
+    budget: z.object({
+      economy: z.boolean(),
+      medium: z.boolean(),
+      luxury: z.boolean(),
+    }),
 
     shoppingPlaces: z
       .object({
@@ -571,18 +541,6 @@ export const applicationSchema = z.object({
         other: z.boolean(),
         otherDescription: z.string(),
       })
-      .refine(
-        (data) => {
-          const hasSelectedOptions = Object.entries(data)
-            .filter(([key]) => key !== "otherDescription")
-            .some(([_, value]) => value === true)
-          return hasSelectedOptions
-        },
-        {
-          message: "Выберите хотя бы одно место для шоппинга",
-          path: ["_error"],
-        }
-      )
       .refine(
         (data) => {
           if (data.other) {
@@ -598,27 +556,11 @@ export const applicationSchema = z.object({
 
     specialWishes: z.string().optional(),
 
-    shoppingTime: z
-      .object({
-        fewHours: z.boolean(),
-        halfDay: z.boolean(),
-        fullDay: z.boolean(),
-      })
-      .refine(
-        (data) => {
-          // Проверяем, что выбран ровно один вариант
-          const selectedCount = [
-            data.fewHours,
-            data.halfDay,
-            data.fullDay,
-          ].filter(Boolean).length
-          return selectedCount === 1
-        },
-        {
-          message: "Выберите одну продолжительность шоппинга",
-          path: ["_error"],
-        }
-      ),
+    shoppingTime: z.object({
+      fewHours: z.boolean(),
+      halfDay: z.boolean(),
+      fullDay: z.boolean(),
+    }),
 
     deliveryServices: z.object({
       needed: z.boolean(),

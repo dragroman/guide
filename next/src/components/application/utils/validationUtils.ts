@@ -261,16 +261,6 @@ export async function validateFood(
 
   // Проверяем выбор типа кухни
   const cuisine = getValues("food.cuisine")
-  if (
-    !validateAtLeastOneSelected(
-      cuisine,
-      "food.cuisine",
-      "Выберите хотя бы один тип кухни",
-      setError
-    )
-  ) {
-    return false
-  }
 
   // Проверяем описание для "Другое" в выборе кухни
   if (
@@ -322,30 +312,8 @@ export async function validateShopping(
   const isStepValid = await trigger(["shopping"])
   if (!isStepValid) return false
 
-  // Проверка бюджета - должен быть выбран только один вариант
-  const budget = getValues("shopping.budget")
-  const budgetSelected = Object.values(budget).filter(Boolean).length
-
-  if (budgetSelected !== 1) {
-    setError("shopping.budget", {
-      type: "custom",
-      message: "Выберите один вариант бюджета",
-    })
-    return false
-  }
-
   // Проверка мест для шоппинга
   const shoppingPlaces = getValues("shopping.shoppingPlaces")
-  if (
-    !validateAtLeastOneSelected(
-      shoppingPlaces,
-      "shopping.shoppingPlaces",
-      "Выберите хотя бы одно место для шоппинга",
-      setError
-    )
-  ) {
-    return false
-  }
 
   // Проверка поля "Другое" для мест шоппинга
   if (
@@ -360,19 +328,6 @@ export async function validateShopping(
   ) {
     return false
   }
-
-  // Проверка времени на шоппинг - должен быть выбран только один вариант
-  const shoppingTime = getValues("shopping.shoppingTime")
-  const timeSelected = Object.values(shoppingTime).filter(Boolean).length
-
-  if (timeSelected !== 1) {
-    setError("shopping.shoppingTime", {
-      type: "custom",
-      message: "Выберите одну продолжительность шоппинга",
-    })
-    return false
-  }
-
   return true
 }
 
