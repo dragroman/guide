@@ -147,7 +147,7 @@ export function useApplicationForm() {
       case 6:
         return await validateBudget(trigger)
       case 7:
-        return await validateContact(trigger)
+        return await validateContact(trigger, getValues, setError)
       case 8:
         return await trigger()
       default:

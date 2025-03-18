@@ -12,13 +12,13 @@ export function StepPersonalInfo({
 }: StepProps) {
   return (
     <div className="space-y-8">
+      <h1 className="text-3xl font-bold">Начнем!</h1>
       <Controller
         name="name"
         control={control}
         render={({ field }) => (
           <FormField
             label="Давайте знакомится"
-            type="email"
             name="name"
             value={field.value}
             onChange={field.onChange}

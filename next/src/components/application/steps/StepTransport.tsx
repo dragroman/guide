@@ -118,14 +118,15 @@ export function StepTransport({
   }
 
   return (
-    <div className="space-y-6">
-      <div>
-        <h3 className="text-lg">Нужна ли встреча в аэропорту?</h3>
-        <div className="text-xs text-muted-foreground">
-          (можно выбрать только один)
+    <div className="space-y-8">
+      <h1 className="text-3xl font-bold">Трансфер</h1>
+      <div className="space-y-4">
+        <div>
+          <h3 className="text-lg">Нужна ли встреча в аэропорту?</h3>
+          <div className="text-xs text-muted-foreground">
+            (можно выбрать только один)
+          </div>
         </div>
-      </div>
-      <div>
         {/* Используем CardSelector с обновленными путями */}
         <CardSelector
           options={transferOptions}
@@ -137,16 +138,22 @@ export function StepTransport({
         {/* Отображаем ошибку, если есть */}
         {hasTransferError() && (
           <p className="text-sm font-medium text-destructive mt-2">
-            {getErrorMessage(errors, "transport.transfer") ||
-              "Выберите хотя бы один тип трансфера"}
+            {getErrorMessage(
+              errors,
+              "transport.transfer",
+              "Выберите хотя бы один тип трансфера"
+            )}
           </p>
         )}
 
         {formData.transport?.transfer?.other && (
-          <div className="space-y-2 mt-3">
-            <Label htmlFor="transferOtherDescription">
-              Укажите ваши пожелания к трансферу
-            </Label>
+          <div className="space-y-2">
+            <div>
+              <Label htmlFor="transferOtherDescription">
+                Укажите ваши пожелания к трансферу
+              </Label>
+              (можно выбрать несколько)
+            </div>
             <Controller
               name="transport.transfer.otherDescription"
               control={control}
@@ -170,19 +177,22 @@ export function StepTransport({
               <p className="text-sm font-medium text-destructive">
                 {getErrorMessage(
                   errors,
-                  "transport.transfer.otherDescription"
-                ) || "Укажите описание для пункта 'Другое'"}
+                  "transport.transfer.otherDescription",
+                  "Укажите описание для пункта 'Другое'"
+                )}
               </p>
             )}
           </div>
         )}
       </div>
 
-      <div>
-        <h3 className="mb-4 text-sm font-medium">
-          Пожелания к транспорту во время тура
-        </h3>
-
+      <div className="space-y-4">
+        <div>
+          <h3 className="text-lg">Выбираем удобный способ передвижения</h3>
+          <div className="text-xs text-muted-foreground">
+            (можно выбрать несколько)
+          </div>
+        </div>
         {/* Используем CardSelector с обновленными путями */}
         <CardSelector
           options={transportOptions}
@@ -190,15 +200,16 @@ export function StepTransport({
           path="transport.preferences"
           onOptionChange={handleTransportChange}
         />
-
         {/* Отображаем ошибку, если есть */}
         {hasTransportPreferencesError() && (
           <p className="text-sm font-medium text-destructive mt-2">
-            {getErrorMessage(errors, "transport.preferences") ||
-              "Выберите хотя бы один вариант транспорта"}
+            {getErrorMessage(
+              errors,
+              "transport.preferences",
+              "Выберите хотя бы один вариант транспорта"
+            )}
           </p>
         )}
-
         {formData.transport?.preferences?.other && (
           <div className="space-y-2 mt-3">
             <Label htmlFor="transportPreferencesOtherDescription">
@@ -229,8 +240,9 @@ export function StepTransport({
               <p className="text-sm font-medium text-destructive">
                 {getErrorMessage(
                   errors,
-                  "transport.preferences.otherDescription"
-                ) || "Укажите описание для пункта 'Другое'"}
+                  "transport.preferences.otherDescription",
+                  "Укажите описание для пункта 'Другое'"
+                )}
               </p>
             )}
           </div>

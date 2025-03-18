@@ -48,7 +48,8 @@ export const hasOtherDescriptionError = (
  */
 export const getErrorMessage = (
   errors: FieldErrors<ApplicationSchemaType>,
-  path: string | undefined
+  path: string | undefined,
+  message: string
 ): string => {
   if (!path) return ""
 
@@ -68,5 +69,5 @@ export const getErrorMessage = (
     return errorObj.message
   }
 
-  return "Пожалуйста, проверьте введенные данные"
+  return message
 }

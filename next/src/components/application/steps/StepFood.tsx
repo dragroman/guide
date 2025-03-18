@@ -173,9 +173,20 @@ export function StepFood({
   }
 
   return (
-    <div className="space-y-6">
-      <div>
-        <h3 className="mb-4 text-sm font-medium">Предпочтения по кухне</h3>
+    <div className="space-y-8">
+      <h1>
+        <span className="text-3xl font-bold">Питание</span>
+        <span className="ml-2 text-sm text-muted-foreground">
+          (можно пропустить)
+        </span>
+      </h1>
+      <div className="space-y-4">
+        <div>
+          <h2 className="text-lg">Какая кухня сделает твою поездку вкуснее?</h2>
+          <div className="text-xs text-muted-foreground">
+            (можно выбрать несколько)
+          </div>
+        </div>
 
         {/* Используем CardSelector для типов кухни с обновленным путем */}
         <CardSelector
@@ -226,10 +237,15 @@ export function StepFood({
         )}
       </div>
 
-      <div>
-        <h3 className="mb-4 text-sm font-medium">
-          Дополнительная информация о питании
-        </h3>
+      <div className="space-y-4">
+        <div>
+          <h2 className="text-lg">
+            Давай уточним: может, есть аллергия или любимые блюда?
+          </h2>
+          <div className="text-xs text-muted-foreground">
+            (можно выбрать несколько)
+          </div>
+        </div>
 
         {/* Используем CardSelector для предпочтений по питанию с обновленным путем */}
         <CardSelector

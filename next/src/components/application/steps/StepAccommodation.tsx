@@ -123,14 +123,17 @@ export function StepAccommodation({
   }
 
   return (
-    <div className="space-y-6">
-      <div>
-        <h3 className="text-lg">Где вы предпочитаете останавливаться?</h3>
-        <div className="text-xs text-muted-foreground">
-          (можно выбрать несколько)
+    <div className="space-y-8">
+      <h1 className="text-3xl font-bold">Проживание</h1>
+      <div className="space-y-4">
+        <div>
+          <h2 className="text-lg">
+            Твой комфорт важен! Где хотел бы остановимся?
+          </h2>
+          <div className="text-xs text-muted-foreground">
+            (можно выбрать несколько)
+          </div>
         </div>
-      </div>
-      <div>
         {/* Обновленный путь для CardSelector */}
         <CardSelector
           options={accommodationOptions}
@@ -142,8 +145,11 @@ export function StepAccommodation({
         {/* Отображаем ошибку, если есть */}
         {hasAccommodationOptionsError() && (
           <p className="text-sm font-medium text-destructive mt-2">
-            {getErrorMessage(errors, "accommodation.options") ||
-              "Выберите хотя бы один тип размещения"}
+            {getErrorMessage(
+              errors,
+              "accommodation.options",
+              "Выберите хотя бы один тип размещения"
+            )}
           </p>
         )}
 
@@ -175,21 +181,22 @@ export function StepAccommodation({
               <p className="text-sm font-medium text-destructive">
                 {getErrorMessage(
                   errors,
-                  "accommodation.options.otherDescription"
-                ) || "Укажите описание для пункта 'Другое'"}
+                  "accommodation.options.otherDescription",
+                  "Укажите описание для пункта 'Другое'"
+                )}
               </p>
             )}
           </div>
         )}
       </div>
 
-      <div>
-        <h3 className="text-lg">Может быть есть дополнительные пожелания?</h3>
-        <div className="text-xs text-muted-foreground">
-          (можно выбрать несколько)
+      <div className="space-y-4">
+        <div>
+          <h2 className="text-lg">Может быть есть дополнительные пожелания?</h2>
+          <div className="text-xs text-muted-foreground">
+            (можно выбрать несколько)
+          </div>
         </div>
-      </div>
-      <div>
         {/* Обновленный путь для CardSelector предпочтений */}
         <CardSelector
           options={preferencesOptions}
@@ -201,8 +208,11 @@ export function StepAccommodation({
         {/* Отображаем ошибку, если есть */}
         {hasPreferencesError() && (
           <p className="text-sm font-medium text-destructive mt-2">
-            {getErrorMessage(errors, "accommodation.preferences") ||
-              "Выберите хотя бы одно предпочтение по размещению"}
+            {getErrorMessage(
+              errors,
+              "accommodation.preferences",
+              "Выберите хотя бы одно предпочтение по размещению"
+            )}
           </p>
         )}
 
@@ -234,8 +244,9 @@ export function StepAccommodation({
               <p className="text-sm font-medium text-destructive">
                 {getErrorMessage(
                   errors,
-                  "accommodation.preferences.otherDescription"
-                ) || "Укажите описание для пункта 'Другое'"}
+                  "accommodation.preferences.otherDescription",
+                  "Укажите описание для пункта 'Другое'"
+                )}
               </p>
             )}
           </div>

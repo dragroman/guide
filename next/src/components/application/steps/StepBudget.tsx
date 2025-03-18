@@ -79,7 +79,7 @@ export function StepBudget({ control, formData, setValue }: StepProps) {
     { icon: Check, title: "Помощь при въезде и выезде" },
     {
       icon: CircleX,
-      title: "Международный перелеты и страховка не включены",
+      title: "Международные перелеты не включены",
       excluded: true,
     },
   ]
@@ -101,10 +101,7 @@ export function StepBudget({ control, formData, setValue }: StepProps) {
 
   return (
     <div className="space-y-6">
-      <h2 className="text-xl font-medium">
-        <HandCoins className="h-5 w-5" />
-        Давай посчитаем!
-      </h2>
+      <h1 className="text-3xl font-bold">Давай посчитаем!</h1>
       <p className="text-muted-foreground">
         Укажите примерный бюджет на одного человека. Это поможет нам лучше
         спланировать ваше путешествие.
@@ -249,7 +246,7 @@ export function StepBudget({ control, formData, setValue }: StepProps) {
         </div>
       </div>
       <div className="text-lg">
-        Что будет включено в планировании индивидуального тура?
+        Что будет включено в стоимость индивидуального тура?
       </div>
       <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-3">
         {services.map(({ icon: Icon, title, excluded }) => (

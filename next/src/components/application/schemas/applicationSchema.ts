@@ -9,8 +9,11 @@ export type ApplicationSchemaType = {
 
   // Контактная информация
   contact: {
-    phone: string
-    email: string
+    phone?: string
+    email?: string
+    wechat?: string
+    telegram?: string
+    whatsapp?: string
   }
 
   // Информация о поездке
@@ -134,6 +137,9 @@ export const defaultFormValues: ApplicationSchemaType = {
   contact: {
     phone: "",
     email: "",
+    wechat: "",
+    telegram: "",
+    whatsapp: "",
   },
 
   trip: {
@@ -271,17 +277,41 @@ export const applicationSchema = z.object({
     ),
 
   // Контактная информация
-  contact: z.object({
-    phone: z
-      .string({ required_error: "Телефон обязателен для заполнения" })
-      .min(8, "Введите полный номер телефона")
-      .refine(
-        (value) => /^\+[1-9]\d{1,14}$/.test(value),
-        "Телефон должен быть в международном формате, например +79123456789"
-      ),
+  contact: z
+    .object({
+      phone: z
+        .string({ required_error: "Телефон обязателен для заполнения" })
+        .min(8, "Введите полный номер телефона")
+        .refine(
+          (value) => /^\+[1-9]\d{1,14}$/.test(value),
+          "Телефон должен быть в международном формате, например +79123456789"
+        )
+        .optional(),
 
-    email: z.string().email("Email должен быть корректным"),
-  }),
+      email: z.string().email("Email должен быть корректным").optional(),
+
+      wechat: z.string().optional(),
+
+      telegram: z.string().optional(),
+
+      whatsapp: z.string().optional(),
+    })
+    .refine(
+      (data) => {
+        // Проверяем, что хотя бы одно поле заполнено
+        return !!(
+          data.phone ||
+          data.email ||
+          data.wechat ||
+          data.telegram ||
+          data.whatsapp
+        )
+      },
+      {
+        message: "Укажите хотя бы один способ связи",
+        path: ["_error"],
+      }
+    ),
 
   // Информация о поездке
   trip: z.object({

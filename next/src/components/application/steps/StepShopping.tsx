@@ -160,123 +160,143 @@ export function StepShopping({
 
   return (
     <div className="space-y-8">
+      <h1>
+        <span className="text-3xl font-bold">Покупки</span>
+        <span className="ml-2 text-sm text-muted-foreground">
+          (можно пропустить)
+        </span>
+      </h1>
       {/* Бюджет */}
-      <div>
-        <h3 className="text-lg">Какой у тебя примерный бюджет на шоппинг? </h3>
-        <div className="text-xs text-muted-foreground">
-          (выберите один вариант)
+      <div className="space-y-4">
+        <div>
+          <h2 className="text-lg">
+            Какой у тебя примерный бюджет на шоппинг?{" "}
+          </h2>
+          <div className="text-xs text-muted-foreground">
+            (выберите один вариант)
+          </div>
         </div>
-      </div>
-      <div>
-        <CardSelector
-          options={budgetOptions}
-          formData={formData}
-          path="shopping.budget"
-          onOptionChange={handleBudgetChange}
-          className="grid grid-cols-3 md:grid-cols-3 gap-3"
-        />
-
-        {/* Отображаем ошибку, если есть */}
-        {hasBudgetError() && (
-          <p className="text-sm font-medium text-destructive mt-2">
-            {getErrorMessage(errors, "shopping.budget") ||
-              "Выберите один вариант бюджета"}
-          </p>
-        )}
+        <div>
+          <CardSelector
+            options={budgetOptions}
+            formData={formData}
+            path="shopping.budget"
+            onOptionChange={handleBudgetChange}
+            className="grid grid-cols-3 md:grid-cols-3 gap-3"
+          />
+          {/* Отображаем ошибку, если есть */}
+          {hasBudgetError() && (
+            <p className="text-sm font-medium text-destructive mt-2">
+              {getErrorMessage(
+                errors,
+                "shopping.budget",
+                "Выберите один вариант бюджета"
+              )}
+            </p>
+          )}
+        </div>
       </div>
 
       {/* Места для шоппинга */}
-      <div>
-        <h3 className="text-lg">Где тебе больше нравится делать покупки?</h3>
-        <div className="text-xs text-muted-foreground">
-          (можно выбрать несколько)
-        </div>
-      </div>
-      <div>
-        <CardSelector
-          options={shoppingPlacesOptions}
-          formData={formData}
-          path="shopping.shoppingPlaces"
-          onOptionChange={handleShoppingPlacesChange}
-          className="grid grid-cols-2 md:grid-cols-3 gap-3"
-        />
-
-        {/* Отображаем ошибку, если есть */}
-        {hasShoppingPlacesError() && (
-          <p className="text-sm font-medium text-destructive mt-2">
-            {getErrorMessage(errors, "shopping.shoppingPlaces") ||
-              "Выберите хотя бы одно место для шоппинга"}
-          </p>
-        )}
-
-        {formData.shopping?.shoppingPlaces?.other && (
-          <div className="space-y-2 mt-3">
-            <Label htmlFor="shoppingPlacesOtherDescription">
-              Укажите свой вариант
-            </Label>
-            <Controller
-              name="shopping.shoppingPlaces.otherDescription"
-              control={control}
-              render={({ field }) => (
-                <Textarea
-                  id="shoppingPlacesOtherDescription"
-                  placeholder="Опишите где вам нравится делать покупки"
-                  {...field}
-                  value={field.value || ""}
-                  onChange={(e) => {
-                    field.onChange(e)
-                    handleShoppingPlacesTextChange(e.target.value)
-                  }}
-                  className={
-                    hasShoppingPlacesOtherError() ? "border-destructive" : ""
-                  }
-                />
-              )}
-            />
-            {hasShoppingPlacesOtherError() && (
-              <p className="text-sm font-medium text-destructive">
-                {getErrorMessage(
-                  errors,
-                  "shopping.shoppingPlaces.otherDescription"
-                ) || "Укажите описание для пункта 'Другое'"}
-              </p>
-            )}
+      <div className="space-y-4">
+        <div>
+          <h2 className="text-lg">Где тебе больше нравится делать покупки?</h2>
+          <div className="text-xs text-muted-foreground">
+            (можно выбрать несколько)
           </div>
-        )}
+        </div>
+        <div>
+          <CardSelector
+            options={shoppingPlacesOptions}
+            formData={formData}
+            path="shopping.shoppingPlaces"
+            onOptionChange={handleShoppingPlacesChange}
+            className="grid grid-cols-2 md:grid-cols-3 gap-3"
+          />
+          {/* Отображаем ошибку, если есть */}
+          {hasShoppingPlacesError() && (
+            <p className="text-sm font-medium text-destructive mt-2">
+              {getErrorMessage(
+                errors,
+                "shopping.shoppingPlaces",
+                "Выберите хотя бы одно место для шоппинга"
+              )}
+            </p>
+          )}
+          {formData.shopping?.shoppingPlaces?.other && (
+            <div className="space-y-2 mt-3">
+              <Label htmlFor="shoppingPlacesOtherDescription">
+                Укажите свой вариант
+              </Label>
+              <Controller
+                name="shopping.shoppingPlaces.otherDescription"
+                control={control}
+                render={({ field }) => (
+                  <Textarea
+                    id="shoppingPlacesOtherDescription"
+                    placeholder="Опишите где вам нравится делать покупки"
+                    {...field}
+                    value={field.value || ""}
+                    onChange={(e) => {
+                      field.onChange(e)
+                      handleShoppingPlacesTextChange(e.target.value)
+                    }}
+                    className={
+                      hasShoppingPlacesOtherError() ? "border-destructive" : ""
+                    }
+                  />
+                )}
+              />
+              {hasShoppingPlacesOtherError() && (
+                <p className="text-sm font-medium text-destructive">
+                  {getErrorMessage(
+                    errors,
+                    "shopping.shoppingPlaces.otherDescription",
+                    "Укажите описание для пункта 'Другое'"
+                  )}
+                </p>
+              )}
+            </div>
+          )}
+        </div>
       </div>
 
       {/* Время на шоппинг */}
-      <div>
-        <h3 className="text-lg font-medium">
-          Сколько времени ты готов выделить на шоппинг?{" "}
-        </h3>
-        <div className="text-xs text-muted-foreground">
-          (выберите один вариант)
+      <div className="space-y-4">
+        <div>
+          <h2 className="text-lg">
+            Сколько времени ты готов выделить на шоппинг?{" "}
+          </h2>
+          <div className="text-xs text-muted-foreground">
+            (выберите один вариант)
+          </div>
         </div>
-      </div>
-      <div>
-        <CardSelector
-          options={shoppingTimeOptions}
-          formData={formData}
-          path="shopping.shoppingTime"
-          onOptionChange={handleShoppingTimeChange}
-          className="grid grid-cols-3 md:grid-cols-3 gap-3"
-        />
-
-        {/* Отображаем ошибку, если есть */}
-        {hasShoppingTimeError() && (
-          <p className="text-sm font-medium text-destructive mt-2">
-            {getErrorMessage(errors, "shopping.shoppingTime") ||
-              "Выберите одну продолжительность шоппинга"}
-          </p>
-        )}
+        <div>
+          <CardSelector
+            options={shoppingTimeOptions}
+            formData={formData}
+            path="shopping.shoppingTime"
+            onOptionChange={handleShoppingTimeChange}
+            className="grid grid-cols-3 md:grid-cols-3 gap-3"
+          />
+          {/* Отображаем ошибку, если есть */}
+          {hasShoppingTimeError() && (
+            <p className="text-sm font-medium text-destructive mt-2">
+              {getErrorMessage(
+                errors,
+                "shopping.shoppingTime",
+                "Выберите одну продолжительность шоппинга"
+              )}
+            </p>
+          )}
+        </div>
       </div>
 
       {/* Особые пожелания */}
-      <div className="space-y-2">
-        <Label htmlFor="specialWishes" className="text-lg">
+      <div className="space-y-4">
+        <div className="text-lg">
           Есть ли что-то, что ты точно хочешь купить в этой поездке?
-        </Label>
+        </div>
         <Controller
           name="shopping.specialWishes"
           control={control}
@@ -292,8 +312,8 @@ export function StepShopping({
       </div>
 
       {/* Дополнительные услуги */}
-      <div className="space-y-2">
-        <h3 className="mb-4 text-sm font-medium">Дополнительные услуги</h3>
+      <div className="space-y-4">
+        <h2 className="text-lg">Дополнительные услуги</h2>
 
         <div className="flex items-center space-x-2">
           <Controller

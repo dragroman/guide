@@ -93,7 +93,8 @@ export function StepTripPurpose({
   }
 
   return (
-    <div className="space-y-10">
+    <div className="space-y-8">
+      <h1 className="text-3xl font-bold">Когда и зачем?</h1>
       {/* Календарь */}
       <div className="space-y-4">
         <Label htmlFor="dateRange" className="text-lg">
@@ -112,7 +113,7 @@ export function StepTripPurpose({
           )}
         />
         {formData.trip.daysCount && (
-          <div className="mt-2 text-sm">
+          <div className="text-sm">
             <Badge variant="outline">
               Продолжительность: {formData.trip.daysCount}{" "}
               {getDaysText(formData.trip.daysCount)}

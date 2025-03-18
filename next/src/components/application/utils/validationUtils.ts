@@ -298,9 +298,30 @@ export async function validateFood(
  * Валидация для шага с контактами (шаг 5)
  */
 export async function validateContact(
-  trigger: UseFormTrigger<ApplicationSchemaType>
+  trigger: UseFormTrigger<ApplicationSchemaType>,
+  getValues: UseFormGetValues<ApplicationSchemaType>,
+  setError: UseFormSetError<ApplicationSchemaType>
 ): Promise<boolean> {
-  return await trigger(["contact"])
+  const isStepValid = await trigger(["contact"])
+  if (!isStepValid) return false
+
+  // Проверяем наличие хотя бы одного контакта
+  const contact = getValues("contact")
+  if (
+    !contact.phone &&
+    !contact.email &&
+    !contact.wechat &&
+    !contact.telegram &&
+    !contact.whatsapp
+  ) {
+    setError("contact", {
+      type: "custom",
+      message: "Укажите хотя бы один способ связи",
+    })
+    return false
+  }
+
+  return true
 }
 
 export async function validateShopping(
