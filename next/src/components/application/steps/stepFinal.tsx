@@ -247,6 +247,10 @@ export function StepConfirmation({ formData }: StepProps) {
             )}
           </div>
         )}
+        {renderInfoBlock(
+          "Примерный бюджет на человека в день",
+          <>{formData.budget} ₽</>
+        )}
       </div>
     </div>
   )

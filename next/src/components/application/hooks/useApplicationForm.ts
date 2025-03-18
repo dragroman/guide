@@ -18,6 +18,7 @@ import {
   validateFood,
   validateContact,
   validateShopping,
+  validateBudget,
 } from "../utils/validationUtils"
 
 // Типы для состояния формы
@@ -144,9 +145,10 @@ export function useApplicationForm() {
       case 5:
         return await validateShopping(trigger, getValues, setError)
       case 6:
-        return await validateContact(trigger)
+        return await validateBudget(trigger)
       case 7:
-        // На последнем шаге проверяем всю форму
+        return await validateContact(trigger)
+      case 8:
         return await trigger()
       default:
         return true
@@ -285,10 +287,9 @@ export function useApplicationForm() {
             transport: data.transport,
             food: data.food,
             shopping: data.shopping,
+            budget: data.budget,
           }),
         })
-
-        console.log(response)
 
         if (!response.ok) {
           const errorData = await response.json()

@@ -325,7 +325,7 @@ export async function validateShopping(
   // Проверка бюджета - должен быть выбран только один вариант
   const budget = getValues("shopping.budget")
   const budgetSelected = Object.values(budget).filter(Boolean).length
-  console.log(budget)
+
   if (budgetSelected !== 1) {
     setError("shopping.budget", {
       type: "custom",
@@ -374,4 +374,10 @@ export async function validateShopping(
   }
 
   return true
+}
+
+export async function validateBudget(
+  trigger: UseFormTrigger<ApplicationSchemaType>
+): Promise<boolean> {
+  return await trigger(["budget"])
 }

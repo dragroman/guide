@@ -20,6 +20,7 @@ import { StepProps } from "./types"
 import ApplicationHeader from "./layout/Header"
 import ApplicationFooter from "./layout/Footer"
 import { StepShopping } from "./steps/StepShopping"
+import { StepBudget } from "./steps/StepBudget"
 
 export default function MultistepForm() {
   const {
@@ -96,8 +97,10 @@ export default function MultistepForm() {
       case 5:
         return <StepShopping {...stepProps} />
       case 6:
-        return <StepContactInfo {...stepProps} />
+        return <StepBudget {...stepProps} />
       case 7:
+        return <StepContactInfo {...stepProps} />
+      case 8:
         return <StepConfirmation {...stepProps} />
       default:
         return null

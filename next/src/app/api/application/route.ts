@@ -22,8 +22,6 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    console.log(body)
-
     // Дополнительная валидация с помощью Zod
     try {
       // Преобразуем данные в формат, ожидаемый схемой
@@ -44,6 +42,7 @@ export async function POST(request: NextRequest) {
         transport: body.transport,
         food: body.food,
         shopping: body.shopping,
+        budget: body.budget,
       })
     } catch (error) {
       if (error instanceof Error) {
@@ -152,6 +151,7 @@ export async function POST(request: NextRequest) {
             : "",
           shopping_time: shoppingTimeArray,
           shopping_special_wishes: body.shopping.specialWishes,
+          budget: body.budget,
         }),
       }
     )

@@ -113,6 +113,7 @@ export type ApplicationSchemaType = {
       needed: boolean
     }
   }
+  budget: number
 }
 
 export type DateRange = {
@@ -228,6 +229,7 @@ export const defaultFormValues: ApplicationSchemaType = {
       needed: false,
     },
   },
+  budget: 1000,
 }
 
 // Zod схема для валидации новой структуры данных
@@ -618,4 +620,5 @@ export const applicationSchema = z.object({
       needed: z.boolean(),
     }),
   }),
+  budget: z.number().min(0).max(100000),
 })
