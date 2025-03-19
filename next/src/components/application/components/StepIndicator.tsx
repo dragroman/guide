@@ -1,6 +1,7 @@
 import React, { useEffect, useRef } from "react"
 import { Check } from "lucide-react"
 import { cn } from "@/lib/utils"
+import { scrollToFormTop } from "../utils/scrollUtils"
 
 interface Step {
   title: string
@@ -40,11 +41,21 @@ export function StepIndicator({
     }
   }, [currentStep]) // Запускаем эффект при изменении currentStep
 
+  // Обработчик перехода на определенный шаг
+  const handleStepClick = (step: number) => {
+    if (step === currentStep) return // Если уже на этом шаге, ничего не делаем
+
+    goToStep(step)
+
+    // После перехода на шаг прокручиваем страницу наверх
+    // scrollToFormTop() - не нужно вызывать здесь, т.к. это теперь происходит в useApplicationForm
+  }
+
   return (
     <div className="w-full">
       <div
         ref={scrollContainerRef}
-        className="flex overflow-x-auto lg:py-2 scrollbar-none"
+        className="flex overflow-x-auto lg:py-2 scrollbar-non px-4 py-2"
         style={{
           // Скрываем стандартный скролл
           scrollbarWidth: "none",
@@ -69,7 +80,7 @@ export function StepIndicator({
               key={index}
               ref={isCurrent ? currentStepRef : null}
               className={cn(
-                "flex-shrink-0 flex flex-col items-center mx-1 first:ml-0 last:mr-0",
+                "flex-shrink-0 flex flex-col items-center mx-1 first:ml-0 last:mr-0 ",
                 index === 0 ? "pl-0" : "",
                 index === steps.length - 1 ? "pr-0" : ""
               )}
@@ -90,7 +101,7 @@ export function StepIndicator({
                 {/* Индикатор */}
                 <button
                   type="button"
-                  onClick={() => goToStep(index)}
+                  onClick={() => handleStepClick(index)}
                   disabled={isPending}
                   className={cn(
                     "h-7 w-7 rounded-full flex items-center justify-center border-2 transition-all relative z-10",

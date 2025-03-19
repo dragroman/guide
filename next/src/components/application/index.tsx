@@ -1,6 +1,6 @@
 "use client"
 
-import React, { useCallback } from "react"
+import React, { useEffect } from "react"
 import { Alert, AlertTitle, AlertDescription } from "@/components/ui/alert"
 import { useApplicationForm } from "./hooks/useApplicationForm"
 import { DraftNotice } from "./components/DraftNotice"
@@ -127,8 +127,10 @@ export default function MultistepForm() {
         )}
 
         {/* Форма с текущим шагом */}
-        <form onSubmit={handleFormAction} className="flex flex-col ">
-          <div className="flex-grow pb-24">{renderCurrentStep()}</div>
+        <form onSubmit={handleFormAction} className="flex flex-col">
+          <div className="flex-grow pb-24" id="form-content">
+            {renderCurrentStep()}
+          </div>
           {/* Уведомление о черновике только на первом шаге */}
           {currentStep === 0 && showDraftNotice && hasDraft && (
             <DraftNotice onLoad={restoreDraft} onIgnore={ignoreDraft} />

@@ -16,6 +16,7 @@ import {
 } from "@/components/ui/dialog"
 import { Switch } from "@/components/ui/switch"
 import { Label } from "@/components/ui/label"
+import { get } from "http"
 
 export function StepBudget({ control, formData, setValue }: StepProps) {
   const [localBudget, setLocalBudget] = useState<number>(
@@ -92,6 +93,94 @@ export function StepBudget({ control, formData, setValue }: StepProps) {
     }
   }
 
+  // Разные тексты
+  type BudgetMessage = {
+    emotion: string
+    title: string
+    text: string
+  }
+  const budgetMessages: BudgetMessage[] = [
+    {
+      emotion: "friendliness",
+      title: "Подберём идеальный тур!",
+      text: "Чтобы подобрать для вас идеальный тур, нам нужно знать ваш бюджет. Так мы сможем предложить наилучшие варианты, подходящие именно вам!",
+    },
+    {
+      emotion: "joy",
+      title: "Чем точнее бюджет – тем лучше путешествие!",
+      text: "Давайте сделаем ваш отдых незабываемым, подобрав оптимальные варианты!",
+    },
+    {
+      emotion: "playfulness",
+      title: "Хотите увидеть лучшие предложения?",
+      text: "Расскажите, какой у нас бюджет, и мы соберём для вас идеальный тур!",
+    },
+    {
+      emotion: "reasonableness",
+      title: "Оптимальный выбор для вас!",
+      text: "Мы ценим ваше время и деньги, поэтому, зная ваш бюджет, сможем предложить только лучшие варианты без лишнего.",
+    },
+    {
+      emotion: "wanderLust",
+      title: "Откройте мир с нами!",
+      text: "Мир огромен, и вариантов много! Сориентируйте нас по бюджету, и мы найдём для вас идеальный маршрут!",
+    },
+    {
+      emotion: "openCommunication",
+      title: "Ваш бюджет – не ограничение!",
+      text: "Это возможность выбрать лучшее в своей категории! Давайте подберём варианты!",
+    },
+    {
+      emotion: "expertise",
+      title: "Доверьтесь профессионалам!",
+      text: "Мы знаем, как сделать ваш отдых комфортным и незабываемым в рамках вашего бюджета. Просто сообщите сумму, и мы всё рассчитаем!",
+    },
+    {
+      emotion: "practicality",
+      title: "Никаких лишних расходов!",
+      text: "Чем точнее бюджет, тем точнее расчёт тура – без ненужных опций, только самое лучшее для вас!",
+    },
+    {
+      emotion: "personalization",
+      title: "Тур под ваши желания!",
+      text: "Мы хотим создать путешествие именно под вас! Дайте нам ориентир по бюджету, и мы подберём тур вашей мечты.",
+    },
+    {
+      emotion: "inspiration",
+      title: "Воплотим мечты в реальность!",
+      text: "Укажите бюджет, и мы найдём для вас путешествие, о котором вы давно мечтали!",
+    },
+    {
+      emotion: "individualApproach",
+      title: "Индивидуальный подход для каждого!",
+      text: "Каждый путешественник уникален! Расскажите нам про бюджет, и мы соберём маршрут, который вам идеально подойдёт.",
+    },
+    {
+      emotion: "energy",
+      title: "Готовы к приключениям?",
+      text: "Укажите сумму, и мы подберём лучшие предложения, чтобы ваше путешествие было крутым!",
+    },
+    {
+      emotion: "luxuryAndComfort",
+      title: "Роскошь и комфорт в каждой детали!",
+      text: "Ваш комфорт – наш приоритет! Сообщите нам бюджет, и мы подберём лучшие отели, перелёты и экскурсии.",
+    },
+    {
+      emotion: "care",
+      title: "Позаботимся о вашем комфорте!",
+      text: "Нам важно, чтобы ваше путешествие было комфортным и без неожиданных расходов. Давайте определим бюджет заранее!",
+    },
+    {
+      emotion: "honestyAndTransparency",
+      title: "Честный и прозрачный расчёт!",
+      text: "Мы не предлагаем то, что вам не подходит. С бюджетом мы сможем рассчитать тур, который вам точно понравится!",
+    },
+  ]
+
+  const getTitleByEmotion = (emotion: string) => {
+    return budgetMessages.find((message) => message.emotion === emotion)?.title
+  }
+
   // Обновление значения в форме после окончания перетаскивания
   useEffect(() => {
     if (!isDragging && localBudget !== formData.budget) {
@@ -101,10 +190,10 @@ export function StepBudget({ control, formData, setValue }: StepProps) {
 
   return (
     <div className="space-y-6">
-      <h1 className="text-3xl font-bold">Давай посчитаем!</h1>
+      <h1 className="text-3xl font-bold">{getTitleByEmotion("joy")}</h1>
       <p className="text-muted-foreground">
-        Укажите примерный бюджет на одного человека. Это поможет нам лучше
-        спланировать ваше путешествие.
+        Мы хотим создать путешествие именно под вас! Дайте нам ориентир по
+        бюджету, и мы подберём тур вашей мечты.
       </p>
       <Controller
         name="needVisa"
@@ -174,7 +263,7 @@ export function StepBudget({ control, formData, setValue }: StepProps) {
             <Slider
               min={1000}
               max={100000}
-              step={500}
+              step={100}
               value={[localBudget]}
               onValueChange={handleBudgetChange}
               onValueCommit={(value) => {

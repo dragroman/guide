@@ -147,6 +147,15 @@ export function StepTripPurpose({
           </div>
         </div>
 
+        {/* Ошибка при отсутствии выбора */}
+        {errors.trip?.purpose?.options && (
+          <p className="text-sm font-medium text-destructive mt-2">
+            {typeof errors.trip.purpose.options === "string"
+              ? errors.trip.purpose.options
+              : "Выберите хотя бы одну цель поездки"}
+          </p>
+        )}
+
         {/* Обновленный путь для CardSelector */}
         <CardSelector
           options={purposeOptions}
@@ -157,16 +166,6 @@ export function StepTripPurpose({
             isChecked ? "bg-primary text-primary-foreground" : "bg-muted"
           }
         />
-
-        {/* Ошибка при отсутствии выбора */}
-        {errors.trip?.purpose?.options && (
-          <p className="text-sm font-medium text-destructive mt-2">
-            {typeof errors.trip.purpose.options === "string"
-              ? errors.trip.purpose.options
-              : "Выберите хотя бы одну цель поездки"}
-          </p>
-        )}
-
         {/* Поле для ввода собственного варианта */}
         {formData.trip.purpose.options.other && (
           <div className="space-y-2 mt-4">

@@ -1,4 +1,4 @@
-import { useReducer, useCallback } from "react"
+import { useReducer, useCallback, useEffect } from "react"
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { DateRange } from "react-day-picker"
@@ -20,6 +20,7 @@ import {
   validateShopping,
   validateBudget,
 } from "../utils/validationUtils"
+import { scrollToFormTop, scrollToFirstError } from "../utils/scrollUtils"
 
 // Типы для состояния формы
 type FormState = {
@@ -102,7 +103,7 @@ export function useApplicationForm() {
   const {
     register,
     handleSubmit,
-    formState: { errors },
+    formState: { errors, isSubmitting: isFormSubmitting },
     control,
     watch,
     setValue,
@@ -129,31 +130,68 @@ export function useApplicationForm() {
   // Вычисляем прогресс заполнения формы
   const progress = Math.floor(((state.currentStep + 1) / TOTAL_STEPS) * 100)
 
+  // Эффект для прокрутки наверх при смене шага
+  useEffect(() => {
+    scrollToFormTop()
+  }, [state.currentStep])
+
+  // Эффект для прокрутки к ошибке при их появлении
+  useEffect(() => {
+    // Если есть ошибки и мы не в процессе отправки формы
+    if (Object.keys(errors).length > 0 && !isFormSubmitting) {
+      scrollToFirstError(errors)
+    }
+  }, [errors, isFormSubmitting])
+
   // Основная функция валидации текущего шага - использует функции из validationUtils
   const validateCurrentStep = useCallback(async () => {
+    let isValid = false
+
     switch (state.currentStep) {
       case 0:
-        return await validatePersonalInfo(trigger)
+        isValid = await validatePersonalInfo(trigger)
+        break
       case 1:
-        return await validateTripInfo(trigger, getValues, setError)
+        isValid = await validateTripInfo(trigger, getValues, setError)
+        break
       case 2:
-        return await validateAccommodation(trigger, getValues, setError)
+        isValid = await validateAccommodation(trigger, getValues, setError)
+        break
       case 3:
-        return await validateTransport(trigger, getValues, setError)
+        isValid = await validateTransport(trigger, getValues, setError)
+        break
       case 4:
-        return await validateFood(trigger, getValues, setError)
+        isValid = await validateFood(trigger, getValues, setError)
+        break
       case 5:
-        return await validateShopping(trigger, getValues, setError)
+        isValid = await validateShopping(trigger, getValues, setError)
+        break
       case 6:
-        return await validateBudget(trigger)
+        isValid = await validateBudget(trigger)
+        break
       case 7:
-        return await validateContact(trigger, getValues, setError, clearErrors)
+        isValid = await validateContact(
+          trigger,
+          getValues,
+          setError,
+          clearErrors
+        )
+        break
       case 8:
-        return await trigger()
+        isValid = await trigger()
+        break
       default:
-        return true
+        isValid = true
+        break
     }
-  }, [state.currentStep, trigger, getValues, setError, clearErrors])
+
+    // Если валидация не прошла, прокручиваем к первой ошибке
+    if (!isValid) {
+      scrollToFirstError(errors)
+    }
+
+    return isValid
+  }, [state.currentStep, trigger, getValues, setError, clearErrors, errors])
 
   // Принимает путь к данным в форме, имя опции и новое состояние
   const handleOptionChange = useCallback(
@@ -317,6 +355,21 @@ export function useApplicationForm() {
               ? error.message
               : "Произошла ошибка при отправке формы",
         })
+
+        // Прокручиваем к сообщению об ошибке
+        setTimeout(() => {
+          const errorAlert = document.querySelector(
+            '.bg-destructive, .text-destructive, [variant="destructive"]'
+          )
+          if (errorAlert) {
+            const offsetTop =
+              errorAlert.getBoundingClientRect().top + window.scrollY - 150
+            window.scrollTo({
+              top: offsetTop,
+              behavior: "smooth",
+            })
+          }
+        }, 100)
       }
     },
     [ignoreDraft]

@@ -127,15 +127,7 @@ export function StepTransport({
             (можно выбрать только один)
           </div>
         </div>
-        {/* Используем CardSelector с обновленными путями */}
-        <CardSelector
-          options={transferOptions}
-          formData={formData}
-          path="transport.transfer"
-          onOptionChange={handleTransferChange}
-        />
 
-        {/* Отображаем ошибку, если есть */}
         {hasTransferError() && (
           <p className="text-sm font-medium text-destructive mt-2">
             {getErrorMessage(
@@ -145,6 +137,12 @@ export function StepTransport({
             )}
           </p>
         )}
+        <CardSelector
+          options={transferOptions}
+          formData={formData}
+          path="transport.transfer"
+          onOptionChange={handleTransferChange}
+        />
 
         {formData.transport?.transfer?.other && (
           <div className="space-y-2">

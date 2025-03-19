@@ -134,15 +134,6 @@ export function StepAccommodation({
             (можно выбрать несколько)
           </div>
         </div>
-        {/* Обновленный путь для CardSelector */}
-        <CardSelector
-          options={accommodationOptions}
-          formData={formData}
-          path="accommodation.options"
-          onOptionChange={handleAccommodationOptionChange}
-        />
-
-        {/* Отображаем ошибку, если есть */}
         {hasAccommodationOptionsError() && (
           <p className="text-sm font-medium text-destructive mt-2">
             {getErrorMessage(
@@ -152,6 +143,12 @@ export function StepAccommodation({
             )}
           </p>
         )}
+        <CardSelector
+          options={accommodationOptions}
+          formData={formData}
+          path="accommodation.options"
+          onOptionChange={handleAccommodationOptionChange}
+        />
 
         {formData.accommodation.options.other && (
           <div className="space-y-2 mt-3">

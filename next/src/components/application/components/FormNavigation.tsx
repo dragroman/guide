@@ -1,6 +1,7 @@
 import React from "react"
 import { Button } from "@/components/ui/button"
 import { Loader2 } from "lucide-react"
+import { scrollToFormTop } from "../utils/scrollUtils"
 
 interface FormNavigationProps {
   currentStep: number
@@ -15,13 +16,19 @@ export function FormNavigation({
   onNext,
   isSubmitting,
 }: FormNavigationProps) {
+  // Обработчик нажатия на кнопку "Далее" или "Отправить"
+  const handleClick = (e: React.FormEvent) => {
+    // Вызываем родительский обработчик
+    onNext(e)
+  }
+
   return (
     <div className="flex justify-between">
       {currentStep < totalSteps - 1 ? (
         <Button
           type="submit"
           size={"lg"}
-          onClick={(e) => onNext(e)}
+          onClick={handleClick}
           className="w-full"
           disabled={isSubmitting}
         >
@@ -30,7 +37,7 @@ export function FormNavigation({
       ) : (
         <Button
           type="submit"
-          onClick={(e) => onNext(e)}
+          onClick={handleClick}
           size={"lg"}
           className="w-full"
           disabled={isSubmitting}
