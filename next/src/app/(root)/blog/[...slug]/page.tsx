@@ -8,7 +8,7 @@ import type { Metadata, ResolvingMetadata } from "next"
 import type { DrupalNode, JsonApiParams } from "next-drupal"
 
 async function getNode(slug: string[]) {
-  const path = `/${slug.join("/")}`
+  const path = `/blog/${slug.join("/")}`
 
   const params: JsonApiParams = {}
 

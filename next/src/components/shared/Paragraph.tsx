@@ -67,12 +67,11 @@ export function Paragraph({ paragraphs }: ParagraphRendererProps): ReactNode {
         switch (paragraph.type) {
           case "paragraph--text":
             return (
-              <div className="mb-12">
+              <div key={paragraph.id} className="mb-12">
                 {paragraph.field_title ? (
                   <h2 className="text-3xl mb-8">{paragraph.field_title}</h2>
                 ) : null}
                 <div
-                  key={paragraph.id}
                   dangerouslySetInnerHTML={{
                     __html: paragraph.field_body.processed,
                   }}
@@ -83,12 +82,9 @@ export function Paragraph({ paragraphs }: ParagraphRendererProps): ReactNode {
 
           case "paragraph--text_image":
             return (
-              <div className="mb-12">
+              <div className="mb-12" key={paragraph.id}>
                 <h2 className="text-3xl mb-8">{paragraph.field_title}</h2>
-                <div
-                  key={paragraph.id}
-                  className="flex flex-col md:flex-row gap-6"
-                >
+                <div className="flex flex-col md:flex-row gap-6">
                   {/* TODO: ${paragraph.field_image_align ? "order-first" : ""} */}
                   <div
                     className={`md:w-1/2 font-serif text-xl prose`}
@@ -115,7 +111,7 @@ export function Paragraph({ paragraphs }: ParagraphRendererProps): ReactNode {
 
           case "paragraph--image":
             return paragraph.field_image ? (
-              <div className="mb-12">
+              <div className="mb-12" key={paragraph.id}>
                 <h2 className="text-3xl mb-8">{paragraph.field_title}</h2>
                 <div key={paragraph.id} className="mt- mb-12">
                   <Image

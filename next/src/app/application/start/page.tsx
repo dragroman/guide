@@ -1,14 +1,20 @@
-import Application from "@/components/application"
+// next/src/app/application/start/page.tsx
+import { LoadingScreen } from "@/components/shared/LoadingScreen"
+import { Suspense, lazy } from "react"
 
-export const metadata = {
-  title: "Контакты | Next.js для Drupal",
-  description: "Свяжитесь с нами через нашу контактную форму",
-}
+// Ленивая загрузка компонента
+const Application = lazy(() => import("@/components/application"))
 
-export default function ContactPage() {
+export default function ApplicationStartPage() {
   return (
-    <div className="container max-w-[500px] mx-auto">
+    <Suspense
+      fallback={
+        <>
+          <LoadingScreen />
+        </>
+      }
+    >
       <Application />
-    </div>
+    </Suspense>
   )
 }

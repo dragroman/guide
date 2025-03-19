@@ -10,7 +10,7 @@ interface ArticleProps {
 export function Article({ node, ...props }: ArticleProps) {
   return (
     <article {...props}>
-      <h1 className="mb-4 text-6xl font-black leading-tight">{node.title}</h1>
+      <h1 className="mb-4 text-3xl font-black leading-tight">{node.title}</h1>
       <div className="mb-4 text-gray-600">
         {node.uid?.display_name ? (
           <span>
