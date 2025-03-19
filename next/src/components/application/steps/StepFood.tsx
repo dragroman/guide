@@ -15,6 +15,7 @@ import {
 } from "lucide-react"
 import { FlagComponent } from "../components/PhoneInput"
 import { Country } from "react-phone-number-input"
+import texts from "../localization/ru"
 
 export function StepFood({
   control,
@@ -23,14 +24,15 @@ export function StepFood({
   handleOptionChange,
   handleTextChange,
 }: StepProps) {
-  // Вспомогательная функция для получения значения из вложенного объекта по строковому пути
+  const t = texts.food
+
+  // Вспомогательные функции
   const getNestedValue = (obj: any, path: string) => {
     return path
       .split(".")
       .reduce((prev, curr) => (prev ? prev[curr] : undefined), obj)
   }
 
-  // Проверка ошибки в группе опций (когда ничего не выбрано)
   const hasOptionsError = (path: string) => {
     const errorObj = getNestedValue(errors, path)
     return (
@@ -41,13 +43,11 @@ export function StepFood({
     )
   }
 
-  // Проверка ошибки в поле "другое"
   const hasOtherDescriptionError = (path: string) => {
     const errorPath = `${path}.otherDescription`
     return getNestedValue(errors, errorPath)
   }
 
-  // Функция для получения текста ошибки
   const getErrorMessage = (path: string): string => {
     const errorObj = getNestedValue(errors, path)
 
@@ -65,10 +65,9 @@ export function StepFood({
       return errorObj.message
     }
 
-    return "Пожалуйста, проверьте введенные данные"
+    return texts.errors.formError
   }
 
-  // Проверки наличия ошибок для конкретных полей
   const hasCuisineError = () => hasOptionsError("food.cuisine")
   const hasCuisineOtherError = () => hasOtherDescriptionError("food.cuisine")
   const hasPreferencesOtherError = () =>
@@ -78,36 +77,36 @@ export function StepFood({
   const cuisineOptions: CardOption[] = [
     {
       name: "chinese",
-      label: "Китайская кухня",
-      description: "Традиционные блюда разных регионов Китая",
+      label: t.cuisine.chinese.label,
+      description: t.cuisine.chinese.description,
       icon: <Utensils className="h-5 w-5" />,
       extraData: { country: "CN" },
     },
     {
       name: "european",
-      label: "Европейская кухня",
-      description: "Блюда из Италии, Франции и других стран Европы",
+      label: t.cuisine.european.label,
+      description: t.cuisine.european.description,
       icon: <Utensils className="h-5 w-5" />,
       extraData: { country: "EU" },
     },
     {
       name: "japanese",
-      label: "Японская кухня",
-      description: "Суши, роллы и другие традиционные блюда Японии",
+      label: t.cuisine.japanese.label,
+      description: t.cuisine.japanese.description,
       icon: <Soup className="h-5 w-5" />,
       extraData: { country: "JP" },
     },
     {
       name: "russian",
-      label: "Русская кухня",
-      description: "Традиционные русские блюда и закуски",
+      label: t.cuisine.russian.label,
+      description: t.cuisine.russian.description,
       icon: <Coffee className="h-5 w-5" />,
       extraData: { country: "RU" },
     },
     {
       name: "other",
-      label: "Другое",
-      description: "Другие национальные кухни и предпочтения",
+      label: t.cuisine.other.label,
+      description: t.cuisine.other.description,
       icon: <Utensils className="h-5 w-5" />,
     },
   ]
@@ -116,31 +115,31 @@ export function StepFood({
   const foodPreferencesOptions: CardOption[] = [
     {
       name: "tryLocal",
-      label: "Местная кухня",
-      description: "Хочу попробовать аутентичные местные блюда",
+      label: t.preferences.tryLocal.label,
+      description: t.preferences.tryLocal.description,
       icon: <Star className="h-5 w-5" />,
     },
     {
       name: "spicyOk",
-      label: "Острая пища",
-      description: "Нормально переношу острую пищу",
+      label: t.preferences.spicyOk.label,
+      description: t.preferences.spicyOk.description,
       icon: <Flame className="h-5 w-5" />,
     },
     {
       name: "fattyOk",
-      label: "Жирная пища",
-      description: "Нормально переношу жирную пищу",
+      label: t.preferences.fattyOk.label,
+      description: t.preferences.fattyOk.description,
       icon: <Leaf className="h-5 w-5" />,
     },
     {
       name: "other",
-      label: "Особые требования",
-      description: "Диеты, аллергии или другие предпочтения",
+      label: t.preferences.other.label,
+      description: t.preferences.other.description,
       icon: <AlertTriangle className="h-5 w-5" />,
     },
   ]
 
-  // Используем универсальные обработчики с новыми путями
+  // Обработчики
   const handleCuisineChange = (name: string, checked: boolean) => {
     handleOptionChange?.("food.cuisine", name, checked)
   }
@@ -175,20 +174,19 @@ export function StepFood({
   return (
     <div className="space-y-8">
       <h1>
-        <span className="text-3xl font-bold">Питание</span>
+        <span className="text-3xl font-bold">{t.title}</span>
         <span className="ml-2 text-sm text-muted-foreground">
-          (можно пропустить)
+          {t.optionalLabel}
         </span>
       </h1>
       <div className="space-y-4">
         <div>
-          <h2 className="text-lg">Какая кухня сделает твою поездку вкуснее?</h2>
+          <h2 className="text-lg">{t.cuisineQuestion}</h2>
           <div className="text-xs text-muted-foreground">
-            (можно выбрать несколько)
+            {texts.common.selectMultiple}
           </div>
         </div>
 
-        {/* Используем CardSelector для типов кухни с обновленным путем */}
         <CardSelector
           options={cuisineOptions}
           formData={formData}
@@ -197,18 +195,16 @@ export function StepFood({
           renderExtraContent={renderCuisineExtra}
         />
 
-        {/* Ошибка валидации типа кухни */}
         {hasCuisineError() && (
           <p className="text-sm font-medium text-destructive mt-2">
-            {getErrorMessage("food.cuisine") ||
-              "Выберите хотя бы один тип кухни"}
+            {getErrorMessage("food.cuisine") || texts.errors.cuisineRequired}
           </p>
         )}
 
         {formData.food.cuisine.other && (
           <div className="space-y-2 mt-3">
             <Label htmlFor="cuisineOtherDescription">
-              Укажите ваши предпочтения по кухне
+              {t.otherCuisineLabel}
             </Label>
             <Controller
               name="food.cuisine.otherDescription"
@@ -216,7 +212,7 @@ export function StepFood({
               render={({ field }) => (
                 <Textarea
                   id="cuisineOtherDescription"
-                  placeholder="Опишите ваши предпочтения по кухне"
+                  placeholder={t.otherCuisinePlaceholder}
                   {...field}
                   value={field.value || ""}
                   onChange={(e) => {
@@ -230,7 +226,7 @@ export function StepFood({
             {hasCuisineOtherError() && (
               <p className="text-sm font-medium text-destructive">
                 {getErrorMessage("food.cuisine.otherDescription") ||
-                  "Укажите описание для пункта 'Другое'"}
+                  texts.errors.otherDescription}
               </p>
             )}
           </div>
@@ -239,15 +235,12 @@ export function StepFood({
 
       <div className="space-y-4">
         <div>
-          <h2 className="text-lg">
-            Давай уточним: может, есть аллергия или любимые блюда?
-          </h2>
+          <h2 className="text-lg">{t.preferencesQuestion}</h2>
           <div className="text-xs text-muted-foreground">
-            (можно выбрать несколько)
+            {texts.common.selectMultiple}
           </div>
         </div>
 
-        {/* Используем CardSelector для предпочтений по питанию с обновленным путем */}
         <CardSelector
           options={foodPreferencesOptions}
           formData={formData}
@@ -261,7 +254,7 @@ export function StepFood({
         {formData.food.preferences.other && (
           <div className="space-y-2 mt-3">
             <Label htmlFor="foodPreferencesOtherDescription">
-              Укажите особые требования к питанию
+              {t.otherPreferenceLabel}
             </Label>
             <Controller
               name="food.preferences.otherDescription"
@@ -269,7 +262,7 @@ export function StepFood({
               render={({ field }) => (
                 <Textarea
                   id="foodPreferencesOtherDescription"
-                  placeholder="Опишите ваши диеты, аллергии или другие требования к питанию"
+                  placeholder={t.otherPreferencePlaceholder}
                   {...field}
                   value={field.value || ""}
                   onChange={(e) => {
@@ -285,7 +278,7 @@ export function StepFood({
             {hasPreferencesOtherError() && (
               <p className="text-sm font-medium text-destructive">
                 {getErrorMessage("food.preferences.otherDescription") ||
-                  "Укажите описание для пункта 'Другое'"}
+                  texts.errors.otherDescription}
               </p>
             )}
           </div>

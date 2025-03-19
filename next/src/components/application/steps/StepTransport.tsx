@@ -17,31 +17,32 @@ import {
   hasOtherDescriptionError,
   getErrorMessage,
 } from "../utils/errorHelpers"
+import texts from "../localization/ru" // Импортируем тексты
 
 // Опции для трансфера из аэропорта
 const transferOptions: CardOption[] = [
   {
     name: "airport",
-    label: "Трансфер из аэропорта",
-    description: "Встреча в аэропорту и доставка до отеля",
+    label: texts.transport.transfer.airport.label,
+    description: texts.transport.transfer.airport.description,
     icon: <PlaneTakeoff className="h-5 w-5" />,
   },
   {
     name: "individual",
-    label: "Индивидуальный",
-    description: "Персональный автомобиль с водителем",
+    label: texts.transport.transfer.individual.label,
+    description: texts.transport.transfer.individual.description,
     icon: <Car className="h-5 w-5" />,
   },
   {
     name: "none",
-    label: "Не нужен",
-    description: "Самостоятельное прибытие в отель",
+    label: texts.transport.transfer.none.label,
+    description: texts.transport.transfer.none.description,
     icon: <PersonStanding className="h-5 w-5" />,
   },
   {
     name: "other",
-    label: "Другое",
-    description: "Уточните ваши особые пожелания",
+    label: texts.transport.transfer.other.label,
+    description: texts.transport.transfer.other.description,
     icon: <PlusCircle className="h-5 w-5" />,
   },
 ]
@@ -50,27 +51,26 @@ const transferOptions: CardOption[] = [
 const transportOptions: CardOption[] = [
   {
     name: "privateDriver",
-    label: "Индивидуальный водитель",
-    description: "Аренда автомобиля с водителем для удобства перемещений",
+    label: texts.transport.preferences.privateDriver.label,
+    description: texts.transport.preferences.privateDriver.description,
     icon: <Car className="h-5 w-5" />,
   },
   {
     name: "publicTransport",
-    label: "Общественный транспорт",
-    description:
-      "Передвижение на автобусах, метро и другом общественном транспорте",
+    label: texts.transport.preferences.publicTransport.label,
+    description: texts.transport.preferences.publicTransport.description,
     icon: <Bus className="h-5 w-5" />,
   },
   {
     name: "taxi",
-    label: "Такси",
-    description: "Использование услуг такси по необходимости",
+    label: texts.transport.preferences.taxi.label,
+    description: texts.transport.preferences.taxi.description,
     icon: <CarTaxiFront className="h-5 w-5" />,
   },
   {
     name: "other",
-    label: "Другое",
-    description: "Уточните ваши особые пожелания к транспорту",
+    label: texts.transport.preferences.other.label,
+    description: texts.transport.preferences.other.description,
     icon: <PlusCircle className="h-5 w-5" />,
   },
 ]
@@ -119,12 +119,12 @@ export function StepTransport({
 
   return (
     <div className="space-y-8">
-      <h1 className="text-3xl font-bold">Трансфер</h1>
+      <h1 className="text-3xl font-bold">{texts.transport.title}</h1>
       <div className="space-y-4">
         <div>
-          <h3 className="text-lg">Нужна ли встреча в аэропорту?</h3>
+          <h3 className="text-lg">{texts.transport.transferQuestion}</h3>
           <div className="text-xs text-muted-foreground">
-            (можно выбрать только один)
+            {texts.common.selectOne}
           </div>
         </div>
 
@@ -133,7 +133,7 @@ export function StepTransport({
             {getErrorMessage(
               errors,
               "transport.transfer",
-              "Выберите хотя бы один тип трансфера"
+              texts.errors.transferRequired
             )}
           </p>
         )}
@@ -148,9 +148,9 @@ export function StepTransport({
           <div className="space-y-2">
             <div>
               <Label htmlFor="transferOtherDescription">
-                Укажите ваши пожелания к трансферу
+                {texts.transport.otherTransferLabel}
               </Label>
-              (можно выбрать несколько)
+              {texts.common.selectMultiple}
             </div>
             <Controller
               name="transport.transfer.otherDescription"
@@ -158,7 +158,7 @@ export function StepTransport({
               render={({ field }) => (
                 <Textarea
                   id="transferOtherDescription"
-                  placeholder="Опишите ваши пожелания к трансферу из аэропорта"
+                  placeholder={texts.transport.otherTransferPlaceholder}
                   {...field}
                   value={field.value || ""}
                   onChange={(e) => {
@@ -176,7 +176,7 @@ export function StepTransport({
                 {getErrorMessage(
                   errors,
                   "transport.transfer.otherDescription",
-                  "Укажите описание для пункта 'Другое'"
+                  texts.errors.otherDescription
                 )}
               </p>
             )}
@@ -186,9 +186,9 @@ export function StepTransport({
 
       <div className="space-y-4">
         <div>
-          <h3 className="text-lg">Выбираем удобный способ передвижения</h3>
+          <h3 className="text-lg">{texts.transport.transportQuestion}</h3>
           <div className="text-xs text-muted-foreground">
-            (можно выбрать несколько)
+            {texts.common.selectMultiple}
           </div>
         </div>
         {/* Используем CardSelector с обновленными путями */}
@@ -204,14 +204,14 @@ export function StepTransport({
             {getErrorMessage(
               errors,
               "transport.preferences",
-              "Выберите хотя бы один вариант транспорта"
+              texts.errors.transferRequired
             )}
           </p>
         )}
         {formData.transport?.preferences?.other && (
           <div className="space-y-2 mt-3">
             <Label htmlFor="transportPreferencesOtherDescription">
-              Укажите ваши пожелания к транспорту
+              {texts.transport.otherTransportLabel}
             </Label>
             <Controller
               name="transport.preferences.otherDescription"
@@ -219,7 +219,7 @@ export function StepTransport({
               render={({ field }) => (
                 <Textarea
                   id="transportPreferencesOtherDescription"
-                  placeholder="Опишите ваши пожелания к транспорту во время тура"
+                  placeholder={texts.transport.otherTransportPlaceholder}
                   {...field}
                   value={field.value || ""}
                   onChange={(e) => {
@@ -239,7 +239,7 @@ export function StepTransport({
                 {getErrorMessage(
                   errors,
                   "transport.preferences.otherDescription",
-                  "Укажите описание для пункта 'Другое'"
+                  texts.errors.otherDescription
                 )}
               </p>
             )}

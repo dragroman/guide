@@ -19,6 +19,7 @@ import {
   hasOtherDescriptionError,
   getErrorMessage,
 } from "../utils/errorHelpers"
+import texts from "../localization/ru"
 
 export function StepAccommodation({
   control,
@@ -27,6 +28,11 @@ export function StepAccommodation({
   handleOptionChange,
   handleTextChange,
 }: StepProps) {
+  // Подгружаем тексты
+  const t = texts.accommodation
+  const option = t.options
+  const preferences = t.preferences
+
   // Проверки наличия ошибок для конкретных полей
   const hasAccommodationOptionsError = () =>
     hasOptionsError(errors, "accommodation.options")
@@ -41,38 +47,38 @@ export function StepAccommodation({
   const accommodationOptions: CardOption[] = [
     {
       name: "hotel3",
-      label: "Отель 3★",
-      description: "Комфортабельные номера с базовыми удобствами",
+      label: option.hotel3.label,
+      description: option.hotel3.description,
       icon: <Star className="h-5 w-5" />,
     },
     {
       name: "hotel4",
-      label: "Отель 4★",
-      description: "Улучшенные номера с дополнительными услугами",
+      label: option.hotel4.label,
+      description: option.hotel4.description,
       icon: <Star className="h-5 w-5" />,
     },
     {
       name: "hotel5",
-      label: "Отель 5★",
-      description: "Люксовые номера с полным спектром услуг",
+      label: option.hotel5.label,
+      description: option.hotel5.description,
       icon: <Star className="h-5 w-5" />,
     },
     {
       name: "apartment",
-      label: "Апартаменты",
-      description: "Самостоятельное проживание с кухней и гостиной",
+      label: option.apartment.label,
+      description: option.apartment.description,
       icon: <Building className="h-5 w-5" />,
     },
     {
       name: "hostel",
-      label: "Хостел",
-      description: "Бюджетное размещение в общих номерах",
+      label: option.hostel.label,
+      description: option.hostel.description,
       icon: <Home className="h-5 w-5" />,
     },
     {
       name: "other",
-      label: "Другое",
-      description: "Уточните ваши особые пожелания",
+      label: option.other.label,
+      description: option.other.description,
       icon: <Warehouse className="h-5 w-5" />,
     },
   ]
@@ -81,26 +87,26 @@ export function StepAccommodation({
   const preferencesOptions: CardOption[] = [
     {
       name: "centralLocation",
-      label: "Близость к центру",
-      description: "Удобное расположение в центральной части города",
+      label: preferences.centralLocation.label,
+      description: preferences.centralLocation.description,
       icon: <MapPin className="h-5 w-5" />,
     },
     {
       name: "nearShoppingCenters",
-      label: "Рядом с магазинами",
-      description: "Близкое расположение к торговым центрам и рынкам",
+      label: preferences.nearShoppingCenters.label,
+      description: preferences.nearShoppingCenters.description,
       icon: <ShoppingBag className="h-5 w-5" />,
     },
     {
       name: "poolAndSpa",
-      label: "Бассейн и спа",
-      description: "Наличие бассейна, спа-зоны и фитнес-центра",
+      label: preferences.poolAndSpa.label,
+      description: preferences.poolAndSpa.description,
       icon: <Dumbbell className="h-5 w-5" />,
     },
     {
       name: "other",
-      label: "Другое",
-      description: "Другие особые пожелания к размещению",
+      label: preferences.other.label,
+      description: preferences.other.description,
       icon: <Sparkles className="h-5 w-5" />,
     },
   ]
@@ -124,14 +130,12 @@ export function StepAccommodation({
 
   return (
     <div className="space-y-8">
-      <h1 className="text-3xl font-bold">Проживание</h1>
+      <h1 className="text-3xl font-bold">{t.title}</h1>
       <div className="space-y-4">
         <div>
-          <h2 className="text-lg">
-            Твой комфорт важен! Где хотел бы остановимся?
-          </h2>
+          <h2 className="text-lg">{t.question}</h2>
           <div className="text-xs text-muted-foreground">
-            (можно выбрать несколько)
+            {texts.common.selectMultiple}
           </div>
         </div>
         {hasAccommodationOptionsError() && (
@@ -139,7 +143,7 @@ export function StepAccommodation({
             {getErrorMessage(
               errors,
               "accommodation.options",
-              "Выберите хотя бы один тип размещения"
+              texts.errors.accommodationRequired
             )}
           </p>
         )}
@@ -153,7 +157,7 @@ export function StepAccommodation({
         {formData.accommodation.options.other && (
           <div className="space-y-2 mt-3">
             <Label htmlFor="accommodationOtherDescription">
-              Укажите предпочтения
+              {texts.accommodation.otherLabel}
             </Label>
             <Controller
               name="accommodation.options.otherDescription"
@@ -161,7 +165,7 @@ export function StepAccommodation({
               render={({ field }) => (
                 <Textarea
                   id="accommodationOtherDescription"
-                  placeholder="Опишите предпочитаемый тип размещения"
+                  placeholder={texts.accommodation.otherPlaceholder}
                   {...field}
                   value={field.value || ""}
                   onChange={(e) => {
@@ -179,7 +183,7 @@ export function StepAccommodation({
                 {getErrorMessage(
                   errors,
                   "accommodation.options.otherDescription",
-                  "Укажите описание для пункта 'Другое'"
+                  texts.errors.otherDescription
                 )}
               </p>
             )}
@@ -189,9 +193,9 @@ export function StepAccommodation({
 
       <div className="space-y-4">
         <div>
-          <h2 className="text-lg">Может быть есть дополнительные пожелания?</h2>
+          <h2 className="text-lg">{texts.accommodation.preferenceQuestion}</h2>
           <div className="text-xs text-muted-foreground">
-            (можно выбрать несколько)
+            {texts.common.selectMultiple}
           </div>
         </div>
         {/* Обновленный путь для CardSelector предпочтений */}
@@ -208,7 +212,7 @@ export function StepAccommodation({
             {getErrorMessage(
               errors,
               "accommodation.preferences",
-              "Выберите хотя бы одно предпочтение по размещению"
+              texts.errors.accommodationRequired
             )}
           </p>
         )}
@@ -216,7 +220,7 @@ export function StepAccommodation({
         {formData.accommodation.preferences.other && (
           <div className="space-y-2 mt-3">
             <Label htmlFor="preferencesOtherDescription">
-              Укажите ваши пожелания
+              {texts.accommodation.preferenceOtherLabel}
             </Label>
             <Controller
               name="accommodation.preferences.otherDescription"
@@ -224,7 +228,7 @@ export function StepAccommodation({
               render={({ field }) => (
                 <Textarea
                   id="preferencesOtherDescription"
-                  placeholder="Опишите ваши пожелания к размещению"
+                  placeholder={texts.accommodation.preferenceOtherPlaceholder}
                   {...field}
                   value={field.value || ""}
                   onChange={(e) => {
@@ -242,7 +246,7 @@ export function StepAccommodation({
                 {getErrorMessage(
                   errors,
                   "accommodation.preferences.otherDescription",
-                  "Укажите описание для пункта 'Другое'"
+                  texts.errors.otherDescription
                 )}
               </p>
             )}

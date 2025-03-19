@@ -5,7 +5,6 @@ import { Textarea } from "@/components/ui/textarea"
 import { Badge } from "@/components/ui/badge"
 import { DatePickerWithRange } from "../components/DatePickerWithRange"
 import { StepProps } from "../types"
-import { getDaysText } from "../utils"
 import { DateRange as RDPDateRange } from "react-day-picker"
 import {
   Briefcase,
@@ -17,6 +16,7 @@ import {
   UtensilsCrossed,
 } from "lucide-react"
 import { CardSelector, CardOption } from "../components/CardSelector"
+import texts, { getDaysText } from "../localization/ru"
 
 export function StepTripPurpose({
   control,
@@ -26,48 +26,50 @@ export function StepTripPurpose({
   handleOptionChange,
   handleTextChange,
 }: StepProps) {
-  // Определяем массив опций для целей поездки
+  const t = texts.tripPurpose // Получаем тексты для этого компонента
+
+  // Определяем массив опций для целей поездки на основе локализации
   const purposeOptions: CardOption[] = [
     {
       name: "excursion",
-      label: "История и культура",
-      description: "музеи, архитектура, знаковые места",
+      label: t.options.excursion.label,
+      description: t.options.excursion.description,
       icon: <Building2 className="h-6 w-6" />,
     },
     {
       name: "business",
-      label: "Деловая поездка",
-      description: "Конференции, встречи, работа ",
+      label: t.options.business.label,
+      description: t.options.business.description,
       icon: <Briefcase className="h-6 w-6" />,
     },
     {
       name: "shopping",
-      label: "Шоппинг и сувениры",
-      description: "Торговые центры, рынки, местные товары",
+      label: t.options.shopping.label,
+      description: t.options.shopping.description,
       icon: <ShoppingBag className="h-6 w-6" />,
     },
     {
       name: "food",
-      label: "Гастрономия",
-      description: "Местная кухня, рестораны, уличная еда, дегустации",
+      label: t.options.food.label,
+      description: t.options.food.description,
       icon: <UtensilsCrossed className="h-6 w-6" />,
     },
     {
       name: "fun",
-      label: "Развлечения и события",
-      description: "Парки, мероприятия, вечеринки",
+      label: t.options.fun.label,
+      description: t.options.fun.description,
       icon: <Sparkles className="h-6 w-6" />,
     },
     {
       name: "health",
-      label: "Оздоровление и релакс",
-      description: "Массажи, спа-центры, стоматология, косметология",
+      label: t.options.health.label,
+      description: t.options.health.description,
       icon: <ScanHeart className="h-6 w-6" />,
     },
     {
       name: "other",
-      label: "Другое",
-      description: "Что-то другое? Расскажи нам!",
+      label: t.options.other.label,
+      description: t.options.other.description,
       icon: <PlusCircle className="h-6 w-6" />,
     },
   ]
@@ -94,11 +96,11 @@ export function StepTripPurpose({
 
   return (
     <div className="space-y-8">
-      <h1 className="text-3xl font-bold">Когда и зачем?</h1>
+      <h1 className="text-3xl font-bold">{t.title}</h1>
       {/* Календарь */}
       <div className="space-y-4">
         <Label htmlFor="dateRange" className="text-lg">
-          Предполагаемые даты поездки *
+          {t.dateRangeLabel}
         </Label>
         <Controller
           name="trip.dateRange"
@@ -115,7 +117,7 @@ export function StepTripPurpose({
         {formData.trip.daysCount && (
           <div className="text-sm">
             <Badge variant="outline">
-              Продолжительность: {formData.trip.daysCount}{" "}
+              {t.duration}: {formData.trip.daysCount}{" "}
               {getDaysText(formData.trip.daysCount)}
             </Badge>
           </div>
@@ -131,7 +133,7 @@ export function StepTripPurpose({
                   ? errors.trip.dateRange.from.message
                   : errors.trip.dateRange.to
                     ? errors.trip.dateRange.to.message
-                    : "Пожалуйста, выберите даты поездки"}
+                    : texts.errors.dateRequired}
           </p>
         )}
       </div>
@@ -139,11 +141,9 @@ export function StepTripPurpose({
       {/* Цель поездки */}
       <div className="space-y-4">
         <div>
-          <h3 className="text-lg font-medium">
-            Что приносит вам удовольствие в путешествии?
-          </h3>
+          <h3 className="text-lg font-medium">{t.purposeQuestion}</h3>
           <div className="text-xs text-muted-foreground">
-            (можно выбрать несколько)
+            {texts.common.selectMultiple}
           </div>
         </div>
 
@@ -152,7 +152,7 @@ export function StepTripPurpose({
           <p className="text-sm font-medium text-destructive mt-2">
             {typeof errors.trip.purpose.options === "string"
               ? errors.trip.purpose.options
-              : "Выберите хотя бы одну цель поездки"}
+              : texts.errors.purposeRequired}
           </p>
         )}
 
@@ -169,14 +169,14 @@ export function StepTripPurpose({
         {/* Поле для ввода собственного варианта */}
         {formData.trip.purpose.options.other && (
           <div className="space-y-2 mt-4">
-            <Label htmlFor="otherDescription">Опишите вашу цель</Label>
+            <Label htmlFor="otherDescription">{t.otherPurposeLabel}</Label>
             <Controller
               name="trip.purpose.otherDescription"
               control={control}
               render={({ field }) => (
                 <Textarea
                   id="otherDescription"
-                  placeholder="Расскажите подробнее о вашей цели поездки"
+                  placeholder={t.otherPurposePlaceholder}
                   {...field}
                   className={
                     errors.trip?.purpose?.otherDescription
@@ -192,7 +192,8 @@ export function StepTripPurpose({
             />
             {errors.trip?.purpose?.otherDescription && (
               <p className="text-sm font-medium text-destructive">
-                {errors.trip.purpose.otherDescription.message as string}
+                {(errors.trip.purpose.otherDescription.message as string) ||
+                  texts.errors.otherDescription}
               </p>
             )}
           </div>

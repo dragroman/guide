@@ -5,23 +5,24 @@ import { StepProps } from "../types"
 import { FormField } from "../components/FormField"
 import { PhoneInput } from "../components/PhoneInput"
 import { getErrorMessage } from "../utils/errorHelpers"
+import texts from "../localization/ru"
 
 export function StepContactInfo({ control, errors }: StepProps) {
+  const t = texts.contact
+
   return (
     <div className="space-y-8">
-      <h2 className="text-3xl font-bold">Куда отправить предложение?</h2>
-      <p className="text-muted-foreground text-md">
-        Оставь телефон и почту, чтобы мы могли отправить предложение:
-      </p>
+      <h2 className="text-3xl font-bold">{t.title}</h2>
+      <p className="text-muted-foreground text-md">{t.description}</p>
 
       <div className="space-y-2">
         {/* Отображение общей ошибки */}
         {errors.contact && typeof errors.contact === "object" && (
           <p className="text-sm font-medium text-destructive mt-2">
-            {getErrorMessage(errors, "contact", "Введите хотя бы один контакт")}
+            {getErrorMessage(errors, "contact", texts.errors.contactRequired)}
           </p>
         )}
-        <Label htmlFor="phone">Телефон</Label>
+        <Label htmlFor="phone">{t.phoneLabel}</Label>
         <Controller
           name="contact.phone"
           control={control}
@@ -36,9 +37,7 @@ export function StepContactInfo({ control, errors }: StepProps) {
             />
           )}
         />
-        <p className="text-xs text-muted-foreground">
-          Введите номер телефона в международном формате
-        </p>
+        <p className="text-xs text-muted-foreground">{t.phoneDescription}</p>
         {errors.contact?.phone && (
           <p className="text-sm font-medium text-destructive">
             {errors.contact.phone.message}
@@ -50,14 +49,14 @@ export function StepContactInfo({ control, errors }: StepProps) {
         control={control}
         render={({ field }) => (
           <FormField
-            label="Электронная почта"
+            label={t.emailLabel}
             value={field.value ?? ""}
             type="email"
             autocomplete="email"
             name="email"
             onChange={field.onChange}
             onBlur={field.onBlur}
-            placeholder="Электронная почта"
+            placeholder={t.emailPlaceholder}
             error={errors.contact?.email?.message}
           />
         )}
@@ -67,11 +66,11 @@ export function StepContactInfo({ control, errors }: StepProps) {
         control={control}
         render={({ field }) => (
           <FormField
-            label="WeChat"
+            label={t.wechatLabel}
             name="wechat"
             onChange={field.onChange}
             value={field.value ?? ""}
-            placeholder="WeChat ID или номер телефона"
+            placeholder={t.wechatPlaceholder}
           />
         )}
       />
@@ -82,9 +81,9 @@ export function StepContactInfo({ control, errors }: StepProps) {
           <FormField
             onChange={field.onChange}
             value={field.value ?? ""}
-            label="Whatsapp"
+            label={t.whatsappLabel}
             name="Whatsapp"
-            placeholder="+7999999999"
+            placeholder={t.whatsappPlaceholder}
           />
         )}
       />
@@ -93,11 +92,11 @@ export function StepContactInfo({ control, errors }: StepProps) {
         control={control}
         render={({ field }) => (
           <FormField
-            label="Telegram"
+            label={t.telegramLabel}
             name="Telegram"
             onChange={field.onChange}
             value={field.value ?? ""}
-            placeholder="@haohub"
+            placeholder={t.telegramPlaceholder}
           />
         )}
       />

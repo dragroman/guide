@@ -1,5 +1,3 @@
-// components/application/steps/StepShopping.tsx
-
 import React from "react"
 import { Controller } from "react-hook-form"
 import { Label } from "@/components/ui/label"
@@ -10,8 +8,6 @@ import { Checkbox } from "@/components/ui/checkbox"
 import {
   ShoppingBag,
   ShoppingCart,
-  Store,
-  Building,
   PlusCircle,
   Clock,
   Clock1,
@@ -23,6 +19,7 @@ import {
   hasOtherDescriptionError,
   getErrorMessage,
 } from "../utils/errorHelpers"
+import texts from "../localization/ru"
 
 export function StepShopping({
   control,
@@ -31,6 +28,8 @@ export function StepShopping({
   handleOptionChange,
   handleTextChange,
 }: StepProps) {
+  const t = texts.shopping
+
   // Проверки наличия ошибок для конкретных полей
   const hasBudgetError = () => hasOptionsError(errors, "shopping.budget")
   const hasShoppingPlacesError = () =>
@@ -44,20 +43,20 @@ export function StepShopping({
   const budgetOptions: CardOption[] = [
     {
       name: "economy",
-      label: "Эконом",
-      description: "Ищу выгодные предложения",
+      label: t.budget.economy.label,
+      description: t.budget.economy.description,
       icon: <ShoppingCart className="h-5 w-5" />,
     },
     {
       name: "medium",
-      label: "Средний",
-      description: "Готов потратить, но в разумных пределах",
+      label: t.budget.medium.label,
+      description: t.budget.medium.description,
       icon: <ShoppingBag className="h-5 w-5" />,
     },
     {
       name: "luxury",
-      label: "Люкс",
-      description: "Хочу купить что-то особенное",
+      label: t.budget.luxury.label,
+      description: t.budget.luxury.description,
       icon: <ShoppingBag className="h-5 w-5" />,
     },
   ]
@@ -66,28 +65,28 @@ export function StepShopping({
   const shoppingPlacesOptions: CardOption[] = [
     {
       name: "malls",
-      label: "Торговые центры",
-      description: "Большие торговые центры с разнообразием магазинов",
+      label: t.places.malls.label,
+      description: t.places.malls.description,
     },
     {
       name: "boutiques",
-      label: "Брендовые бутики",
-      description: "Специализированные магазины с брендовыми товарами",
+      label: t.places.boutiques.label,
+      description: t.places.boutiques.description,
     },
     {
       name: "markets",
-      label: "Местные рынки и лавки",
-      description: "Традиционные рынки с аутентичными товарами",
+      label: t.places.markets.label,
+      description: t.places.markets.description,
     },
     {
       name: "outlets",
-      label: "Аутлеты",
-      description: "Магазины со скидками на известные бренды",
+      label: t.places.outlets.label,
+      description: t.places.outlets.description,
     },
     {
       name: "other",
-      label: "Другое",
-      description: "Укажите свой вариант",
+      label: t.places.other.label,
+      description: t.places.other.description,
     },
   ]
 
@@ -95,36 +94,33 @@ export function StepShopping({
   const shoppingTimeOptions: CardOption[] = [
     {
       name: "fewHours",
-      label: "Пару часов",
-      description: "Быстрый шоппинг",
+      label: t.time.fewHours.label,
+      description: t.time.fewHours.description,
       icon: <Clock className="h-5 w-5" />,
     },
     {
       name: "halfDay",
-      label: "Полдня",
-      description: "Хочу осмотреться и купить что-то интересное",
+      label: t.time.halfDay.label,
+      description: t.time.halfDay.description,
       icon: <Clock1 className="h-5 w-5" />,
     },
     {
       name: "fullDay",
-      label: "Целый день",
-      description: "Шоппинг — это важно!",
+      label: t.time.fullDay.label,
+      description: t.time.fullDay.description,
       icon: <Clock12 className="h-5 w-5" />,
     },
   ]
 
   // Обработчики для бюджета - выбор только одного варианта
   const handleBudgetChange = (name: string, checked: boolean) => {
-    // Если опция включена, выключаем все остальные опции
     if (checked) {
-      // Сначала выключаем все опции
       budgetOptions.forEach((option) => {
         if (option.name !== name) {
           handleOptionChange?.("shopping.budget", option.name, false)
         }
       })
     }
-    // Затем устанавливаем выбранную опцию
     handleOptionChange?.("shopping.budget", name, checked)
   }
 
@@ -139,41 +135,35 @@ export function StepShopping({
 
   // Обработчики для времени шоппинга - выбор только одного варианта
   const handleShoppingTimeChange = (name: string, checked: boolean) => {
-    // Если опция включена, выключаем все остальные опции
     if (checked) {
-      // Сначала выключаем все опции
       shoppingTimeOptions.forEach((option) => {
         if (option.name !== name) {
           handleOptionChange?.("shopping.shoppingTime", option.name, false)
         }
       })
     }
-    // Затем устанавливаем выбранную опцию
     handleOptionChange?.("shopping.shoppingTime", name, checked)
   }
 
   // Обработчик для доставки
   const handleDeliveryChange = (checked: boolean) => {
-    // Напрямую устанавливаем значение для нашего флага
     handleOptionChange?.("shopping.deliveryServices", "needed", checked)
   }
 
   return (
     <div className="space-y-8">
       <h1>
-        <span className="text-3xl font-bold">Покупки</span>
+        <span className="text-3xl font-bold">{t.title}</span>
         <span className="ml-2 text-sm text-muted-foreground">
-          (можно пропустить)
+          {t.optionalLabel}
         </span>
       </h1>
       {/* Бюджет */}
       <div className="space-y-4">
         <div>
-          <h2 className="text-lg">
-            Какой у тебя примерный бюджет на шоппинг?{" "}
-          </h2>
+          <h2 className="text-lg">{t.budgetQuestion}</h2>
           <div className="text-xs text-muted-foreground">
-            (выберите один вариант)
+            {texts.common.selectOne}
           </div>
         </div>
         <div>
@@ -184,13 +174,12 @@ export function StepShopping({
             onOptionChange={handleBudgetChange}
             className="grid grid-cols-3 md:grid-cols-3 gap-3"
           />
-          {/* Отображаем ошибку, если есть */}
           {hasBudgetError() && (
             <p className="text-sm font-medium text-destructive mt-2">
               {getErrorMessage(
                 errors,
                 "shopping.budget",
-                "Выберите один вариант бюджета"
+                texts.errors.shoppingTimeRequired
               )}
             </p>
           )}
@@ -200,9 +189,9 @@ export function StepShopping({
       {/* Места для шоппинга */}
       <div className="space-y-4">
         <div>
-          <h2 className="text-lg">Где тебе больше нравится делать покупки?</h2>
+          <h2 className="text-lg">{t.placesQuestion}</h2>
           <div className="text-xs text-muted-foreground">
-            (можно выбрать несколько)
+            {texts.common.selectMultiple}
           </div>
         </div>
         <div>
@@ -213,20 +202,19 @@ export function StepShopping({
             onOptionChange={handleShoppingPlacesChange}
             className="grid grid-cols-2 md:grid-cols-3 gap-3"
           />
-          {/* Отображаем ошибку, если есть */}
           {hasShoppingPlacesError() && (
             <p className="text-sm font-medium text-destructive mt-2">
               {getErrorMessage(
                 errors,
                 "shopping.shoppingPlaces",
-                "Выберите хотя бы одно место для шоппинга"
+                texts.errors.shoppingPlacesRequired
               )}
             </p>
           )}
           {formData.shopping?.shoppingPlaces?.other && (
             <div className="space-y-2 mt-3">
               <Label htmlFor="shoppingPlacesOtherDescription">
-                Укажите свой вариант
+                {t.otherPlacesLabel}
               </Label>
               <Controller
                 name="shopping.shoppingPlaces.otherDescription"
@@ -234,7 +222,7 @@ export function StepShopping({
                 render={({ field }) => (
                   <Textarea
                     id="shoppingPlacesOtherDescription"
-                    placeholder="Опишите где вам нравится делать покупки"
+                    placeholder={t.otherPlacesPlaceholder}
                     {...field}
                     value={field.value || ""}
                     onChange={(e) => {
@@ -252,7 +240,7 @@ export function StepShopping({
                   {getErrorMessage(
                     errors,
                     "shopping.shoppingPlaces.otherDescription",
-                    "Укажите описание для пункта 'Другое'"
+                    texts.errors.otherDescription
                   )}
                 </p>
               )}
@@ -264,11 +252,9 @@ export function StepShopping({
       {/* Время на шоппинг */}
       <div className="space-y-4">
         <div>
-          <h2 className="text-lg">
-            Сколько времени ты готов выделить на шоппинг?{" "}
-          </h2>
+          <h2 className="text-lg">{t.timeQuestion}</h2>
           <div className="text-xs text-muted-foreground">
-            (выберите один вариант)
+            {texts.common.selectOne}
           </div>
         </div>
         <div>
@@ -279,13 +265,12 @@ export function StepShopping({
             onOptionChange={handleShoppingTimeChange}
             className="grid grid-cols-3 md:grid-cols-3 gap-3"
           />
-          {/* Отображаем ошибку, если есть */}
           {hasShoppingTimeError() && (
             <p className="text-sm font-medium text-destructive mt-2">
               {getErrorMessage(
                 errors,
                 "shopping.shoppingTime",
-                "Выберите одну продолжительность шоппинга"
+                texts.errors.shoppingTimeRequired
               )}
             </p>
           )}
@@ -294,16 +279,14 @@ export function StepShopping({
 
       {/* Особые пожелания */}
       <div className="space-y-4">
-        <div className="text-lg">
-          Есть ли что-то, что ты точно хочешь купить в этой поездке?
-        </div>
+        <div className="text-lg">{t.wishesQuestion}</div>
         <Controller
           name="shopping.specialWishes"
           control={control}
           render={({ field }) => (
             <Textarea
               id="specialWishes"
-              placeholder="Например, местные продукты, украшения или что-то уникальное"
+              placeholder={t.wishesPlaceholder}
               {...field}
               value={field.value || ""}
             />
@@ -313,7 +296,7 @@ export function StepShopping({
 
       {/* Дополнительные услуги */}
       <div className="space-y-4">
-        <h2 className="text-lg">Дополнительные услуги</h2>
+        <h2 className="text-lg">{t.additionalServices}</h2>
 
         <div className="flex items-center space-x-2">
           <Controller
@@ -332,7 +315,7 @@ export function StepShopping({
           />
           <Label htmlFor="deliveryNeeded" className="flex items-center gap-2">
             <Package className="h-4 w-4" />
-            Нужна помощь с доставкой покупок из интернет магазинов
+            {t.deliveryService}
           </Label>
         </div>
       </div>
