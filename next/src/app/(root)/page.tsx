@@ -114,7 +114,9 @@ export default async function Home() {
                 Истории, советы и наблюдения из жизни в Китае
               </p>
             </div>
-            <div className="space-y-16">{/* <ArticleTeaserList /> */}</div>
+            <div className="space-y-16">
+              <ArticleTeaserList />
+            </div>
             <div className="mt-12 text-center">
               <Link href="/blog">
                 <Button

@@ -21,7 +21,9 @@ export default async function Blog() {
               Истории, советы и наблюдения из жизни в Китае
             </p>
           </div>
-          <div className="space-y-16"></div>
+          <div className="space-y-16">
+            <ArticleTeaserList />
+          </div>
         </div>
       </div>
     </div>

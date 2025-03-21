@@ -7,12 +7,12 @@ import { tr } from "date-fns/locale"
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json()
-    console.log(body)
+    console.log("Полученные данные API:", body)
 
     // Проверяем что получены все необходимые данные
     if (
       !body.name ||
-      !body.phone ||
+      !body.contact.phone ||
       !body.trip.dateRange.from ||
       !body.trip.dateRange.to
     ) {
@@ -106,7 +106,7 @@ export async function POST(request: NextRequest) {
         body: JSON.stringify({
           webform_id: "application",
           name: body.name,
-          phone: body.phone,
+          phone: body.contact.phone,
           email: body.contact.email,
           people_count: body.peopleCount,
           adults: body.ageGroups.adults,

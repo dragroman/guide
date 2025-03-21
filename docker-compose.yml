@@ -1,23 +1,6 @@
 version: "3.8"
 
 services:
-  nextjs:
-    build:
-      context: ./next
-      args:
-        - NEXT_PUBLIC_DRUPAL_BASE_URL=http://drupal
-        - DRUPAL_CLIENT_ID=${DRUPAL_CLIENT_ID}
-        - DRUPAL_CLIENT_SECRET=${DRUPAL_CLIENT_SECRET}
-    container_name: next
-    ports:
-      - "3000:3000"
-    environment:
-      - NEXT_PUBLIC_DRUPAL_BASE_URL=http://drupal
-      - DRUPAL_CLIENT_ID=${DRUPAL_CLIENT_ID}
-      - DRUPAL_CLIENT_SECRET=${DRUPAL_CLIENT_SECRET}
-    networks:
-      - app_network
-
   drupal:
     build: ./drupal
     container_name: drupal
@@ -33,7 +16,7 @@ services:
       - ./drupal/config:/var/www/html/drupal/config
       - ./config/drupal/settings.php:/var/www/html/drupal/web/sites/default/settings.php
     networks:
-      - app_network
+      - drupal_network
     depends_on:
       - mariadb
 
@@ -48,8 +31,9 @@ services:
     volumes:
       - ./db/guide.sql:/docker-entrypoint-initdb.d/guide.sql
     networks:
-      - app_network
+      - drupal_network
 
 networks:
-  app_network:
+  drupal_network:
+    name: drupal_network
     driver: bridge
