@@ -1,0 +1,55 @@
+version: "3.8"
+
+services:
+  nextjs:
+    build:
+      context: ./next
+      args:
+        - NEXT_PUBLIC_DRUPAL_BASE_URL=http://drupal
+        - DRUPAL_CLIENT_ID=${DRUPAL_CLIENT_ID}
+        - DRUPAL_CLIENT_SECRET=${DRUPAL_CLIENT_SECRET}
+    container_name: next
+    ports:
+      - "3000:3000"
+    environment:
+      - NEXT_PUBLIC_DRUPAL_BASE_URL=http://drupal
+      - DRUPAL_CLIENT_ID=${DRUPAL_CLIENT_ID}
+      - DRUPAL_CLIENT_SECRET=${DRUPAL_CLIENT_SECRET}
+    networks:
+      - app_network
+
+  drupal:
+    build: ./drupal
+    container_name: drupal
+    ports:
+      - "8080:80"
+    environment:
+      - DRUPAL_DATABASE_HOST=mariadb
+      - DRUPAL_DATABASE_PORT=3306
+      - DRUPAL_DATABASE_NAME=${DATABASE}
+      - DRUPAL_DATABASE_USERNAME=${DRUPAL_USERNAME}
+      - DRUPAL_DATABASE_PASSWORD=${DRUPAL_PASSWORD}
+    volumes:
+      - ./drupal/config:/var/www/html/drupal/config
+      - ./config/drupal/settings.php:/var/www/html/drupal/web/sites/default/settings.php
+    networks:
+      - app_network
+    depends_on:
+      - mariadb
+
+  mariadb:
+    image: mariadb:11.3
+    container_name: db
+    environment:
+      - MARIADB_ROOT_PASSWORD=${MARIADB_ROOT_PASSWORD}
+      - MARIADB_DATABASE=${DATABASE}
+      - MARIADB_USER=${DRUPAL_USERNAME}
+      - MARIADB_PASSWORD=${DRUPAL_PASSWORD}
+    volumes:
+      - ./db/guide.sql:/docker-entrypoint-initdb.d/guide.sql
+    networks:
+      - app_network
+
+networks:
+  app_network:
+    driver: bridge

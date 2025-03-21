@@ -1,6 +1,8 @@
 import type { Metadata } from "next"
+import type { DrupalNode } from "next-drupal"
 import { Button } from "@/components/ui/button"
 import Link from "next/link"
+import { Ghost, MapPin, Clock, Coffee } from "lucide-react"
 import ArticleTeaserList from "@/components/drupal/ArticleTeaserList"
 
 export const metadata: Metadata = {
@@ -112,9 +114,7 @@ export default async function Home() {
                 Истории, советы и наблюдения из жизни в Китае
               </p>
             </div>
-            <div className="space-y-16">
-              <ArticleTeaserList />
-            </div>
+            <div className="space-y-16">{/* <ArticleTeaserList /> */}</div>
             <div className="mt-12 text-center">
               <Link href="/blog">
                 <Button

@@ -58,35 +58,35 @@
         },
         "drupal-scaffold": {
             "locations": {
-                "web-root": "public_html/"
+                "web-root": "web/"
             }
         },
         "installer-paths": {
-            "public_html/core": [
+            "web/core": [
                 "type:drupal-core"
             ],
-            "public_html/libraries/{$name}": [
+            "web/libraries/{$name}": [
                 "type:drupal-library"
             ],
-            "public_html/modules/contrib/{$name}": [
+            "web/modules/contrib/{$name}": [
                 "type:drupal-module"
             ],
-            "public_html/profiles/contrib/{$name}": [
+            "web/profiles/contrib/{$name}": [
                 "type:drupal-profile"
             ],
-            "public_html/themes/contrib/{$name}": [
+            "web/themes/contrib/{$name}": [
                 "type:drupal-theme"
             ],
             "drush/Commands/contrib/{$name}": [
                 "type:drupal-drush"
             ],
-            "public_html/modules/custom/{$name}": [
+            "web/modules/custom/{$name}": [
                 "type:drupal-custom-module"
             ],
-            "public_html/profiles/custom/{$name}": [
+            "web/profiles/custom/{$name}": [
                 "type:drupal-custom-profile"
             ],
-            "public_html/themes/custom/{$name}": [
+            "web/themes/custom/{$name}": [
                 "type:drupal-custom-theme"
             ],
             "recipes/{$name}": [

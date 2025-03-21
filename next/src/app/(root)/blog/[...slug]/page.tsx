@@ -87,29 +87,37 @@ export async function generateMetadata(
 const RESOURCE_TYPES = ["node--page", "node--article"]
 
 export async function generateStaticParams(): Promise<NodePageParams[]> {
-  const resources = await drupal.getResourceCollectionPathSegments(
-    RESOURCE_TYPES,
-    {
-      // The pathPrefix will be removed from the returned path segments array.
-      // pathPrefix: "/blog",
-      // The list of locales to return.
-      // locales: ["en", "es"],
-      // The default locale.
-      // defaultLocale: "en",
-    }
-  )
+  try {
+    const resources = await drupal.getResourceCollectionPathSegments(
+      RESOURCE_TYPES,
+      {
+        // The pathPrefix will be removed from the returned path segments array.
+        // pathPrefix: "/blog",
+        // The list of locales to return.
+        // locales: ["en", "es"],
+        // The default locale.
+        // defaultLocale: "en",
+      }
+    )
 
-  return resources.map((resource) => {
-    // resources is an array containing objects like: {
-    //   path: "/blog/some-category/a-blog-post",
-    //   type: "node--article",
-    //   locale: "en", // or `undefined` if no `locales` requested.
-    //   segments: ["blog", "some-category", "a-blog-post"],
-    // }
-    return {
-      slug: resource.segments,
-    }
-  })
+    return resources.map((resource) => {
+      // resources is an array containing objects like: {
+      //   path: "/blog/some-category/a-blog-post",
+      //   type: "node--article",
+      //   locale: "en", // or `undefined` if no `locales` requested.
+      //   segments: ["blog", "some-category", "a-blog-post"],
+      // }
+      return {
+        slug: resource.segments,
+      }
+    })
+  } catch (error) {
+    console.warn(
+      "Unable to fetch blog paths during build time. Will use fallback.",
+      error
+    )
+    return [] // возвращаем пустой массив, если сервер Drupal недоступен
+  }
 }
 
 export default async function NodePage(props: NodePageProps) {
