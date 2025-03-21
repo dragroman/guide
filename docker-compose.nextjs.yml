@@ -1,23 +1,20 @@
-version: "3.8"
-
 services:
   nextjs:
     build:
       context: ./next
+      args:
+        - NEXT_PUBLIC_DRUPAL_BASE_URL=http://host.docker.internal:8080
     container_name: next
     ports:
       - "3000:3000"
     environment:
-      - NEXT_PUBLIC_DRUPAL_BASE_URL=http://drupal
+      - NEXT_PUBLIC_DRUPAL_BASE_URL=${DRUPAL_BASE_URL}
       - NEXT_IMAGE_DOMAIN=drupal
       - DRUPAL_CLIENT_ID=${DRUPAL_CLIENT_ID}
       - DRUPAL_CLIENT_SECRET=${DRUPAL_CLIENT_SECRET}
       - DRUPAL_REVALIDATE_SECRET=${DRUPAL_REVALIDATE_SECRET}
     networks:
       - drupal_network
-    dns:
-      - 8.8.8.8
-      - 1.1.1.1
 
 networks:
   drupal_network:
