@@ -18,7 +18,7 @@ export default async function Home() {
         <div className="absolute inset-0 opacity-20 bg-[url('/harbin-bg.jpg')] bg-cover bg-center"></div>
         <div className="container mx-auto px-4 z-10 text-center">
           <h1 className="text-5xl md:text-7xl font-black text-white mb-8 tracking-tight">
-            Китай<span className="text-pink-400">.</span>
+            Китай<span className="text-pink-400">. test</span>
           </h1>
           <p className="text-xl md:text-2xl text-white/80 max-w-2xl mx-auto mb-10 leading-relaxed font-light">
             Уникальный взгляд на город, где Восток встречается с Западом. Мой

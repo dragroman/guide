@@ -15,7 +15,7 @@ build:
     - docker push $CI_REGISTRY_IMAGE/nextjs:latest
 
     # При необходимости можно добавить сборку Drupal
-    - cd /var/www/haohub/drupal
+    - cd ../drupal
     - docker build -t $CI_REGISTRY_IMAGE/drupal:latest .
     - docker push $CI_REGISTRY_IMAGE/drupal:latest
   only:
@@ -23,7 +23,7 @@ build:
 deploy:
   stage: deploy
   script:
-    - cd ../drupal
+    - cd /var/www/haohub
     - docker-compose pull
     - docker-compose up -d
   only:
