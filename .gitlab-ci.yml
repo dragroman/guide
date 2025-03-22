@@ -9,7 +9,7 @@ build:
   before_script:
     - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
   script:
-    - cd /var/www/haohub/next
+    - cd next
     - docker build
       -t $CI_REGISTRY_IMAGE/nextjs:latest .
     - docker push $CI_REGISTRY_IMAGE/nextjs:latest
@@ -23,7 +23,7 @@ build:
 deploy:
   stage: deploy
   script:
-    - cd //var/www/haohub
+    - cd ../drupal
     - docker-compose pull
     - docker-compose up -d
   only:
