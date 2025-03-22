@@ -1,6 +1,9 @@
 import { NextDrupal } from "next-drupal"
 
-const baseUrl = process.env.NEXT_PUBLIC_DRUPAL_BASE_URL || "http://drupal"
+const baseUrl =
+  process.env.NEXT_PUBLIC_BUILD_DRUPAL_BASE_URL ||
+  process.env.NEXT_PUBLIC_DRUPAL_BASE_URL ||
+  "http://drupal"
 const clientId = process.env.DRUPAL_CLIENT_ID || "dummy_id"
 const clientSecret = process.env.DRUPAL_CLIENT_SECRET || "dummy_secret"
 

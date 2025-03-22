@@ -1,7 +1,32 @@
 stages:
   - build
   - deploy
-build:
+build-drupal:
+  stage: build
+  image: docker:latest
+  services:
+    - docker:dind
+  before_script:
+    - |
+      if [ -z "$CI_REGISTRY" ] || [ -z "$CI_REGISTRY_USER" ] || [ -z "$CI_REGISTRY_PASSWORD" ]; then
+        echo "ERROR: Missing registry credentials variables"
+        exit 1
+      fi
+    - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
+  script:
+    - echo "Building Drupal image..."
+    - |
+      if git diff origin/main HEAD~1 HEAD -- drupal/; then
+        echo "Drupal не изменился, пропускаем сборку"
+      else
+        composer install
+        docker compose build drupal
+      fi
+  after_script:
+    - echo "DONE DRUPAL"
+  tags:
+    - production
+build-next:
   stage: build
   image: docker:latest
   services:
@@ -9,23 +34,37 @@ build:
   before_script:
     - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
   script:
-    - cd next
-    - docker build
-      -t $CI_REGISTRY_IMAGE/nextjs:latest .
-    - docker push $CI_REGISTRY_IMAGE/nextjs:latest
-
-    # При необходимости можно добавить сборку Drupal
-    - cd ../drupal
-    - docker build -t $CI_REGISTRY_IMAGE/drupal:latest .
-    - docker push $CI_REGISTRY_IMAGE/drupal:latest
+    - echo "Building Next.js"
+    - |
+      if git diff origin/main HEAD~1 HEAD -- next/; then
+        echo "Nextjs не изменился, пропускаем сборку"
+      else
+        docker compose build next
+      fi
+    - docker compose logs | tee -a docker-compose.log
+    - docker compose push drupal next
+  artifacts:
+    when: always
+    paths:
+      - docker-compose.log
+    expire_in: 1 week
+  after_script:
+    # Очистка системы Docker после завершения (успешного или нет)
+    - echo "Cleaning up Docker resources..."
+    - docker system prune -af --volumes || true
+  tags:
+    - production
   only:
     - main
 deploy:
   stage: deploy
+  before_script:
+    - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
   script:
     - cd /var/www/haohub
-    - docker-compose pull
-    - docker-compose up -d
+    - echo "Pulling images..."
+    - docker compose pull next drupal
+    - docker compose up -d
   only:
     - main
   environment:

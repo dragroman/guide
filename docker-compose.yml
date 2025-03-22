@@ -1,9 +1,15 @@
-version: "3.8"
-
 services:
   drupal:
+    build:
+      context: ./drupal
+      dockerfile: Dockerfile
+      args:
+        - DATABASE=${DATABASE}
+        - DRUPAL_USERNAME=${DRUPAL_USERNAME}
+        - DRUPAL_PASSWORD=${DRUPAL_PASSWORD}
     image: registry.gitlab.com/dragroman/guide/drupal:latest
     container_name: drupal
+    platform: linux/amd64
     ports:
       - "8080:80"
     environment:
@@ -16,13 +22,14 @@ services:
       - ./drupal/config:/var/www/html/drupal/config
       - ./config/drupal/settings.php:/var/www/html/drupal/web/sites/default/settings.php
     networks:
-      - drupal_network
+      drupal_network:
+        ipv4_address: 172.20.0.2
     depends_on:
       - mariadb
 
   mariadb:
     image: mariadb:11.3
-    container_name: db
+    container_name: mariadb
     environment:
       - MARIADB_ROOT_PASSWORD=${MARIADB_ROOT_PASSWORD}
       - MARIADB_DATABASE=${DATABASE}
@@ -31,23 +38,32 @@ services:
     volumes:
       - ./db/guide.sql:/docker-entrypoint-initdb.d/guide.sql
     networks:
-      - drupal_network
+      drupal_network:
+        ipv4_address: 172.20.0.3
 
-  nextjs:
+  next:
+    build:
+      context: ./next
+      dockerfile: Dockerfile
+      network: host
+      args:
+        - DRUPAL_URL=${NEXT_PUBLIC_DRUPAL_BASE_URL:-http://172.20.0.2}
     image: registry.gitlab.com/dragroman/guide/next:latest
+    environment:
+      - NEXT_PUBLIC_DRUPAL_BASE_URL=${NEXT_PUBLIC_DRUPAL_BASE_URL}
     container_name: next
+    platform: linux/amd64
     ports:
       - "3000:3000"
-    environment:
-      - NEXT_PUBLIC_DRUPAL_BASE_URL=${DRUPAL_BASE_URL}
-      - NEXT_IMAGE_DOMAIN=${NEXT_IMAGE_DOMAIN:-drupal}
-      - DRUPAL_CLIENT_ID=${DRUPAL_CLIENT_ID}
-      - DRUPAL_CLIENT_SECRET=${DRUPAL_CLIENT_SECRET}
-      - DRUPAL_REVALIDATE_SECRET=${DRUPAL_REVALIDATE_SECRET}
     networks:
-      - drupal_network
+      drupal_network:
+        ipv4_address: 172.20.0.4
 
 networks:
   drupal_network:
     name: drupal_network
     driver: bridge
+    ipam:
+      config:
+        - subnet: 172.20.0.0/16
+          gateway: 172.20.0.1
