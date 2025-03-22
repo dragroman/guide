@@ -2,7 +2,7 @@ version: "3.8"
 
 services:
   drupal:
-    build: ./drupal
+    image: registry.gitlab.com/dragroman/guide/drupal:latest
     container_name: drupal
     ports:
       - "8080:80"
@@ -30,6 +30,20 @@ services:
       - MARIADB_PASSWORD=${DRUPAL_PASSWORD}
     volumes:
       - ./db/guide.sql:/docker-entrypoint-initdb.d/guide.sql
+    networks:
+      - drupal_network
+
+  nextjs:
+    image: registry.gitlab.com/dragroman/guide/next:latest
+    container_name: next
+    ports:
+      - "3000:3000"
+    environment:
+      - NEXT_PUBLIC_DRUPAL_BASE_URL=${DRUPAL_BASE_URL}
+      - NEXT_IMAGE_DOMAIN=${NEXT_IMAGE_DOMAIN:-drupal}
+      - DRUPAL_CLIENT_ID=${DRUPAL_CLIENT_ID}
+      - DRUPAL_CLIENT_SECRET=${DRUPAL_CLIENT_SECRET}
+      - DRUPAL_REVALIDATE_SECRET=${DRUPAL_REVALIDATE_SECRET}
     networks:
       - drupal_network
 

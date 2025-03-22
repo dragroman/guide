@@ -1,5 +1,5 @@
 Dockerfile
 .dockerignore
-vendor
-tmp
-private
+/vendor
+/tmp
+/private

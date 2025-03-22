@@ -1,8 +1,8 @@
 import { NextDrupal } from "next-drupal"
 
-const baseUrl = process.env.NEXT_PUBLIC_DRUPAL_BASE_URL as string
-const clientId = process.env.DRUPAL_CLIENT_ID as string
-const clientSecret = process.env.DRUPAL_CLIENT_SECRET as string
+const baseUrl = process.env.NEXT_PUBLIC_DRUPAL_BASE_URL || "http://drupal"
+const clientId = process.env.DRUPAL_CLIENT_ID || "dummy_id"
+const clientSecret = process.env.DRUPAL_CLIENT_SECRET || "dummy_secret"
 
 export const drupal = new NextDrupal(baseUrl, {
   // Enable to use authentication

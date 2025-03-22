@@ -1,7 +1,5 @@
 FROM node:18-alpine AS base
 
-ARG NEXT_PUBLIC_DRUPAL_BASE_URL
-ENV NEXT_PUBLIC_DRUPAL_BASE_URL=$NEXT_PUBLIC_DRUPAL_BASE_URL
 
 # Install dependencies only when needed
 FROM base AS deps
@@ -25,11 +23,6 @@ WORKDIR /app
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
 
-# Next.js collects completely anonymous telemetry data about general usage.
-# Learn more here: https://nextjs.org/telemetry
-# Uncomment the following line in case you want to disable telemetry during the build.
-ENV NEXT_TELEMETRY_DISABLED=1
-
 RUN \
   if [ -f yarn.lock ]; then yarn run build; \
   elif [ -f package-lock.json ]; then npm run build; \
@@ -43,12 +36,11 @@ WORKDIR /app
 
 ENV NODE_ENV=production
 # Uncomment the following line in case you want to disable telemetry during runtime.
-ENV NEXT_TELEMETRY_DISABLED=1
-
-
-ENV NEXT_PUBLIC_DRUPAL_BASE_URL=$NEXT_PUBLIC_DRUPAL_BASE_URL
-ENV NEXT_IMAGE_DOMAIN=$NEXT_IMAGE_DOMAIN
-
+ENV NEXT_PUBLIC_DRUPAL_BASE_URL=${NEXT_PUBLIC_DRUPAL_BASE_URL}
+ENV NEXT_IMAGE_DOMAIN=${NEXT_IMAGE_DOMAIN}
+ENV DRUPAL_CLIENT_ID=${DRUPAL_CLIENT_ID}
+ENV DRUPAL_CLIENT_SECRET=${DRUPAL_CLIENT_SECRET}
+ENV DRUPAL_REVALIDATE_SECRET=${DRUPAL_REVALIDATE_SECRET}
 
 RUN addgroup --system --gid 1001 nodejs
 RUN adduser --system --uid 1001 nextjs
