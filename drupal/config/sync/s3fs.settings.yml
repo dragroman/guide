@@ -1,13 +1,13 @@
 _core:
   default_config_hash: VV0HFGFvi0Pou7lakptNvL-oNLy6iIUp5m6b6gf4xos
 credentials_file: ''
-bucket: ''
+bucket: 860e11001337-fawning-izo
 region: us-east-1
-use_cname: false
+use_cname: true
 domain_root: none
-use_customhost: false
-hostname: ''
-domain: ''
+use_customhost: true
+hostname: 'https://s3.ru1.storage.beget.cloud'
+domain: img.chinq.ru
 use_path_style_endpoint: false
 disable_version_sync: false
 cache_control_header: ''
@@ -17,9 +17,9 @@ ignore_cache: false
 read_only: false
 disable_cert_verify: false
 redirect_styles_ttl: 0
-root_folder: ''
-public_folder: ''
-private_folder: ''
+root_folder: guide
+public_folder: public
+private_folder: private
 presigned_urls: ''
 saveas: ''
 torrents: ''
@@ -28,6 +28,6 @@ cssjs_host: ''
 use_credentials_cache: false
 credentials_cache_dir: ''
 keymodule:
-  access_key_name: ''
   secret_key_name: ''
+  access_key_name: ''
 disable_shared_config_files: false

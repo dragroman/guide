@@ -19,7 +19,6 @@ services:
       - DRUPAL_DATABASE_USERNAME=${DRUPAL_USERNAME}
       - DRUPAL_DATABASE_PASSWORD=${DRUPAL_PASSWORD}
     volumes:
-      - ./drupal/config:/var/www/html/drupal/config
       - ./config/drupal/settings.php:/var/www/html/drupal/web/sites/default/settings.php
     networks:
       drupal_network:
@@ -35,8 +34,6 @@ services:
       - MARIADB_DATABASE=${DATABASE}
       - MARIADB_USER=${DRUPAL_USERNAME}
       - MARIADB_PASSWORD=${DRUPAL_PASSWORD}
-    volumes:
-      - ./db/guide.sql:/docker-entrypoint-initdb.d/guide.sql
     networks:
       drupal_network:
         ipv4_address: 172.20.0.3
@@ -51,6 +48,7 @@ services:
     image: registry.gitlab.com/dragroman/guide/next:latest
     environment:
       - NEXT_PUBLIC_DRUPAL_BASE_URL=${NEXT_PUBLIC_DRUPAL_BASE_URL}
+      - NEXT_IMAGE_DOMAIN=${IMAGE_DOMAIN}
     container_name: next
     platform: linux/amd64
     ports:

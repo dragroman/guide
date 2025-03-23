@@ -15,5 +15,9 @@ export function formatDate(input: string): string {
 }
 
 export function absoluteUrl(input: string) {
+  if (input.startsWith("http://") || input.startsWith("https://")) {
+    return input
+  }
+
   return `${process.env.NEXT_PUBLIC_DRUPAL_BASE_URL}${input}`
 }

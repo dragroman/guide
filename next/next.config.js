@@ -6,7 +6,7 @@ const nextConfig = {
     remotePatterns: [
       {
         // protocol: 'https',
-        hostname: process.env.NEXT_IMAGE_DOMAIN || "drupal",
+        hostname: process.env.NEXT_IMAGE_DOMAIN,
         // port: '',
         // pathname: '/sites/default/files/**',
       },

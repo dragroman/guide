@@ -174,6 +174,16 @@ elements: |-
   shopping_special_wishes:
     '#type': textarea
     '#title': shopping_special_wishes
+  budget:
+    '#type': number
+    '#title': budget
+    '#min': 1000
+  need_visa:
+    '#type': checkbox
+    '#title': need_visa
+  need_insurance:
+    '#type': checkbox
+    '#title': need_insurance
 css: ''
 javascript: ''
 settings:

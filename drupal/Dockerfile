@@ -41,7 +41,7 @@ RUN sed -i 's|/var/www/html|/var/www/html/|g' /etc/apache2/apache2.conf
 RUN a2enmod rewrite && service apache2 restart
 
 WORKDIR /var/www/html/drupal
-RUN composer install
+RUN composer install --no-dev --optimize-autoloader    
 
 # Установка прав на директории
 RUN chown -R www-data:www-data /var/www/

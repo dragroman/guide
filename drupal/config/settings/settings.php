@@ -888,3 +888,10 @@ $databases['default']['default'] = array (
 $settings['config_sync_directory'] = '../config/sync';
 $settings['file_private_path'] = '/var/www/html/drupal/private';
 $settings['file_temp_path'] = '/var/www/html/drupal/tmp';
+
+// S3
+$settings['s3fs.access_key'] = getenv('S3_ACCESS_KEY');
+$settings['s3fs.secret_key'] = getenv('S3_SECRET_KEY');
+$settings['php_storage']['twig']['directory'] = '../storage/php';
+$settings['s3fs.use_s3_for_public'] = TRUE;
+$settings['s3fs.use_s3_for_private'] = TRUE;

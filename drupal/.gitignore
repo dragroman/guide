@@ -54,3 +54,4 @@ error_log
 
 Ignore files
 /web/files
+/storage

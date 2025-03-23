@@ -15,13 +15,7 @@ build-drupal:
     - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
   script:
     - echo "Building Drupal image..."
-    - |
-      if git diff origin/main HEAD~1 HEAD -- drupal/; then
-        echo "Drupal не изменился, пропускаем сборку"
-      else
-        composer install
-        docker compose build drupal
-      fi
+    - docker compose build drupal
   after_script:
     - echo "DONE DRUPAL"
   tags:
@@ -64,7 +58,11 @@ deploy:
     - cd /var/www/haohub
     - echo "Pulling images..."
     - docker compose pull next drupal
-    - docker compose up -d
+    - docker compose up -d drupal mariadb
+    - docker exec drupal vendor/bin/drush cim -y
+    - docker exec drupal vendor/bin/drush updb -y
+    - docker exec drupal vendor/bin/drush cr
+    - docker compose up -d next
   only:
     - main
   environment:
