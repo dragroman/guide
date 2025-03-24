@@ -1,6 +1,8 @@
 FROM node:18-alpine AS base
 
 ARG DRUPAL_URL
+ARG NEXT_IMAGE_DOMAIN
+ARG NEXT_PUBLIC_GTM_ID
 
 # Install dependencies only when needed
 FROM base AS deps
@@ -24,8 +26,9 @@ WORKDIR /app
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
 
-ARG DRUPAL_URL
+ENV NEXT_PUBLIC_GTM_ID=$NEXT_PUBLIC_GTM_ID
 ENV NEXT_PUBLIC_DRUPAL_BASE_URL=$DRUPAL_URL
+ENV NEXT_IMAGE_DOMAIN=$NEXT_IMAGE_DOMAIN
 
 RUN \
   if [ -f yarn.lock ]; then yarn run build; \

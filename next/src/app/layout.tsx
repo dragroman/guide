@@ -3,7 +3,7 @@ import type { Viewport } from "next"
 import type { Metadata } from "next"
 import type { ReactNode } from "react"
 import localFont from "next/font/local"
-
+import { GoogleTagManager } from "@next/third-parties/google"
 import "@/styles/globals.css"
 
 const merriweather = localFont({
@@ -44,12 +44,15 @@ export const viewport: Viewport = {
   userScalable: false,
 }
 
+const gtmId = process.env.NEXT_PUBLIC_GTM_ID
+
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (
     <html
       lang="ru"
       className={`${merriweather.className} antialiased scroll-smooth`}
     >
+      {gtmId && <GoogleTagManager gtmId={gtmId} />}
       <body>{children}</body>
     </html>
   )

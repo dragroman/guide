@@ -46,10 +46,12 @@ services:
       args:
         - DRUPAL_URL=${NEXT_PUBLIC_DRUPAL_BASE_URL:-http://172.20.0.2}
         - NEXT_IMAGE_DOMAIN=${IMAGE_DOMAIN}
+        - NEXT_PUBLIC_GTM_ID=${NEXT_PUBLIC_GTM_ID}
     image: registry.gitlab.com/dragroman/guide/next:latest
     environment:
       - NEXT_PUBLIC_DRUPAL_BASE_URL=${NEXT_PUBLIC_DRUPAL_BASE_URL}
       - NEXT_IMAGE_DOMAIN=${IMAGE_DOMAIN}
+      - NEXT_PUBLIC_GTM_ID=${NEXT_PUBLIC_GTM_ID}
     container_name: next
     platform: linux/amd64
     ports:
