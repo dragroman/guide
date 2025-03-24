@@ -1,16 +1,15 @@
+import { Loader2 } from "lucide-react"
+
 export function LoadingScreen() {
   return (
-    <div className="fixed inset-0 flex items-center justify-center bg-gray-50">
-      <div className="text-center">
-        <div className="relative inline-block">
-          <div className="w-24 h-24 border-4 border-gray-200 rounded-full"></div>
-          <div className="absolute inset-0 border-4 border-t-4 border-pink-500 rounded-full animate-spin"></div>
+    <div className="fixed inset-0 flex items-center justify-center bg-background/95 backdrop-blur-sm z-50">
+      <div className="text-center max-w-md px-4">
+        <div className="relative inline-block mb-6">
+          <Loader2 className="h-16 w-16 text-primary animate-spin" />
         </div>
-        <div className="mt-6 space-y-2">
-          <h2 className="text-3xl font-bold text-gray-800 animate-pulse">
-            Собираем маршрут
-          </h2>
-          <p className="text-gray-500 animate-pulse delay-150">
+        <div className="space-y-3">
+          <h2 className="text-3xl font-bold animate-pulse">Собираем маршрут</h2>
+          <p className="text-muted-foreground animate-pulse delay-150">
             Подбираем лучшие впечатления для вашего путешествия
           </p>
         </div>

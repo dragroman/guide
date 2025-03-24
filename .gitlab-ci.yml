@@ -29,12 +29,7 @@ build-next:
     - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
   script:
     - echo "Building Next.js"
-    - |
-      if git diff origin/main HEAD~1 HEAD -- next/; then
-        echo "Nextjs не изменился, пропускаем сборку"
-      else
-        docker compose build next
-      fi
+    - docker compose build next
     - docker compose logs | tee -a docker-compose.log
     - docker compose push drupal next
   artifacts:
@@ -42,14 +37,21 @@ build-next:
     paths:
       - docker-compose.log
     expire_in: 1 week
-  after_script:
-    # Очистка системы Docker после завершения (успешного или нет)
-    - echo "Cleaning up Docker resources..."
-    - docker system prune -af --volumes || true
   tags:
     - production
   only:
     - main
+clean:
+  stage: build
+  before_script:
+    - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
+  script:
+    - echo "Cleaning up Docker resources..."
+    - docker system prune -af --volumes || true
+  only:
+    - main
+  tags:
+    - production
 deploy:
   stage: deploy
   before_script:

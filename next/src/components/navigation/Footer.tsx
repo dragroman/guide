@@ -4,7 +4,7 @@ export function Footer() {
       <div className="container mx-auto px-4">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
           <div>
-            <h3 className="text-xl font-bold mb-4 font-mono">Haohub Guide</h3>
+            <h3 className="text-xl font-bold mb-4">Haohub Guide</h3>
             <p className="text-gray-400 mb-4">
               Наши эксперты помогут вам подобрать индивидуальный тур по Китаю
               мечты
@@ -62,7 +62,7 @@ export function Footer() {
           </div>
 
           {/* <div>
-            <h3 className="text-lg font-semibold mb-4 font-mono">Навигация</h3>
+            <h3 className="text-lg font-semibold mb-4">Навигация</h3>
             <ul className="space-y-2">
               <li>
                 <a
@@ -100,7 +100,7 @@ export function Footer() {
           </div>
 
           <div>
-            <h3 className="text-lg font-semibold mb-4 font-mono">Категории</h3>
+            <h3 className="text-lg font-semibold mb-4">Категории</h3>
             <ul className="space-y-2">
               <li>
                 <a
@@ -138,7 +138,7 @@ export function Footer() {
           </div> */}
 
           <div>
-            <h3 className="text-lg font-semibold mb-4 font-mono">Контакты</h3>
+            <h3 className="text-lg font-semibold mb-4">Контакты</h3>
             <ul className="space-y-2 text-gray-400">
               <li className="flex items-start">
                 <svg

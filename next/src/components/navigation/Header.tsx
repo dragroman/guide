@@ -18,7 +18,7 @@ import { Menu, X, Home, BookOpen, Phone, MapPin } from "lucide-react"
 import { cn } from "@/lib/utils"
 
 // Список путей, где хедер должен быть прозрачным
-const TRANSPARENT_PATHS = [""]
+const TRANSPARENT_PATHS = ["/", "/application"]
 
 // Структура данных для пунктов навигации
 const navigationItems = [
@@ -74,7 +74,7 @@ export function Header({ className }: { className?: string }) {
 
   const getLogoStyle = () => {
     return cn(
-      "text-2xl font-bold font-mono no-underline",
+      "text-2xl font-bold no-underline",
       isScrolled || !shouldBeTransparent ? "text-foreground" : "text-white"
     )
   }

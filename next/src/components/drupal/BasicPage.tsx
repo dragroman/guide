@@ -11,7 +11,7 @@ export function BasicPage({ node, ...props }: BasicPageProps) {
       {node.body?.processed && (
         <div
           dangerouslySetInnerHTML={{ __html: node.body?.processed }}
-          className="mt-6 font-serif text-xl leading-loose prose"
+          className="mt-6 text-xl leading-loose prose"
         />
       )}
     </article>

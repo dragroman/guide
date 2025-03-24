@@ -45,6 +45,7 @@ services:
       network: host
       args:
         - DRUPAL_URL=${NEXT_PUBLIC_DRUPAL_BASE_URL:-http://172.20.0.2}
+        - NEXT_IMAGE_DOMAIN=${IMAGE_DOMAIN}
     image: registry.gitlab.com/dragroman/guide/next:latest
     environment:
       - NEXT_PUBLIC_DRUPAL_BASE_URL=${NEXT_PUBLIC_DRUPAL_BASE_URL}

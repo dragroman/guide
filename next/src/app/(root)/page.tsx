@@ -22,6 +22,7 @@ import {
   Archive,
 } from "lucide-react"
 import ArticleTeaserList from "@/components/drupal/ArticleTeaserList"
+import Image from "next/image"
 
 export const metadata: Metadata = {
   title: "Путеводитель по Китаю",
@@ -32,19 +33,36 @@ export default async function Home() {
   return (
     <>
       {/* Hero секция */}
-      <section className="relative h-[80vh]">
-        <div className="absolute inset-0 bg-[url('/harbin-bg.jpg')] bg-cover bg-center opacity-20"></div>
-        <div className="absolute inset-0 bg-gradient-to-r from-background to-background/60"></div>
+      <section className="relative h-[100vh] sm:h-[50vh] overflow-hidden">
+        {/* Оптимизированное изображение с next/image */}
+        <div className="absolute inset-0 z-0">
+          <Image
+            src="/hero.jpg"
+            alt="Панорама Харбина"
+            fill
+            priority
+            quality={85}
+            sizes="100vw"
+            style={{
+              objectFit: "cover",
+              objectPosition: "center",
+              opacity: 1,
+            }}
+          />
+          <div className="absolute inset-0 bg-black opacity-50"></div>
+        </div>
+
+        {/* Контент */}
         <div className="container relative h-full flex flex-col justify-center items-start max-w-5xl mx-auto px-4 z-10">
-          <Badge className="mb-4" variant="outline">
+          <Badge className="mb-4 text-white" variant="outline">
             Ваш гид по Китаю
           </Badge>
-          <h1 className="text-5xl md:text-7xl font-bold mb-6 tracking-tight">
+          <h1 className="text-5xl md:text-7xl font-bold mb-6 tracking-tight text-white">
             Откройте для себя
             <br />
             настоящий <span className="text-primary">Китай</span>
           </h1>
-          <p className="text-xl text-muted-foreground max-w-xl mb-8">
+          <p className="text-xl text-white max-w-xl mb-8">
             Уникальный взгляд на город, где Восток встречается с Западом. Мой
             второй дом последние 10 лет.
           </p>
@@ -187,9 +205,14 @@ export default async function Home() {
               </div>
             </div>
 
-            <div className="rounded-2xl overflow-hidden aspect-[4/5] bg-muted">
-              {/* Здесь будет главное изображение */}
-              <div className="w-full h-full bg-[url('/harbin-tour.jpg')] bg-cover bg-center"></div>
+            <div className="rounded-2xl overflow-hidden aspect-[4/5] relative">
+              <Image
+                src="/day-city-view.jpg"
+                alt="Туристический опыт в Харбине"
+                fill
+                sizes="(max-width: 768px) 100vw, 50vw"
+                style={{ objectFit: "cover", objectPosition: "center" }}
+              />
             </div>
           </div>
         </div>
