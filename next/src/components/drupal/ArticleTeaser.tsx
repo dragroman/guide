@@ -41,7 +41,7 @@ export function ArticleTeaser({
         >
           <Link href={node.path.alias} className="block h-full">
             <div className="relative h-full w-full">
-              <Image
+              {/* <Image
                 src={absoluteUrl(node.field_image.uri.url)}
                 fill
                 sizes={
@@ -52,7 +52,7 @@ export function ArticleTeaser({
                 style={{ objectFit: "cover" }}
                 alt={node.field_image.resourceIdObjMeta.alt || node.title}
                 className="transition-all duration-300 hover:scale-105"
-              />
+              /> */}
             </div>
           </Link>
         </div>
