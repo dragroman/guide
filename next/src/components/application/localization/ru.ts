@@ -40,7 +40,7 @@ export const texts = {
   },
 
   // Шаг: Личная информация
-  personalInfo: {
+  baseInfo: {
     title: "Начнем!",
     nameLabel: "Давайте знакомится",
     namePlaceholder: "Ваше имя",
@@ -48,6 +48,8 @@ export const texts = {
     ageGroups: "Возрастные группы",
     ageGroupsDescription:
       "Укажите сколько людей и какого возраста поедут в тур",
+    city: "Город",
+    cityPlaceholder: "Выберите город",
   },
 
   // Шаг: Информация о поездке

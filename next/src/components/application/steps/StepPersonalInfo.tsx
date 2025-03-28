@@ -11,7 +11,7 @@ export function StepPersonalInfo({
   setValue,
   formData,
 }: StepProps) {
-  const t = texts.personalInfo
+  const t = texts.baseInfo
 
   return (
     <div className="space-y-8">
@@ -32,30 +32,46 @@ export function StepPersonalInfo({
       />
 
       {/* Компонент с возрастными группами */}
-      <div className="space-y-8">
-        <div className="space-y-2">
-          <label className="text-sm font-medium">{t.travelers}</label>
-          <Controller
-            name="ageGroups"
-            control={control}
-            render={({ field }) => (
-              <AgeGroupDrawer
-                label={t.ageGroups}
-                description={t.ageGroupsDescription}
-                value={field.value}
-                onChange={(groups) => {
-                  field.onChange(groups)
-                  // Также можно обновить peopleCount для совместимости
-                  const totalPeople = Object.values(groups).reduce(
-                    (sum, count) => sum + count,
-                    0
-                  )
-                  setValue("peopleCount", totalPeople)
-                }}
-              />
-            )}
-          />
-        </div>
+
+      <div className="space-y-2">
+        <label className="text-sm font-medium">{t.travelers}</label>
+        <Controller
+          name="ageGroups"
+          control={control}
+          render={({ field }) => (
+            <AgeGroupDrawer
+              label={t.ageGroups}
+              description={t.ageGroupsDescription}
+              value={field.value}
+              onChange={(groups) => {
+                field.onChange(groups)
+                // Также можно обновить peopleCount для совместимости
+                const totalPeople = Object.values(groups).reduce(
+                  (sum, count) => sum + count,
+                  0
+                )
+                setValue("peopleCount", totalPeople)
+              }}
+            />
+          )}
+        />
+      </div>
+      {/* Выбор города */}
+      <div className="space-y-2">
+        <Controller
+          name="city"
+          control={control}
+          render={({ field }) => (
+            <FormField
+              label={t.city}
+              name="city"
+              value={field.value}
+              placeholder={t.cityPlaceholder}
+              onChange={field.onChange}
+              error={errors.city?.message as string}
+            />
+          )}
+        />
       </div>
     </div>
   )
