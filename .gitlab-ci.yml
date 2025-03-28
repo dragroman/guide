@@ -1,8 +1,10 @@
 stages:
-  - build
-  - deploy
+  - build_drupal
+  - deploy_drupal
+  - build_next
+  - deploy_next
 build-drupal:
-  stage: build
+  stage: build_drupal
   image: docker:latest
   services:
     - docker:dind
@@ -16,12 +18,35 @@ build-drupal:
   script:
     - echo "Building Drupal image..."
     - docker compose build drupal
+    - docker compose push drupal
   after_script:
     - echo "DONE DRUPAL"
   tags:
     - production
+  only:
+    - main
+deploy-drupal:
+  stage: deploy_drupal
+  before_script:
+    - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
+  script:
+    - cd /var/www/haohub
+    - echo "Pulling images..."
+    - docker compose pull drupal
+    - docker compose up -d drupal mariadb --remove-orphans
+    - echo "Waiting for Drupal to be ready..."
+    - sleep 10
+    - docker exec drupal vendor/bin/drush cim -y
+    - docker exec drupal vendor/bin/drush updb -y
+    - docker exec drupal vendor/bin/drush cr
+    - echo "DONE DRUPAL"
+  tags:
+    - production
+  only:
+    - main
+
 build-next:
-  stage: build
+  stage: build_next
   image: docker:latest
   services:
     - docker:dind
@@ -30,45 +55,25 @@ build-next:
   script:
     - echo "Building Next.js"
     - docker compose build next
-    - docker compose logs | tee -a docker-compose.log
-    - docker compose push drupal next
-  artifacts:
-    when: always
-    paths:
-      - docker-compose.log
-    expire_in: 1 week
+    - docker compose push next
   tags:
     - production
   only:
     - main
-clean:
-  stage: build
-  before_script:
-    - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
-  script:
-    - echo "Cleaning up Docker resources..."
-    - docker system prune -af --volumes || true
-  only:
-    - main
-  tags:
-    - production
-deploy:
-  stage: deploy
+
+deploy-next:
+  stage: deploy_next
   before_script:
     - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
   script:
     - cd /var/www/haohub
     - echo "Pulling images..."
-    - docker compose pull next drupal
-    - docker compose up -d drupal mariadb
-    - docker exec drupal vendor/bin/drush cim -y
-    - docker exec drupal vendor/bin/drush updb -y
-    - docker exec drupal vendor/bin/drush cr
-    - docker compose up -d next
-  only:
-    - main
+    - docker compose pull next
+    - docker compose up -d next --remove-orphans
   environment:
     name: production
     url: https://$DOMAIN
   tags:
     - production
+  only:
+    - main
