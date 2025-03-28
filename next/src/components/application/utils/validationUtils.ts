@@ -70,10 +70,10 @@ export function validateDateRange(
 /**
  * Валидация для шага с личной информацией (шаг 0)
  */
-export async function validatePersonalInfo(
+export async function validateBaseInfo(
   trigger: UseFormTrigger<ApplicationSchemaType>
 ): Promise<boolean> {
-  return await trigger(["name", "peopleCount", "ageGroups"])
+  return await trigger(["name", "peopleCount", "ageGroups", "city"])
 }
 
 /**

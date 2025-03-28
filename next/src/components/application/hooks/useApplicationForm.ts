@@ -11,7 +11,7 @@ import {
 import { TOTAL_STEPS } from "../constants"
 import { useDraftForm } from "./useDraftForm"
 import {
-  validatePersonalInfo,
+  validateBaseInfo,
   validateTripInfo,
   validateAccommodation,
   validateTransport,
@@ -149,7 +149,7 @@ export function useApplicationForm() {
 
     switch (state.currentStep) {
       case 0:
-        isValid = await validatePersonalInfo(trigger)
+        isValid = await validateBaseInfo(trigger)
         break
       case 1:
         isValid = await validateTripInfo(trigger, getValues, setError)
