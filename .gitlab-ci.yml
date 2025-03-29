@@ -36,7 +36,7 @@ deploy-drupal:
     - docker compose up -d drupal mariadb --remove-orphans
     - echo "Waiting for Drupal to be ready..."
     - sleep 10
-    - docker exec drupal vendor/bin/drush cim -y --no-translations
+    - docker exec drupal vendor/bin/drush cim -y
     - docker exec drupal vendor/bin/drush updb -y
     - docker exec drupal vendor/bin/drush cr
     - echo "DONE DRUPAL"

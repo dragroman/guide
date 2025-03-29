@@ -11,6 +11,7 @@ module:
   coffee: 0
   comment: 0
   config: 0
+  config_control: 0
   config_translation: 0
   consumers: 0
   contact: 0
