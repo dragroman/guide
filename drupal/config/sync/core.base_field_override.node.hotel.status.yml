@@ -1,0 +1,22 @@
+uuid: 7bfe4195-e4d6-472f-972d-fc5562c367b1
+langcode: en
+status: true
+dependencies:
+  config:
+    - node.type.hotel
+id: node.hotel.status
+field_name: status
+entity_type: node
+bundle: hotel
+label: Published
+description: ''
+required: false
+translatable: false
+default_value:
+  -
+    value: 1
+default_value_callback: ''
+settings:
+  on_label: 'On'
+  off_label: 'Off'
+field_type: boolean

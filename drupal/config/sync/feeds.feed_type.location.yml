@@ -7,7 +7,11 @@ dependencies:
     - field.field.taxonomy_term.location.field_title_cn
     - taxonomy.vocabulary.location
   module:
+    - feeds_tamper
     - taxonomy
+third_party_settings:
+  feeds_tamper:
+    tampers: {  }
 label: Location
 id: location
 description: ''
@@ -31,7 +35,7 @@ processor_configuration:
   langcode: ru
   insert_new: 1
   update_existing: 2
-  update_non_existent: _keep
+  update_non_existent: _delete
   skip_hash_check: false
   skip_validation: false
   skip_validation_types: {  }
@@ -66,6 +70,16 @@ custom_sources:
     label: title_cn
     machine_name: title_cn
     type: csv
+  published:
+    value: published
+    label: published
+    machine_name: published
+    type: csv
+  weight:
+    value: weight
+    label: weight
+    machine_name: weight
+    type: csv
 mappings:
   -
     target: field_country
@@ -99,4 +113,16 @@ mappings:
       value: title_cn
     settings:
       language: null
+    unique: {  }
+  -
+    target: status
+    map:
+      value: published
+    settings:
+      language: null
+  -
+    target: weight
+    map:
+      value: weight
+    settings: {  }
     unique: {  }

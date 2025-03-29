@@ -1,0 +1,20 @@
+uuid: 878d9355-274e-4055-a7f0-7dd73e282886
+langcode: en
+status: true
+dependencies:
+  config:
+    - node.type.spot
+  module:
+    - path
+id: node.spot.path
+field_name: path
+entity_type: node
+bundle: spot
+label: 'URL alias'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: path

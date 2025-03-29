@@ -5,7 +5,7 @@ dependencies: {  }
 _core:
   default_config_hash: _D9q3XSnP6ik9we9UuoTvZsQKPuYNp_G9PfwVtWzgnQ
 id: document
-label: Документ
+label: Document
 description: 'Загруженный файл или документ, такой как PDF.'
 source: file
 queue_thumbnail_downloads: false

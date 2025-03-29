@@ -8,7 +8,7 @@ dependencies:
 _core:
   default_config_hash: H6JHGXl97yOKmVaV62SoY1ki1tWVdyD44fgOkdmVyRM
 id: comment
-label: Комментарии
+label: Comments
 module: comment
 description: 'Найти и управлять комментариями.'
 tag: default
@@ -21,7 +21,7 @@ display:
     display_plugin: default
     position: 0
     display_options:
-      title: Комментарии
+      title: Comments
       fields:
         comment_bulk_form:
           id: comment_bulk_form
@@ -888,7 +888,7 @@ display:
       path: admin/content/comment
       menu:
         type: tab
-        title: Комментарии
+        title: Comments
         description: 'Комментарии опубликованы'
         weight: 0
         menu_name: admin

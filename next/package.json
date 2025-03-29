@@ -4,13 +4,13 @@
   "private": true,
   "license": "MIT",
   "scripts": {
-    "dev": "bun next dev --turbopack",
-    "build": "bun next build",
-    "start": "bun next start",
-    "preview": "bun next build && bun next start",
-    "lint": "bun next lint",
-    "format": "bun prettier --write .",
-    "format:check": "bun prettier --check ."
+    "dev": "next dev --turbopack",
+    "build": "next build",
+    "start": "next start",
+    "preview": "next build && next start",
+    "lint": "next lint",
+    "format": "prettier --write .",
+    "format:check": "prettier --check ."
   },
   "dependencies": {
     "@hookform/resolvers": "^4.1.3",

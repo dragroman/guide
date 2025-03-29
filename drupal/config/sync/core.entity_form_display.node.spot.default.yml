@@ -8,6 +8,7 @@ dependencies:
     - field.field.node.spot.field_category
     - field.field.node.spot.field_location
     - field.field.node.spot.field_name_cn
+    - field.field.node.spot.field_phone
     - node.type.spot
   module:
     - paragraphs
@@ -72,6 +73,14 @@ content:
   field_name_cn:
     type: string_textfield
     weight: 121
+    region: content
+    settings:
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+  field_phone:
+    type: string_textfield
+    weight: 127
     region: content
     settings:
       size: 60

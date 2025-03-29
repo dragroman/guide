@@ -1,0 +1,18 @@
+uuid: 3e48256c-698f-4990-9345-5145ab8d96f7
+langcode: en
+status: true
+dependencies:
+  config:
+    - node.type.spot
+id: node.spot.title
+field_name: title
+entity_type: node
+bundle: spot
+label: Title
+description: ''
+required: true
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string

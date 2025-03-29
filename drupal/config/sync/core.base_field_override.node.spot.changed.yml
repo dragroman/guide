@@ -1,0 +1,18 @@
+uuid: e96e0891-0057-4b34-8c97-727554734aa9
+langcode: en
+status: true
+dependencies:
+  config:
+    - node.type.spot
+id: node.spot.changed
+field_name: changed
+entity_type: node
+bundle: spot
+label: Changed
+description: 'The time that the node was last edited.'
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: changed

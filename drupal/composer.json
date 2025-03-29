@@ -21,6 +21,8 @@
         "drupal/core-composer-scaffold": "^11.1",
         "drupal/core-project-message": "^11.1",
         "drupal/core-recommended": "^11.1",
+        "drupal/devel": "^5.3",
+        "drupal/devel_kint_extras": "^1.1",
         "drupal/feeds": "^3.0",
         "drupal/feeds_tamper": "^2.0@beta",
         "drupal/next": "^2.0",
@@ -59,6 +61,11 @@
         "drupal-scaffold": {
             "locations": {
                 "web-root": "web/"
+            },
+            "file-mapping": {
+                "[web-root]/sites/development.services.yml": false,
+                "[web-root]/sites/default/default.settings.php": false,
+                "[web-root]/sites/default/default.services.yml": false
             }
         },
         "installer-paths": {
