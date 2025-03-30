@@ -38,10 +38,10 @@ export async function GET(
     // Выполняем запрос к API Drupal
     const data = await drupal.getResourceCollection<any[]>(resourceType, {
       params: apiParams,
-      cache: search ? "no-store" : "force-cache", // Кешируем только запросы без поиска
-      next: {
-        revalidate: search ? 0 : 3600, // Кешируем на 1 час, если это не поисковый запрос
-      },
+      // cache: search ? "no-store" : "force-cache", // Кешируем только запросы без поиска
+      // next: {
+      //   revalidate: search ? 0 : 3600, // Кешируем на 1 час, если это не поисковый запрос
+      // },
     })
 
     // Преобразуем данные в нужный формат
@@ -52,6 +52,7 @@ export async function GET(
       description: item.description?.value || null,
       weight: item.weight || 0,
       changed: item.changed || null,
+      field_select_text: item.field_select_text?.value || null,
     }))
 
     return NextResponse.json({

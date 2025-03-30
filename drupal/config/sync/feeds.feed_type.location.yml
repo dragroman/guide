@@ -3,7 +3,12 @@ langcode: en
 status: true
 dependencies:
   config:
+    - core.base_field_override.taxonomy_term.location.description
+    - core.base_field_override.taxonomy_term.location.name
+    - core.base_field_override.taxonomy_term.location.status
     - field.field.taxonomy_term.location.field_country
+    - field.field.taxonomy_term.location.field_image
+    - field.field.taxonomy_term.location.field_select_text
     - field.field.taxonomy_term.location.field_title_cn
     - taxonomy.vocabulary.location
   module:
@@ -11,7 +16,20 @@ dependencies:
     - taxonomy
 third_party_settings:
   feeds_tamper:
-    tampers: {  }
+    tampers:
+      181478b9-b731-4b9b-9145-348079a8ebe2:
+        words: ''
+        words_list:
+          - '1'
+        word_boundaries: false
+        exact: false
+        case_sensitive: false
+        invert: false
+        uuid: 181478b9-b731-4b9b-9145-348079a8ebe2
+        plugin: keyword_filter
+        source: published
+        weight: 0
+        label: 'Keyword filter'
 label: Location
 id: location
 description: ''
@@ -80,6 +98,31 @@ custom_sources:
     label: weight
     machine_name: weight
     type: csv
+  field_image_url:
+    value: image_url
+    label: image_url
+    machine_name: field_image_url
+    type: csv
+  image_alt:
+    value: image_alt
+    label: image_alt
+    machine_name: image_alt
+    type: csv
+  image_title:
+    value: image_title
+    label: image_title
+    machine_name: image_title
+    type: csv
+  description:
+    value: description
+    label: description
+    machine_name: description
+    type: csv
+  field_select_text:
+    value: field_select_text
+    label: field_select_text
+    machine_name: field_select_text
+    type: csv
 mappings:
   -
     target: field_country
@@ -126,3 +169,28 @@ mappings:
       value: weight
     settings: {  }
     unique: {  }
+  -
+    target: field_image
+    map:
+      target_id: field_image_url
+      alt: image_alt
+      title: image_title
+    settings:
+      language: ''
+      reference_by: fid
+      autocreate: 0
+      existing: '1'
+      autocreate_bundle: false
+  -
+    target: description
+    map:
+      value: description
+    settings:
+      language: null
+      format: plain_text
+  -
+    target: field_select_text
+    map:
+      value: field_select_text
+    settings:
+      language: null

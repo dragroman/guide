@@ -6,6 +6,7 @@ dependencies:
     - field.field.taxonomy_term.location.feeds_item
     - field.field.taxonomy_term.location.field_country
     - field.field.taxonomy_term.location.field_image
+    - field.field.taxonomy_term.location.field_select_text
     - field.field.taxonomy_term.location.field_title_cn
     - taxonomy.vocabulary.location
   module:
@@ -45,6 +46,13 @@ content:
       svg_render_as_image: true
     third_party_settings: {  }
     weight: 3
+    region: content
+  field_select_text:
+    type: basic_string
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    weight: 4
     region: content
   field_title_cn:
     type: string

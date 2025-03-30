@@ -22,6 +22,7 @@ interface LocationData {
   id: string
   name: string
   description?: string
+  field_select_text?: string
   image?: {
     url: string
     alt?: string
@@ -62,7 +63,7 @@ export function LocationSelect({
       setLocationData({
         id: data.id,
         name: data.name,
-        description: data.description,
+        field_select_text: data.field_select_text,
         image: data.field_image
           ? {
               url: data.field_image.url,
@@ -109,7 +110,7 @@ export function LocationSelect({
         vocabularyId="location"
         placeholder={placeholder}
         className={error ? "border-destructive" : ""}
-        showDescription={true} // Показываем описание в выпадающем списке
+        showDescription={false}
       />
       {error && <p className="text-sm font-medium text-destructive">{error}</p>}
 
