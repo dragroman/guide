@@ -30,6 +30,11 @@ ENV NEXT_PUBLIC_GTM_ID=$NEXT_PUBLIC_GTM_ID
 ENV NEXT_PUBLIC_DRUPAL_BASE_URL=$DRUPAL_URL
 ENV NEXT_IMAGE_DOMAIN=$NEXT_IMAGE_DOMAIN
 
+RUN echo "NEXT_PUBLIC_GTM_ID=$NEXT_PUBLIC_GTM_ID" && \
+    echo "NEXT_PUBLIC_DRUPAL_BASE_URL=$NEXT_PUBLIC_DRUPAL_BASE_URL" && \
+    echo "NEXT_IMAGE_DOMAIN=$NEXT_IMAGE_DOMAIN"
+
+
 RUN \
   if [ -f yarn.lock ]; then yarn run build; \
   elif [ -f package-lock.json ]; then npm run build; \

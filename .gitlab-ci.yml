@@ -33,9 +33,9 @@ deploy-drupal:
     - cd /var/www/haohub
     - echo "Pulling images..."
     - docker compose pull drupal
-    - docker compose up -d drupal mariadb --remove-orphans
+    - docker compose up -d drupal mariadb
     - echo "Waiting for Drupal to be ready..."
-    - sleep 10
+    - sleep 60
     - docker exec drupal vendor/bin/drush cim -y
     - docker exec drupal vendor/bin/drush updb -y
     - docker exec drupal vendor/bin/drush cr
