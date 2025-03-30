@@ -15,7 +15,7 @@ export async function GET(
     }
 
     apiParams[`fields[taxonomy_term--${vocabulary}]`] =
-      "name,path,description,field_image"
+      "name,path,description,field_image,field_select_text"
 
     // Получаем один термин таксономии по ID
     const term = await drupal.getResource(resourceType, id, {
@@ -36,7 +36,7 @@ export async function GET(
       name: term.name,
       path: term.path?.alias || null,
       description: term.description?.value || null,
-      field_select_text: term.field_select_text?.value || null,
+      field_select_text: term.field_select_text || null,
       weight: term.weight || 0,
       changed: term.changed || null,
       field_image: term.field_image

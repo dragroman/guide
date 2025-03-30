@@ -63,6 +63,7 @@ export function LocationSelect({
       setLocationData({
         id: data.id,
         name: data.name,
+        description: data.description,
         field_select_text: data.field_select_text,
         image: data.field_image
           ? {
@@ -81,11 +82,11 @@ export function LocationSelect({
   // Обработчик выбора локации
   const handleTagChange = (id: string, name: string, term?: any) => {
     // Если у нас есть полные данные о термине из компонента выбора
-    if (term && term.description) {
+    if (term && term.field_select_text) {
       setLocationData({
         id,
         name,
-        description: term.description,
+        field_select_text: term.field_select_text,
         image: term.field_image
           ? {
               url: term.field_image.url,
@@ -153,21 +154,15 @@ export function LocationSelect({
                     </Badge>
                   </div>
                 )}
-
                 {/* Отображаем описание, если оно есть */}
-                {locationData.description && (
+                {locationData.field_select_text && (
                   <div
                     className="text-sm text-muted-foreground mt-2"
                     dangerouslySetInnerHTML={{
-                      __html: locationData.description,
+                      __html: locationData.field_select_text,
                     }}
                   ></div>
                 )}
-
-                {/* Информация для отладки - можно убрать в продакшене */}
-                <div className="mt-2 pt-2 border-t text-xs text-muted-foreground">
-                  ID: {locationData.id}
-                </div>
               </CardContent>
             </>
           )}

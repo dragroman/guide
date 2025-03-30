@@ -173,8 +173,8 @@ mappings:
     target: field_image
     map:
       target_id: field_image_url
-      alt: image_alt
-      title: image_title
+      alt: title_ru
+      title: title_ru
     settings:
       language: ''
       reference_by: fid
