@@ -20,7 +20,7 @@ export async function GET(
     // Формируем параметры запроса к Drupal JSON API
     const apiParams: Record<string, any> = {
       "filter[status]": 1,
-      sort: "-weight",
+      sort: "weight",
       "page[limit]": limit,
       "page[offset]": page * limit,
     }

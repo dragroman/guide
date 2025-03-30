@@ -895,3 +895,11 @@ $settings['s3fs.secret_key'] = getenv('S3_SECRET_KEY');
 $settings['php_storage']['twig']['directory'] = '../storage/php';
 $settings['s3fs.use_s3_for_public'] = TRUE;
 $settings['s3fs.use_s3_for_private'] = TRUE;
+
+// Trusted host
+$settings['trusted_host_patterns'] = [
+  '^chinq\.ru$',            // Основной домен
+  '^www\.chinq\.ru$',       // WWW-версия
+  '^drupal\.chinq\.ru$',    // Поддомен для Drupal
+  '^www\.drupal\.chinq\.ru$', // WWW-версия поддомена
+];

@@ -5,10 +5,12 @@ dependencies:
   config:
     - field.field.taxonomy_term.location.feeds_item
     - field.field.taxonomy_term.location.field_country
+    - field.field.taxonomy_term.location.field_image
     - field.field.taxonomy_term.location.field_title_cn
     - taxonomy.vocabulary.location
   module:
     - options
+    - svg_image
     - text
 id: taxonomy_term.location.default
 targetEntityType: taxonomy_term
@@ -28,6 +30,21 @@ content:
     settings: {  }
     third_party_settings: {  }
     weight: 1
+    region: content
+  field_image:
+    type: image
+    label: above
+    settings:
+      image_link: ''
+      image_style: ''
+      image_loading:
+        attribute: lazy
+      svg_attributes:
+        width: null
+        height: null
+      svg_render_as_image: true
+    third_party_settings: {  }
+    weight: 3
     region: content
   field_title_cn:
     type: string

@@ -15,7 +15,6 @@ import { Badge } from "@/components/ui/badge"
 
 // Импортируем компоненты для выбора терминов таксономии
 import TaxonomySelect from "@/components/drupal/TaxonomySelect"
-import TaxonomySelectApi from "@/components/drupal/TaxonomySelectApi"
 import TaxonomyMultiSelect from "@/components/drupal/TaxonomyMultiSelect"
 import { useTaxonomyTermsApi } from "@/hooks/useTaxonomyTermsApi"
 
@@ -26,7 +25,6 @@ export default function TaxonomySelectExample() {
 
   // Состояние для компонента с API
   const [selectedApiTag, setSelectedApiTag] = useState("")
-  const [selectedApiTagName, setSelectedApiTagName] = useState("")
 
   // Состояние для мульти-выбора
   const [selectedTags, setSelectedTags] = useState<string[]>([])
@@ -50,7 +48,6 @@ export default function TaxonomySelectExample() {
 
   const handleApiTagChange = (id: string, name: string) => {
     setSelectedApiTag(id)
-    setSelectedApiTagName(name)
   }
 
   const handleMultiTagChange = (ids: string[]) => {
@@ -70,7 +67,6 @@ export default function TaxonomySelectExample() {
       <Tabs defaultValue="basic">
         <TabsList className="mb-4">
           <TabsTrigger value="basic">Базовый компонент</TabsTrigger>
-          <TabsTrigger value="api">Компонент с API</TabsTrigger>
           <TabsTrigger value="multi">Мульти-выбор</TabsTrigger>
           <TabsTrigger value="hook">С использованием хука</TabsTrigger>
         </TabsList>
@@ -110,45 +106,6 @@ export default function TaxonomySelectExample() {
               <p>
                 Загружает все термины при монтировании и фильтрует их на стороне
                 клиента. Подходит для небольших словарей.
-              </p>
-            </CardFooter>
-          </Card>
-        </TabsContent>
-
-        {/* Компонент с API */}
-        <TabsContent value="api">
-          <Card>
-            <CardHeader>
-              <CardTitle>TaxonomySelectApi</CardTitle>
-              <CardDescription>
-                Компонент с поиском терминов через API маршрут
-              </CardDescription>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              <TaxonomySelectApi
-                value={selectedApiTag}
-                onChange={handleApiTagChange}
-                vocabularyId="location"
-                placeholder="Поиск по тегам..."
-                showDescription={true}
-              />
-
-              {selectedApiTag && (
-                <div className="mt-4 p-4 bg-muted rounded-md">
-                  <p className="text-sm font-medium">Выбрана категория:</p>
-                  <div className="flex mt-2">
-                    <Badge className="mr-2">{selectedApiTagName}</Badge>
-                  </div>
-                  <p className="text-xs text-muted-foreground mt-2">
-                    ID: {selectedApiTag}
-                  </p>
-                </div>
-              )}
-            </CardContent>
-            <CardFooter className="text-sm text-muted-foreground border-t p-4">
-              <p>
-                Выполняет поиск на стороне сервера через API маршрут. Подходит
-                для больших словарей с множеством терминов.
               </p>
             </CardFooter>
           </Card>

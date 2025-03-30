@@ -5,10 +5,13 @@ dependencies:
   config:
     - field.field.taxonomy_term.location.feeds_item
     - field.field.taxonomy_term.location.field_country
+    - field.field.taxonomy_term.location.field_image
     - field.field.taxonomy_term.location.field_title_cn
+    - image.style.thumbnail
     - taxonomy.vocabulary.location
   module:
     - path
+    - svg_image
     - text
 id: taxonomy_term.location.default
 targetEntityType: taxonomy_term
@@ -28,6 +31,14 @@ content:
     weight: 101
     region: content
     settings: {  }
+    third_party_settings: {  }
+  field_image:
+    type: image_image
+    weight: 103
+    region: content
+    settings:
+      progress_indicator: throbber
+      preview_image_style: thumbnail
     third_party_settings: {  }
   field_title_cn:
     type: string_textfield

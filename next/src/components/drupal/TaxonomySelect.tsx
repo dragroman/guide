@@ -123,7 +123,7 @@ export default function TaxonomySelectApi({
           role="combobox"
           aria-expanded={open}
           className={cn(
-            "w-full justify-between text-sm font-normal",
+            "w-full justify-between text-sm font-normal h-12",
             !value && "text-muted-foreground",
             className
           )}
@@ -147,7 +147,7 @@ export default function TaxonomySelectApi({
       >
         <Command>
           <CommandInput
-            placeholder="Поиск термина..."
+            placeholder={placeholder}
             value={search}
             onValueChange={setSearch}
             className="h-9"

@@ -10,14 +10,16 @@ export async function GET(
 
   try {
     const resourceType = `taxonomy_term--${vocabulary}`
-    const params: Record<string, any> = {}
+    const apiParams: Record<string, any> = {
+      include: "field_image",
+    }
 
-    params[`fields[taxonomy_term--${vocabulary}]`] =
-      "name,path,description,weight,changed"
+    apiParams[`fields[taxonomy_term--${vocabulary}]`] =
+      "name,path,description,field_image"
 
     // Получаем один термин таксономии по ID
     const term = await drupal.getResource(resourceType, id, {
-      params,
+      params: apiParams,
       cache: "force-cache",
       next: {
         revalidate: 3600, // Кешируем на 1 час
@@ -36,6 +38,15 @@ export async function GET(
       description: term.description?.value || null,
       weight: term.weight || 0,
       changed: term.changed || null,
+      field_image: term.field_image
+        ? {
+            url: term.field_image.uri?.url,
+            width: term.field_image.resourceIdObjMeta?.width,
+            height: term.field_image.resourceIdObjMeta?.height,
+            alt: term.field_image.resourceIdObjMeta?.alt,
+            title: term.field_image.resourceIdObjMeta?.title,
+          }
+        : null,
     }
 
     return NextResponse.json({

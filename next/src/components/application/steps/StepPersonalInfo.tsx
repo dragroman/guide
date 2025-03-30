@@ -4,6 +4,7 @@ import { FormField } from "../components/FormField"
 import { AgeGroupDrawer } from "../components/PeopleCounter"
 import { StepProps } from "../types"
 import texts from "../localization/ru"
+import { LocationSelect } from "../components/LocationSelect"
 
 export function StepPersonalInfo({
   control,
@@ -62,9 +63,8 @@ export function StepPersonalInfo({
           name="city"
           control={control}
           render={({ field }) => (
-            <FormField
+            <LocationSelect
               label={t.city}
-              name="city"
               value={field.value}
               placeholder={t.cityPlaceholder}
               onChange={field.onChange}
