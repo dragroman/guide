@@ -7,6 +7,7 @@ export type ApplicationSchemaType = {
   peopleCount: number
   ageGroups: Record<string, number>
   city: string
+  expertEmail: string
 
   // Контактная информация
   contact: {
@@ -135,6 +136,7 @@ export const defaultFormValues: ApplicationSchemaType = {
     adults: 1,
   },
   city: "",
+  expertEmail: "",
 
   contact: {
     phone: "",
@@ -278,7 +280,9 @@ export const applicationSchema = z.object({
       }
     ),
 
-  city: z.string().min(1, "Город обязателен для заполнения"),
+  city: z.string().min(1, "Город обязателен для заполнения").optional(),
+
+  expertEmail: z.string().email("Email должен быть корректным").optional(),
 
   // Контактная информация
   contact: z

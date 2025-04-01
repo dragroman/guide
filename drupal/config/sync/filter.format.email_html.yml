@@ -1,0 +1,10 @@
+uuid: 5903bab0-4000-4d27-af3b-4471f362215a
+langcode: ru
+status: true
+dependencies: {  }
+_core:
+  default_config_hash: 8UYEKlWeJ8cK8V-9ojit-_9SwBjQKk0SU-UkiuvlWKI
+name: 'Электронная почта в формате HTML'
+format: email_html
+weight: 10
+filters: {  }

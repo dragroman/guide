@@ -1,10 +1,12 @@
-import React from "react"
+import React, { useEffect, useState } from "react"
 import { Controller } from "react-hook-form"
 import { FormField } from "../components/FormField"
 import { AgeGroupDrawer } from "../components/PeopleCounter"
 import { StepProps } from "../types"
 import texts from "../localization/ru"
 import { LocationSelect } from "../components/LocationSelect"
+import { useSearchParams } from "next/navigation"
+import { ShareForm } from "../components/ShareForm"
 
 export function StepPersonalInfo({
   control,
@@ -13,10 +15,39 @@ export function StepPersonalInfo({
   formData,
 }: StepProps) {
   const t = texts.baseInfo
+  const searchParams = useSearchParams()
+  const [isExpertEmailDisabled, setIsExpertEmailDisabled] = useState(false)
+  const [isEditExpertEmail, setIsEditExpertEmail] = useState(false)
+  const [hasExpertEmail, setHasExpertEmail] = useState(false)
+
+  // Проверяем наличие email в URL-параметрах
+  useEffect(() => {
+    const emailFromUrl = searchParams.get("email")
+    if (emailFromUrl && validateEmail(emailFromUrl)) {
+      setValue("expertEmail", emailFromUrl)
+      setIsExpertEmailDisabled(true)
+    } else {
+      setHasExpertEmail(true)
+    }
+  }, [searchParams, setValue])
+
+  // Простая валидация email
+  const validateEmail = (email: string) => {
+    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)
+  }
+
+  // Функция для включения редактирования предзаполненного email
+  const handleEnableExpertEmailEdit = () => {
+    setIsExpertEmailDisabled(false)
+    setIsEditExpertEmail(true)
+  }
 
   return (
     <div className="space-y-8">
-      <h1 className="text-3xl font-bold">{t.title}</h1>
+      <div className="flex items-center justify-between">
+        <h1 className="text-3xl font-bold">{t.title}</h1>
+        {hasExpertEmail && <ShareForm />}
+      </div>
       <Controller
         name="name"
         control={control}

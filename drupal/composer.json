@@ -30,6 +30,7 @@
         "drupal/restui": "^1.22",
         "drupal/s3fs": "^3.7",
         "drupal/svg_image": "^3.2",
+        "drupal/symfony_mailer_log": "^1.2",
         "drupal/taxonomy_machine_name": "^2.0",
         "drupal/webform": "^6.3@beta",
         "drupal/webform_rest": "^4.2",

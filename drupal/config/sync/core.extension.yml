@@ -56,6 +56,8 @@ module:
   simple_oauth: 0
   subrequests: 0
   svg_image: 0
+  symfony_mailer: 0
+  symfony_mailer_log: 0
   system: 0
   tamper: 0
   taxonomy: 0

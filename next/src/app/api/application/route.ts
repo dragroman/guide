@@ -22,6 +22,11 @@ export async function POST(request: NextRequest) {
       )
     }
 
+    const expertEmail =
+      body.expertEmail || request.nextUrl.searchParams.get("email") || ""
+
+    console.log("Полученные данные API:", expertEmail)
+
     // Дополнительная валидация с помощью Zod
     try {
       // Преобразуем данные в формат, ожидаемый схемой
@@ -45,6 +50,7 @@ export async function POST(request: NextRequest) {
         budget: body.budget,
         needVisa: body.needVisa,
         needInsurance: body.needInsurance,
+        expert_email: expertEmail,
       })
     } catch (error) {
       if (error instanceof Error) {
@@ -52,9 +58,9 @@ export async function POST(request: NextRequest) {
       }
     }
 
-    const purposeArray = Object.entries(body.trip.purpose.options).map(
-      ([key]) => key
-    )
+    const purposeArray = Object.entries(body.trip.purpose.options)
+      .filter(([key, value]) => key !== "otherDescription" && value === true)
+      .map(([key]) => key)
 
     const accommodationArray = Object.entries(body.accommodation.options)
       .filter(([key, value]) => key !== "otherDescription" && value === true)
@@ -156,6 +162,7 @@ export async function POST(request: NextRequest) {
           budget: body.budget,
           need_visa: body.needVisa,
           need_insurance: body.needInsurance,
+          expert_email: body.expertEmail,
         }),
       }
     )

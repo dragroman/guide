@@ -1,4 +1,4 @@
-import React from "react"
+import React, { useEffect, useState } from "react"
 import { CheckCircle2 } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import {
@@ -19,12 +19,24 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog"
 import Image from "next/image"
+import { useSearchParams } from "next/navigation"
 
 interface SuccessViewProps {
   onReset: () => void
 }
 
 export function SuccessView({ onReset }: SuccessViewProps) {
+  const searchParams = useSearchParams()
+  const [expertEmail, setExpertEmail] = useState<string>("")
+
+  useEffect(() => {
+    // Получаем email из URL-параметров
+    const emailFromUrl = searchParams.get("email")
+    if (emailFromUrl && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailFromUrl)) {
+      setExpertEmail(emailFromUrl)
+    }
+  }, [searchParams])
+
   return (
     <>
       <Card className="w-full max-w-md mx-auto">
@@ -44,6 +56,14 @@ export function SuccessView({ onReset }: SuccessViewProps) {
             Спасибо за вашу заявку. Наш менеджер свяжется с вами в ближайшее
             время для уточнения деталей.
           </p>
+          {expertEmail && (
+            <div className="mt-2 w-full p-3 bg-blue-50 rounded-md border border-blue-100 text-sm">
+              <p className="text-blue-800">
+                Результаты формы отправлены на адрес:{" "}
+                <strong>{expertEmail}</strong>
+              </p>
+            </div>
+          )}
         </CardContent>
         <CardFooter className="flex justify-center">
           <Button onClick={onReset}>Отправить еще одну заявку</Button>
