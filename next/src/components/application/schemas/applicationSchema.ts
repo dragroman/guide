@@ -1,254 +1,5 @@
 import { z } from "zod"
 
-// Типизированная структура данных приложения с единым стилем
-export type ApplicationSchemaType = {
-  // Основная информация
-  name: string
-  peopleCount: number
-  ageGroups: Record<string, number>
-  city: string
-  cityInternalId?: number
-  expertEmail: string
-
-  // Контактная информация
-  contact: {
-    phone?: string
-    email?: string
-    wechat?: string
-    telegram?: string
-    whatsapp?: string
-  }
-
-  // Информация о поездке
-  trip: {
-    dateRange?: DateRange
-    daysCount: number | null
-    purpose: {
-      options: {
-        excursion: boolean
-        business: boolean
-        shopping: boolean
-        food: boolean
-        fun: boolean
-        health: boolean
-        other: boolean
-      }
-      otherDescription: string
-    }
-  }
-
-  // Размещение
-  accommodation: {
-    options: {
-      hotel3: boolean
-      hotel4: boolean
-      hotel5: boolean
-      apartment: boolean
-      hostel: boolean
-      other: boolean
-      otherDescription: string
-    }
-    preferences: {
-      centralLocation: boolean
-      nearShoppingCenters: boolean
-      poolAndSpa: boolean
-      other: boolean
-      otherDescription: string
-    }
-  }
-
-  // Транспорт
-  transport: {
-    transfer: {
-      airport: boolean
-      individual: boolean
-      none: boolean
-      other: boolean
-      otherDescription: string
-    }
-    preferences: {
-      privateDriver: boolean
-      publicTransport: boolean
-      taxi: boolean
-      other: boolean
-      otherDescription: string
-    }
-  }
-
-  // Питание
-  food: {
-    cuisine: {
-      chinese: boolean
-      european: boolean
-      japanese: boolean
-      russian: boolean
-      other: boolean
-      otherDescription: string
-    }
-    preferences: {
-      tryLocal: boolean
-      spicyOk: boolean
-      fattyOk: boolean
-      other: boolean
-      otherDescription: string
-    }
-  }
-
-  // Покупки
-  shopping: {
-    budget: {
-      economy: boolean
-      medium: boolean
-      luxury: boolean
-    }
-    shoppingPlaces: {
-      malls: boolean
-      boutiques: boolean
-      markets: boolean
-      outlets: boolean
-      other: boolean
-      otherDescription: string
-    }
-    specialWishes?: string
-    shoppingTime: {
-      fewHours: boolean
-      halfDay: boolean
-      fullDay: boolean
-    }
-    deliveryServices: {
-      needed: boolean
-    }
-  }
-  budget: number
-  needVisa: boolean
-  needInsurance: boolean
-}
-
-export type DateRange = {
-  from?: Date | undefined
-  to?: Date | undefined
-}
-
-// Значения формы по умолчанию
-export const defaultFormValues: ApplicationSchemaType = {
-  name: "",
-  peopleCount: 1,
-  ageGroups: {
-    adults: 1,
-  },
-  city: "",
-  cityInternalId: 0,
-  expertEmail: "",
-
-  contact: {
-    phone: "",
-    email: "",
-    wechat: "",
-    telegram: "",
-    whatsapp: "",
-  },
-
-  trip: {
-    dateRange: undefined,
-    daysCount: null,
-    purpose: {
-      options: {
-        excursion: false,
-        business: false,
-        shopping: false,
-        food: false,
-        fun: false,
-        health: false,
-        other: false,
-      },
-      otherDescription: "",
-    },
-  },
-
-  accommodation: {
-    options: {
-      hotel3: false,
-      hotel4: false,
-      hotel5: false,
-      apartment: false,
-      hostel: false,
-      other: false,
-      otherDescription: "",
-    },
-    preferences: {
-      centralLocation: false,
-      nearShoppingCenters: false,
-      poolAndSpa: false,
-      other: false,
-      otherDescription: "",
-    },
-  },
-
-  transport: {
-    transfer: {
-      airport: false,
-      individual: false,
-      none: false,
-      other: false,
-      otherDescription: "",
-    },
-    preferences: {
-      privateDriver: false,
-      publicTransport: false,
-      taxi: false,
-      other: false,
-      otherDescription: "",
-    },
-  },
-
-  food: {
-    cuisine: {
-      chinese: false,
-      european: false,
-      japanese: false,
-      russian: false,
-      other: false,
-      otherDescription: "",
-    },
-    preferences: {
-      tryLocal: false,
-      spicyOk: false,
-      fattyOk: false,
-      other: false,
-      otherDescription: "",
-    },
-  },
-
-  shopping: {
-    budget: {
-      economy: false,
-      medium: false,
-      luxury: false,
-    },
-    shoppingPlaces: {
-      malls: false,
-      boutiques: false,
-      markets: false,
-      outlets: false,
-      other: false,
-      otherDescription: "",
-    },
-    specialWishes: "",
-    shoppingTime: {
-      fewHours: false,
-      halfDay: false,
-      fullDay: false,
-    },
-    deliveryServices: {
-      needed: false,
-    },
-  },
-  budget: 7000,
-  needVisa: false,
-  needInsurance: false,
-}
-
-// Zod схема для валидации новой структуры данных
 export const applicationSchema = z.object({
   // Основная информация
   name: z
@@ -285,7 +36,10 @@ export const applicationSchema = z.object({
   city: z.string().min(1, "Город обязателен для заполнения"),
   cityInternalId: z.number(),
 
-  expertEmail: z.string().email("Email должен быть корректным").optional(),
+  expertEmail: z
+    .string()
+    .optional()
+    .or(z.string().email("Email должен быть корректным")),
 
   // Контактная информация
   contact: z
@@ -630,3 +384,125 @@ export const applicationSchema = z.object({
   needVisa: z.boolean(),
   needInsurance: z.boolean(),
 })
+
+// Типизированная структура данных приложения с единым стилем
+export type ApplicationSchemaType = z.infer<typeof applicationSchema>
+
+// Значения формы по умолчанию
+export const defaultFormValues: ApplicationSchemaType = {
+  name: "",
+  peopleCount: 1,
+  ageGroups: {
+    adults: 1,
+  },
+  city: "",
+  cityInternalId: 0,
+  expertEmail: "",
+
+  contact: {
+    phone: "",
+    email: "",
+    wechat: "",
+    telegram: "",
+    whatsapp: "",
+  },
+
+  trip: {
+    dateRange: undefined,
+    daysCount: null,
+    purpose: {
+      options: {
+        excursion: false,
+        business: false,
+        shopping: false,
+        food: false,
+        fun: false,
+        health: false,
+        other: false,
+      },
+      otherDescription: "",
+    },
+  },
+
+  accommodation: {
+    options: {
+      hotel3: false,
+      hotel4: false,
+      hotel5: false,
+      apartment: false,
+      hostel: false,
+      other: false,
+      otherDescription: "",
+    },
+    preferences: {
+      centralLocation: false,
+      nearShoppingCenters: false,
+      poolAndSpa: false,
+      other: false,
+      otherDescription: "",
+    },
+  },
+
+  transport: {
+    transfer: {
+      airport: false,
+      individual: false,
+      none: false,
+      other: false,
+      otherDescription: "",
+    },
+    preferences: {
+      privateDriver: false,
+      publicTransport: false,
+      taxi: false,
+      other: false,
+      otherDescription: "",
+    },
+  },
+
+  food: {
+    cuisine: {
+      chinese: false,
+      european: false,
+      japanese: false,
+      russian: false,
+      other: false,
+      otherDescription: "",
+    },
+    preferences: {
+      tryLocal: false,
+      spicyOk: false,
+      fattyOk: false,
+      other: false,
+      otherDescription: "",
+    },
+  },
+
+  shopping: {
+    budget: {
+      economy: false,
+      medium: false,
+      luxury: false,
+    },
+    shoppingPlaces: {
+      malls: false,
+      boutiques: false,
+      markets: false,
+      outlets: false,
+      other: false,
+      otherDescription: "",
+    },
+    specialWishes: "",
+    shoppingTime: {
+      fewHours: false,
+      halfDay: false,
+      fullDay: false,
+    },
+    deliveryServices: {
+      needed: false,
+    },
+  },
+  budget: 7000,
+  needVisa: false,
+  needInsurance: false,
+}

@@ -1,5 +1,5 @@
 import { useReducer, useCallback, useEffect } from "react"
-import { Resolver, useForm } from "react-hook-form"
+import { Resolver, SubmitHandler, useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { DateRange } from "react-day-picker"
 import { differenceInDays } from "date-fns"
@@ -113,6 +113,7 @@ export function useApplicationForm() {
     setError,
     clearErrors,
   } = useForm<ApplicationSchemaType>({
+    resolver: zodResolver(applicationSchema),
     defaultValues: defaultFormValues,
     mode: "onChange",
   })
@@ -309,8 +310,8 @@ export function useApplicationForm() {
   }, [state.currentStep, dispatch])
 
   // Обработчик отправки формы
-  const submitForm = useCallback(
-    async (data: ApplicationSchemaType) => {
+  const submitForm: SubmitHandler<ApplicationSchemaType> = useCallback(
+    async (data) => {
       try {
         // Отправка данных на сервер
         const response = await fetch("/api/application", {
