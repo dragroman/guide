@@ -116,8 +116,10 @@ export default function MultistepForm() {
         goToStep={goToStep}
         onPrev={prevStep}
         isSubmitting={isSubmitting}
+        hasDraft={hasDraft}
+        showDraftNotice={showDraftNotice}
+        restoreDraft={restoreDraft}
       />
-
       <div className="w-full mx-auto mb-10 pt-32 lg:pt-48 px-4">
         {isError && (
           <Alert variant="destructive" className="mb-6">
@@ -131,10 +133,7 @@ export default function MultistepForm() {
           <div className="flex-grow pb-24" id="form-content">
             {renderCurrentStep()}
           </div>
-          {/* Уведомление о черновике только на первом шаге */}
-          {currentStep === 0 && showDraftNotice && hasDraft && (
-            <DraftNotice onLoad={restoreDraft} onIgnore={ignoreDraft} />
-          )}
+
           <ApplicationFooter
             currentStep={currentStep}
             onNext={handleFormAction}
