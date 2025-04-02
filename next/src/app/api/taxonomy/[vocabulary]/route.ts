@@ -38,6 +38,10 @@ export async function GET(
     // Выполняем запрос к API Drupal
     const data = await drupal.getResourceCollection<any[]>(resourceType, {
       params: apiParams,
+      cache: search ? "no-store" : "force-cache",
+      next: {
+        revalidate: search ? 0 : 3600,
+      },
     })
 
     // Преобразуем данные в нужный формат

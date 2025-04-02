@@ -2,24 +2,20 @@
 
 import { useState, useEffect } from "react"
 import TaxonomySelect from "@/components/drupal/TaxonomySelect"
-import { Badge } from "@/components/ui/badge"
 import { Label } from "@/components/ui/label"
-import Image from "next/image"
-import { absoluteUrl } from "@/lib/utils"
-import { Card, CardContent } from "@/components/ui/card"
 import { LocationDescription } from "./LocationDescription"
 
 interface LocationSelectProps {
   label: string
-  value: string // Значение из React Hook Form
+  value: string
   placeholder?: string
   onChange: (value: string, internalId?: number) => void
-  error?: string // Ошибка валидации
+  error?: string
   className?: string
 }
 
 // Расширенный интерфейс для данных о городе
-interface LocationData {
+export interface LocationData {
   id: string
   drupal_internal__tid: number
   name: string
@@ -43,15 +39,9 @@ export function LocationSelect({
   const [locationData, setLocationData] = useState<LocationData | null>(null)
   const [isLoading, setIsLoading] = useState(false)
 
-  useEffect(() => {
-    if (value && !locationData) {
-      fetchLocationData(value)
-    }
-  }, [value, locationData])
-
   // Функция для получения подробных данных о городе
   const fetchLocationData = async (termId: string) => {
-    if (!termId) return
+    if (!termId) return null
 
     setIsLoading(true)
     try {
@@ -61,7 +51,7 @@ export function LocationSelect({
       }
 
       const { data } = await response.json()
-      setLocationData({
+      const processedData = {
         id: data.id,
         drupal_internal__tid: data.drupal_internal__tid,
         name: data.name,
@@ -73,19 +63,26 @@ export function LocationSelect({
               alt: data.field_image.alt || data.name,
             }
           : undefined,
-      })
+      }
+
+      setLocationData(processedData)
+      return processedData
     } catch (error) {
       console.error("Ошибка при загрузке данных о городе:", error)
+      setLocationData(null)
+      return null
     } finally {
       setIsLoading(false)
     }
   }
 
   // Обработчик выбора локации
-  const handleTagChange = (id: string, name: string, term?: any) => {
+  const handleTagChange = async (id: string, name: string, term?: any) => {
+    let data: LocationData | null = null
+
     // Если у нас есть полные данные о термине из компонента выбора
     if (term && term.field_select_text) {
-      setLocationData({
+      data = {
         id,
         drupal_internal__tid: term.drupal_internal__tid,
         name,
@@ -96,20 +93,21 @@ export function LocationSelect({
               alt: term.field_image.alt || name,
             }
           : undefined,
-      })
+      }
+      setLocationData(data)
     } else {
       // Иначе загружаем данные отдельным запросом
-      fetchLocationData(id)
+      data = await fetchLocationData(id)
     }
 
-    onChange(id, term?.drupal_internal__tid)
+    onChange(id, data?.drupal_internal__tid)
   }
 
   return (
     <div className={`space-y-4 ${className}`}>
       <Label htmlFor="city">{label}</Label>
       <TaxonomySelect
-        value={value} // Используем значение напрямую из формы
+        value={value}
         onChange={handleTagChange}
         vocabularyId="location"
         placeholder={placeholder}
@@ -119,7 +117,9 @@ export function LocationSelect({
       {error && <p className="text-sm font-medium text-destructive">{error}</p>}
 
       {/* Показываем информацию о выбранном городе */}
-      {value && locationData && <LocationDescription value={value} />}
+      {value && locationData && (
+        <LocationDescription value={value} locationData={locationData} />
+      )}
     </div>
   )
 }

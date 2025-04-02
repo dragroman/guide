@@ -20,6 +20,10 @@ export async function GET(
     // Получаем один термин таксономии по ID
     const term = await drupal.getResource(resourceType, id, {
       params: apiParams,
+      cache: "force-cache",
+      next: {
+        revalidate: 3600, // Кешируем на 1 час
+      },
     })
 
     if (!term) {
