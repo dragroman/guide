@@ -4,6 +4,7 @@ import { getDaysText } from "../utils"
 import { StepProps } from "../types"
 import { SmilePlus } from "lucide-react"
 import texts from "../localization/ru"
+import { LocationDescription } from "../components/LocationDescription"
 
 export function StepConfirmation({ formData }: StepProps) {
   const t = texts.confirmation
@@ -94,7 +95,8 @@ export function StepConfirmation({ formData }: StepProps) {
         </div>
         <div className="font-bold text-2xl">{formData.name}</div>
       </div>
-
+      Город:
+      <LocationDescription value={formData.city} />
       <div className="rounded-md overflow-hidden">
         {/* Информация о группе */}
         {formData.peopleCount > 1 && (
@@ -235,7 +237,6 @@ export function StepConfirmation({ formData }: StepProps) {
           condition={formData.needInsurance}
         />
       </div>
-
       <div className="text-muted-foreground flex items-start border border-gray-200 rounded-md p-3">
         <SmilePlus className="flex-shrink-0 mr-4 w-6 h-6 mt-1" />
         <div>

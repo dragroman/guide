@@ -319,23 +319,7 @@ export function useApplicationForm() {
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify({
-            name: data.name,
-            peopleCount: data.peopleCount,
-            ageGroups: data.ageGroups,
-            contact: data.contact,
-            trip: data.trip,
-            accommodation: data.accommodation,
-            transport: data.transport,
-            food: data.food,
-            shopping: data.shopping,
-            budget: data.budget,
-            needVisa: data.needVisa,
-            needInsurance: data.needInsurance,
-            expertEmail: data.expertEmail,
-            city: data.city,
-            cityInternalId: data.cityInternalId,
-          }),
+          body: JSON.stringify(data),
         })
 
         if (!response.ok) {

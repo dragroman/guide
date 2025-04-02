@@ -56,3 +56,15 @@ export interface StepProps {
 export interface TripPurposeStepProps extends StepProps {
   handleDateChange: (dateRange: RDPDateRange | undefined) => void
 }
+
+export interface LocationData {
+  id: string
+  name: string
+  description?: string
+  field_select_text?: string
+  drupal_internal__tid?: number
+  image?: {
+    url: string
+    alt?: string
+  }
+}
