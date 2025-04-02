@@ -26,6 +26,7 @@ export interface TaxonomyTerm {
   description?: string
   weight?: number
   changed?: string
+  drupal_internal__tid?: number
 }
 
 interface TaxonomySelectApiProps {

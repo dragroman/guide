@@ -1,5 +1,5 @@
 import { useReducer, useCallback, useEffect } from "react"
-import { useForm } from "react-hook-form"
+import { Resolver, useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { DateRange } from "react-day-picker"
 import { differenceInDays } from "date-fns"
@@ -113,9 +113,8 @@ export function useApplicationForm() {
     setError,
     clearErrors,
   } = useForm<ApplicationSchemaType>({
-    resolver: zodResolver(applicationSchema),
     defaultValues: defaultFormValues,
-    mode: "onChange", // Валидация при изменении
+    mode: "onChange",
   })
 
   const [state, dispatch] = useReducer(formReducer, initialState)
@@ -323,7 +322,6 @@ export function useApplicationForm() {
             name: data.name,
             peopleCount: data.peopleCount,
             ageGroups: data.ageGroups,
-            phone: data.contact.phone,
             contact: data.contact,
             trip: data.trip,
             accommodation: data.accommodation,
@@ -334,6 +332,8 @@ export function useApplicationForm() {
             needVisa: data.needVisa,
             needInsurance: data.needInsurance,
             expertEmail: data.expertEmail,
+            city: data.city,
+            cityInternalId: data.cityInternalId,
           }),
         })
 
@@ -382,13 +382,9 @@ export function useApplicationForm() {
       e.preventDefault()
 
       if (state.currentStep === TOTAL_STEPS - 1) {
-        // Если это последний шаг - отправляем форму
         dispatch({ type: "SUBMIT_START" })
-
-        // Используем handleSubmit из react-hook-form для валидации и отправки
         handleSubmit(submitForm)(e)
       } else {
-        // Иначе переходим к следующему шагу
         nextStep()
       }
     },

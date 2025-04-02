@@ -1,8 +1,5 @@
-import { DateRange } from "react-day-picker"
 import { NextRequest, NextResponse } from "next/server"
 import { applicationSchema } from "@/components/application/schemas/applicationSchema"
-import { date } from "zod"
-import { tr } from "date-fns/locale"
 
 export async function POST(request: NextRequest) {
   try {
@@ -12,7 +9,13 @@ export async function POST(request: NextRequest) {
     // Проверяем что получены все необходимые данные
     if (
       !body.name ||
-      !body.contact.phone ||
+      !(
+        body.contact.phone ||
+        body.contact.email ||
+        body.contact.wechat ||
+        body.contact.telegram ||
+        body.contact.whatsapp
+      ) ||
       !body.trip.dateRange.from ||
       !body.trip.dateRange.to
     ) {
@@ -24,8 +27,6 @@ export async function POST(request: NextRequest) {
 
     const expertEmail =
       body.expertEmail || request.nextUrl.searchParams.get("email") || ""
-
-    console.log("Полученные данные API:", expertEmail)
 
     // Дополнительная валидация с помощью Zod
     try {
@@ -51,6 +52,8 @@ export async function POST(request: NextRequest) {
         needVisa: body.needVisa,
         needInsurance: body.needInsurance,
         expert_email: expertEmail,
+        city: body.city,
+        cityInternalId: body.cityInternalId,
       })
     } catch (error) {
       if (error instanceof Error) {
@@ -114,6 +117,9 @@ export async function POST(request: NextRequest) {
           name: body.name,
           phone: body.contact.phone,
           email: body.contact.email,
+          whatsapp: body.contact.whatsapp,
+          telegram: body.contact.telegram,
+          wechat: body.contact.wechat,
           people_count: body.peopleCount,
           adults: body.ageGroups.adults,
           children: body.ageGroups.children,
@@ -163,6 +169,7 @@ export async function POST(request: NextRequest) {
           need_visa: body.needVisa,
           need_insurance: body.needInsurance,
           expert_email: body.expertEmail,
+          city: body.cityInternalId,
         }),
       }
     )

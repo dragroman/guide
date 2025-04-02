@@ -12,7 +12,7 @@ interface LocationSelectProps {
   label: string
   value: string // Значение из React Hook Form
   placeholder?: string
-  onChange: (value: string) => void // Функция для обновления значения в форме
+  onChange: (value: string, internalId?: number) => void
   error?: string // Ошибка валидации
   className?: string
 }
@@ -20,6 +20,7 @@ interface LocationSelectProps {
 // Расширенный интерфейс для данных о городе
 interface LocationData {
   id: string
+  drupal_internal__tid: number
   name: string
   description?: string
   field_select_text?: string
@@ -41,7 +42,6 @@ export function LocationSelect({
   const [locationData, setLocationData] = useState<LocationData | null>(null)
   const [isLoading, setIsLoading] = useState(false)
 
-  // Загрузка данных о городе при первоначальном рендеринге, если у нас есть value
   useEffect(() => {
     if (value && !locationData) {
       fetchLocationData(value)
@@ -62,6 +62,7 @@ export function LocationSelect({
       const { data } = await response.json()
       setLocationData({
         id: data.id,
+        drupal_internal__tid: data.drupal_internal__tid,
         name: data.name,
         description: data.description,
         field_select_text: data.field_select_text,
@@ -85,6 +86,7 @@ export function LocationSelect({
     if (term && term.field_select_text) {
       setLocationData({
         id,
+        drupal_internal__tid: term.drupal_internal__tid,
         name,
         field_select_text: term.field_select_text,
         image: term.field_image
@@ -99,7 +101,7 @@ export function LocationSelect({
       fetchLocationData(id)
     }
 
-    onChange(id) // Передаем только id для React Hook Form
+    onChange(id, term?.drupal_internal__tid)
   }
 
   return (

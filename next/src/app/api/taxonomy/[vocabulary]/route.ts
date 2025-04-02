@@ -27,7 +27,7 @@ export async function GET(
 
     // Добавляем поля как отдельный параметр (решение проблемы с синтаксисом)
     apiParams[`fields[taxonomy_term--${vocabulary}]`] =
-      "name,path,description,weight,changed"
+      "name,path,description,weight,changed,drupal_internal__tid,field_select_text"
 
     // Добавляем поиск, если указан
     if (search && search.length >= 2) {
@@ -38,10 +38,6 @@ export async function GET(
     // Выполняем запрос к API Drupal
     const data = await drupal.getResourceCollection<any[]>(resourceType, {
       params: apiParams,
-      // cache: search ? "no-store" : "force-cache", // Кешируем только запросы без поиска
-      // next: {
-      //   revalidate: search ? 0 : 3600, // Кешируем на 1 час, если это не поисковый запрос
-      // },
     })
 
     // Преобразуем данные в нужный формат
@@ -53,6 +49,7 @@ export async function GET(
       weight: item.weight || 0,
       changed: item.changed || null,
       field_select_text: item.field_select_text?.value || null,
+      drupal_internal__tid: item.drupal_internal__tid,
     }))
 
     return NextResponse.json({

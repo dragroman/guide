@@ -25,13 +25,6 @@ export default function ApplicationFooter({
       <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 p-4 z-10">
         <div className="max-w-[500px] mx-auto">
           <div className="flex flex-col gap-2">
-            <FormNavigation
-              currentStep={currentStep}
-              totalSteps={TOTAL_STEPS}
-              onNext={onNext}
-              isSubmitting={isSubmitting}
-            />
-
             {showSkipButton && onSkip && (
               <Button
                 type="button"
@@ -43,6 +36,12 @@ export default function ApplicationFooter({
                 Пропустить этот шаг
               </Button>
             )}
+            <FormNavigation
+              currentStep={currentStep}
+              totalSteps={TOTAL_STEPS}
+              onNext={onNext}
+              isSubmitting={isSubmitting}
+            />
           </div>
         </div>
       </div>

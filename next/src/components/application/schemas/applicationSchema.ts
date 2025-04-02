@@ -7,6 +7,7 @@ export type ApplicationSchemaType = {
   peopleCount: number
   ageGroups: Record<string, number>
   city: string
+  cityInternalId?: number
   expertEmail: string
 
   // Контактная информация
@@ -136,6 +137,7 @@ export const defaultFormValues: ApplicationSchemaType = {
     adults: 1,
   },
   city: "",
+  cityInternalId: 0,
   expertEmail: "",
 
   contact: {
@@ -280,7 +282,8 @@ export const applicationSchema = z.object({
       }
     ),
 
-  city: z.string().min(1, "Город обязателен для заполнения").optional(),
+  city: z.string().min(1, "Город обязателен для заполнения"),
+  cityInternalId: z.number(),
 
   expertEmail: z.string().email("Email должен быть корректным").optional(),
 
@@ -288,15 +291,34 @@ export const applicationSchema = z.object({
   contact: z
     .object({
       phone: z
+
         .string()
-        .min(8, "Введите полный номер телефона")
-        .refine(
-          (value) => !value || /^\+[1-9]\d{1,14}$/.test(value),
-          "Телефон должен быть в международном формате, например +79123456789"
+        .transform((val) => (val === "" ? undefined : val))
+        .pipe(
+          z
+            .string()
+            .min(8, "Введите полный номер телефона")
+            .refine(
+              (value) => !value || /^\+[1-9]\d{1,14}$/.test(value),
+              "Телефон должен быть в международном формате, например +79123456789"
+            )
+            .optional()
         )
         .optional(),
 
-      email: z.string().email("Email должен быть корректным").optional(),
+      email: z
+        .string()
+        .refine(
+          (value) => {
+            // Проверяем email только если он не пустой
+            if (!value || value.trim() === "") return true
+            return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)
+          },
+          {
+            message: "Email должен быть корректным",
+          }
+        )
+        .optional(),
 
       wechat: z.string().optional(),
 

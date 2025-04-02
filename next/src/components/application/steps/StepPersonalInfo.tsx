@@ -98,7 +98,13 @@ export function StepPersonalInfo({
               label={t.city}
               value={field.value}
               placeholder={t.cityPlaceholder}
-              onChange={field.onChange}
+              onChange={(value, internalId) => {
+                field.onChange(value)
+                // Сохраняем drupal_internal__tid в отдельное поле формы
+                if (internalId) {
+                  setValue("cityInternalId", internalId)
+                }
+              }}
               error={errors.city?.message as string}
             />
           )}
