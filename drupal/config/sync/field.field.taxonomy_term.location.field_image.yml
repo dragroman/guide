@@ -22,7 +22,7 @@ settings:
   handler_settings: {  }
   file_directory: images/city
   file_extensions: 'png gif jpg jpeg webp'
-  max_filesize: '1 MB'
+  max_filesize: '3 MB'
   max_resolution: 1920x1080
   min_resolution: 640x480
   alt_field: true

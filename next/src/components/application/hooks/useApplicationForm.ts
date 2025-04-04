@@ -8,7 +8,7 @@ import {
   ApplicationSchemaType,
   defaultFormValues,
 } from "../schemas/applicationSchema"
-import { TOTAL_STEPS } from "../constants"
+import { STEPS, TOTAL_STEPS } from "../constants"
 import { useDraftForm } from "./useDraftForm"
 import {
   validateBaseInfo,
@@ -21,6 +21,7 @@ import {
   validateBudget,
 } from "../utils/validationUtils"
 import { scrollToFormTop, scrollToFirstError } from "../utils/scrollUtils"
+import { useGtmEvents } from "@/hooks/useGtmEvents"
 
 // Типы для состояния формы
 type FormState = {
@@ -117,6 +118,8 @@ export function useApplicationForm() {
     defaultValues: defaultFormValues,
     mode: "onChange",
   })
+
+  const { trackFormStep, trackFormSubmit } = useGtmEvents()
 
   const [state, dispatch] = useReducer(formReducer, initialState)
 
@@ -248,6 +251,14 @@ export function useApplicationForm() {
     [setValue, clearErrors]
   )
 
+  useEffect(() => {
+    // Отправляем событие только при отрисовке компонента или изменении шага
+    trackFormStep(
+      state.currentStep,
+      STEPS[state.currentStep]?.title || `Шаг ${state.currentStep + 1}`
+    )
+  }, [state.currentStep, trackFormStep])
+
   // Обработчик для диапазона дат
   const handleDateChange = useCallback(
     (dateRange: DateRange | undefined) => {
@@ -329,6 +340,8 @@ export function useApplicationForm() {
           )
         }
 
+        trackFormSubmit(true)
+
         // При успешной отправке удаляем черновик
         ignoreDraft()
         dispatch({ type: "SUBMIT_SUCCESS" })
@@ -341,6 +354,8 @@ export function useApplicationForm() {
               ? error.message
               : "Произошла ошибка при отправке формы",
         })
+
+        trackFormSubmit(false)
 
         // Прокручиваем к сообщению об ошибке
         setTimeout(() => {
@@ -358,7 +373,7 @@ export function useApplicationForm() {
         }, 100)
       }
     },
-    [ignoreDraft]
+    [ignoreDraft, trackFormSubmit]
   )
 
   // Обработчик для кнопки отправки/следующего шага

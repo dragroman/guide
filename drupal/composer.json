@@ -32,6 +32,7 @@
         "drupal/svg_image": "^3.2",
         "drupal/symfony_mailer_log": "^1.2",
         "drupal/taxonomy_machine_name": "^2.0",
+        "drupal/views_bulk_operations": "^4.3",
         "drupal/webform": "^6.3@beta",
         "drupal/webform_rest": "^4.2",
         "drush/drush": "^13.3"

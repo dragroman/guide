@@ -48,7 +48,7 @@ export const texts = {
     ageGroups: "Возрастные группы",
     ageGroupsDescription:
       "Укажите сколько людей и какого возраста поедут в тур",
-    city: "Город",
+    city: "Куда едем?",
     cityPlaceholder: "Выберите город",
   },
 

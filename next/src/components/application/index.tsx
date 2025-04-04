@@ -21,6 +21,7 @@ import ApplicationHeader from "./layout/Header"
 import ApplicationFooter from "./layout/Footer"
 import { StepShopping } from "./steps/StepShopping"
 import { StepBudget } from "./steps/StepBudget"
+import { STEPS, TOTAL_STEPS } from "./constants"
 
 export default function MultistepForm() {
   const {
@@ -63,6 +64,27 @@ export default function MultistepForm() {
     // Черновики
     resetForm,
   } = useApplicationForm()
+
+  useEffect(() => {
+    // Функция для отслеживания закрытия страницы
+    const handleBeforeUnload = () => {
+      if (!isSuccess && currentStep > 0) {
+        window.dataLayer?.push({
+          event: "form_exit",
+          formName: "application_form",
+          lastStepNumber: currentStep,
+          lastStepName: STEPS[currentStep]?.title || `Шаг ${currentStep + 1}`,
+          formProgress: Math.floor(((currentStep + 1) / TOTAL_STEPS) * 100),
+        })
+      }
+    }
+
+    window.addEventListener("beforeunload", handleBeforeUnload)
+
+    return () => {
+      window.removeEventListener("beforeunload", handleBeforeUnload)
+    }
+  }, [currentStep, isSuccess])
 
   // Если форма успешно отправлена, показываем экран успеха
   if (isSuccess) {
