@@ -1,0 +1,18 @@
+uuid: f9dc5d29-083d-4611-ab62-fbf0e837b044
+langcode: en
+status: true
+dependencies: {  }
+id: smtp
+label: SMTP
+plugin: smtp
+configuration:
+  user: noreply@chinq.ru
+  pass: 'jS88MyFg&l2v'
+  host: smtp.beget.com
+  port: 2525
+  query:
+    verify_peer: true
+    local_domain: ''
+    restart_threshold: null
+    restart_threshold_sleep: null
+    ping_threshold: null
