@@ -117,9 +117,16 @@ export function LocationSelect({
       {error && <p className="text-sm font-medium text-destructive">{error}</p>}
 
       {/* Показываем информацию о выбранном городе */}
-      {value && locationData && (
-        <LocationDescription value={value} locationData={locationData} />
-      )}
+      {value &&
+        (isLoading ? (
+          <div className="animate-pulse">
+            <div className="h-24 bg-gray-200 rounded-md"></div>
+          </div>
+        ) : (
+          locationData && (
+            <LocationDescription value={value} locationData={locationData} />
+          )
+        ))}
     </div>
   )
 }

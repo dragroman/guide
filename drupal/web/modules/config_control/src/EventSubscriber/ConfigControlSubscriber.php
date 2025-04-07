@@ -34,7 +34,7 @@ class ConfigControlSubscriber implements EventSubscriberInterface {
       $locale_settings = $storage->read('locale.settings');
       
       // Изменяем путь для переводов
-      $locale_settings['translation']['path'] = '/var/html/html/drupal/tmp/translations';
+      $locale_settings['translation']['path'] = '/var/www/html/drupal/tmp/translations';
       
       // Записываем обратно измененную конфигурацию
       $storage->write('locale.settings', $locale_settings);

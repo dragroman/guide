@@ -3,7 +3,6 @@ langcode: en
 status: true
 dependencies:
   config:
-    - core.base_field_override.taxonomy_term.location.description
     - core.base_field_override.taxonomy_term.location.name
     - core.base_field_override.taxonomy_term.location.status
     - field.field.taxonomy_term.location.field_country
@@ -52,7 +51,7 @@ processor_configuration:
     vid: location
   langcode: ru
   insert_new: 1
-  update_existing: 2
+  update_existing: 1
   update_non_existent: _delete
   skip_hash_check: true
   skip_validation: false
@@ -182,15 +181,8 @@ mappings:
       existing: '1'
       autocreate_bundle: false
   -
-    target: description
+    target: field_select_text
     map:
       value: description
     settings:
-      language: null
-      format: plain_text
-  -
-    target: field_select_text
-    map:
-      value: field_select_text
-    settings:
-      language: null
+      language: ''
