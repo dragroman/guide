@@ -2,11 +2,9 @@ import React from "react"
 import { StepIndicator } from "../components/StepIndicator"
 import { STEPS } from "../constants"
 import { Button } from "@/components/ui/button"
-import { ChevronLeft } from "lucide-react"
-import Link from "next/link"
+import { ArrowLeft, ChevronLeft } from "lucide-react"
 import Image from "next/image"
-import { DraftNotice } from "../components/DraftNotice"
-import { useApplicationForm } from "../hooks/useApplicationForm"
+import Link from "next/link"
 
 interface ApplicationHeaderProps {
   currentStep: number

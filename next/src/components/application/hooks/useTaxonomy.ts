@@ -15,6 +15,7 @@ export async function fetchLocationData(
     return {
       id: data.id,
       name: data.name,
+      field_title_cn: data.field_title_cn,
       description: data.description,
       field_select_text: data.field_select_text,
       image: data.field_image

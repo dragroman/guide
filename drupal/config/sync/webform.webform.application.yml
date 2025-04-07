@@ -479,7 +479,7 @@ handlers:
         locked: locked
         sticky: sticky
         notes: notes
-      custom_data: "chat_id: -1002406601302\r\nparse_mode: \"HTML\"\r\ntext: \"🌟 New Travel Request\\n\\n👤 Personal Information:\\nName: [webform_submission:values:name]\\nPhone: [webform_submission:values:phone]\\nEmail: [webform_submission:values:email]\\nCity: [webform_submission:values:city]\\n\\n📅 Travel Dates:\\nFrom: [webform_submission:values:date_from]\\nTo: [webform_submission:values:date_to]\\nDuration: [webform_submission:values:days_count] days\\n\\n👩‍💼 Expert Contact:\\nExpert Email: [webform_submission:values:expert_email]\""
+      custom_data: "chat_id: -1002406601302\r\nparse_mode: \"HTML\"\r\ntext: \"🌟 Новая анкета!\\n\\n👤 Основные данные:\\nИмя: [webform_submission:values:name]\\nГород: [webform_submission:values:city]\\n\\n📅 Даты поездки:\\nОт: [webform_submission:values:date_from]\\nДо: [webform_submission:values:date_to]\\nДлительность: [webform_submission:values:days_count] дн.\\n\\n👩‍💼 Expert Contact:\\nExpert Email: [webform_submission:values:expert_email]\\n\\nПодробнее: [webform_submission:webform:url]\""
       custom_options: ''
       file_data: true
       cast: false

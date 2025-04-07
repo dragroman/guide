@@ -27,7 +27,7 @@ export async function GET(
 
     // Добавляем поля как отдельный параметр (решение проблемы с синтаксисом)
     apiParams[`fields[taxonomy_term--${vocabulary}]`] =
-      "name,path,description,weight,changed,drupal_internal__tid,field_select_text"
+      "name,path,description,weight,changed,drupal_internal__tid,field_select_text,field_title_cn"
 
     // Добавляем поиск, если указан
     if (search && search.length >= 2) {
@@ -54,6 +54,14 @@ export async function GET(
       changed: item.changed || null,
       field_select_text: item.field_select_text?.value || null,
       drupal_internal__tid: item.drupal_internal__tid,
+      field_title_cn: item.field_title_cn?.value || null,
+      field_image: item.field_image
+        ? {
+            url: item.field_image.uri?.url,
+            width: item.field_image.resourceIdObjMeta?.width,
+            title: item.field_image.resourceIdObjMeta?.title,
+          }
+        : null,
     }))
 
     return NextResponse.json({

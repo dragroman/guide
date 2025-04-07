@@ -1,10 +1,13 @@
+// src/components/application/components/LocationDescription.tsx
+
+import { useState } from "react"
 import { Card, CardContent } from "@/components/ui/card"
 import Image from "next/image"
 import { absoluteUrl } from "@/lib/utils"
 import { Badge } from "@/components/ui/badge"
-import { LocationData } from "./LocationSelect"
-import { useState } from "react"
 import { Skeleton } from "@/components/ui/skeleton"
+import { useLocationData } from "../hooks/useLocationData"
+import { LocationData } from "../types"
 
 interface LocationDescriptionProps {
   value: string
@@ -17,11 +20,29 @@ export function LocationDescription({
 }: LocationDescriptionProps) {
   const [imageLoading, setImageLoading] = useState(true)
 
-  if (!value || !locationData) return null
+  // Если данные не переданы, загружаем их с помощью хука
+  const { locationData: fetchedData, isLoading } = useLocationData(
+    locationData ? null : value
+  )
+
+  // Используем переданные данные или загруженные
+  const dataToUse = locationData || fetchedData
+
+  if (!value) return null
+
+  if (isLoading) {
+    return (
+      <div className="mt-4">
+        <Skeleton className="h-40 w-full" />
+      </div>
+    )
+  }
+
+  if (!dataToUse) return null
 
   return (
     <Card className="mt-4 overflow-hidden">
-      {locationData.image && (
+      {dataToUse.image && (
         <div className="relative w-full h-40">
           {imageLoading && (
             <div className="absolute inset-0 bg-muted/50 flex items-center justify-center">
@@ -29,8 +50,8 @@ export function LocationDescription({
             </div>
           )}
           <Image
-            src={absoluteUrl(locationData.image.url)}
-            alt={locationData.image.alt || locationData.name}
+            src={absoluteUrl(dataToUse.image.url)}
+            alt={dataToUse.image.alt || dataToUse.name}
             fill
             style={{ objectFit: "cover" }}
             className={`transition-all duration-500 ${
@@ -41,26 +62,31 @@ export function LocationDescription({
           />
           <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent" />
           <div className="absolute bottom-4 left-6">
+            {dataToUse.field_title_cn && (
+              <div className="text-white text-2xl font-bold">
+                {dataToUse.field_title_cn}
+              </div>
+            )}
             <div className="text-4xl text-white font-bold">
-              {locationData.name}
+              {dataToUse.name}
             </div>
           </div>
         </div>
       )}
 
-      <CardContent className={locationData.image ? "pt-4" : "pt-6"}>
-        {!locationData.image && (
+      <CardContent className={dataToUse.image ? "pt-4" : "pt-6"}>
+        {!dataToUse.image && (
           <div className="flex items-center gap-2 mb-3">
             <Badge variant="secondary" className="text-lg px-3 py-1">
-              {locationData.name}
+              {dataToUse.name}
             </Badge>
           </div>
         )}
-        {locationData.field_select_text && (
+        {dataToUse.field_select_text && (
           <div
-            className=" text-muted-foreground mt-2"
+            className="text-muted-foreground mt-2"
             dangerouslySetInnerHTML={{
-              __html: locationData.field_select_text,
+              __html: dataToUse.field_select_text,
             }}
           />
         )}

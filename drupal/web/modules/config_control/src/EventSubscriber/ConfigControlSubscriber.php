@@ -53,6 +53,16 @@ class ConfigControlSubscriber implements EventSubscriberInterface {
   public function onExportTransform(StorageTransformEvent $event) {
     $storage = $event->getStorage();
     
+    // Отключаем обработчики веб-формы при экспорте
+    if ($storage->exists('webform.webform.application')) {
+      $webform_config = $storage->read('webform.webform.application');
+      $webform_config['handlers']['email']['status'] = true;
+      $webform_config['handlers']['expert_email']['status'] = true;
+      $webform_config['handlers']['remote_post']['status'] = true;
+      $storage->write('webform.webform.application', $webform_config);
+      \Drupal::logger('config_control')->notice('Обработчики веб-формы отключены для экспорта');
+    }
+
     // Исключаем модули разработки из экспорта
     $exclude_configs = [
       'devel.settings',
