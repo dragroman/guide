@@ -4,9 +4,10 @@ import { useState, useEffect } from "react"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
 import { Button } from "@/components/ui/button"
-import { Home, BookOpen, Phone } from "lucide-react"
+import { Home, BookOpen, Phone, Info } from "lucide-react"
 import { cn } from "@/lib/utils"
 import MenuMobile from "./MenuMobile"
+import { title } from "process"
 
 // Список путей, где хедер должен быть прозрачным
 const TRANSPARENT_PATHS = ["/", "/application"]
@@ -14,12 +15,22 @@ const TRANSPARENT_PATHS = ["/", "/application"]
 // Структура данных для пунктов навигации
 export const navigationItems = [
   { title: "Главная", href: "/", icon: <Home className="h-5 w-5 mr-2" /> },
-  { title: "Блог", href: "/blog", icon: <BookOpen className="h-5 w-5 mr-2" /> },
   {
-    title: "Контакт",
-    href: "/contact",
-    icon: <Phone className="h-5 w-5 mr-2" />,
+    title: "О проекте",
+    href: "/more",
+    icon: <Info className="h-5 w-5 mr-2" />,
   },
+  {
+    title: "Подобрать тур",
+    href: "/application",
+    icon: <BookOpen className="h-5 w-5 mr-2" />,
+  },
+  // { title: "Блог", href: "/blog", icon: <BookOpen className="h-5 w-5 mr-2" /> },
+  // {
+  //   title: "Контакт",
+  //   href: "/contact",
+  //   icon: <Phone className="h-5 w-5 mr-2" />,
+  // },
 ]
 
 export function Header({ className }: { className?: string }) {
@@ -80,7 +91,7 @@ export function Header({ className }: { className?: string }) {
         <nav className="flex items-center justify-between">
           {/* Логотип */}
           <Link href="/" className={getLogoStyle()}>
-            Haohub<span className="text-primary">.</span>
+            chinq<span className="text-primary">.</span>
           </Link>
 
           {/* Десктопное меню */}
@@ -94,25 +105,13 @@ export function Header({ className }: { className?: string }) {
                 {item.title}
               </Link>
             ))}
-
-            <div className="ml-4">
-              <Link href="/application">
-                <Button
-                  className={cn(
-                    "px-4",
-                    isScrolled || !shouldBeTransparent
-                      ? "bg-primary hover:bg-primary/90 text-primary-foreground"
-                      : "bg-white hover:bg-white/90 text-primary"
-                  )}
-                >
-                  Подобрать тур
-                </Button>
-              </Link>
-            </div>
           </div>
 
           {/* Мобильное меню с использованием Drawer */}
-          <MenuMobile isScrolled={isScrolled} />
+          <MenuMobile
+            isScrolled={isScrolled}
+            shouldBeTransparent={shouldBeTransparent}
+          />
         </nav>
       </div>
     </header>

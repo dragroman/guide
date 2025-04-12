@@ -16,20 +16,22 @@ import { cn } from "@/lib/utils"
 export default function MenuMobile({
   isScrolled,
   className,
+  shouldBeTransparent,
 }: {
   isScrolled?: boolean
+  shouldBeTransparent?: boolean
   className?: string
 }) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   const getMenuButtonStyle = () => {
     return cn(
       "p-2 rounded-md",
-      isScrolled ? "text-foreground" : "text-white",
+      shouldBeTransparent ? "text-white" : "text-foreground",
       className
     )
   }
   return (
-    <div className="md:hidden">
+    <div>
       <Drawer open={mobileMenuOpen} onOpenChange={setMobileMenuOpen}>
         <DrawerTrigger asChild>
           <Button
@@ -66,7 +68,7 @@ export default function MenuMobile({
               className="flex items-center py-4 px-4 rounded-md bg-primary/10 text-primary font-medium"
             >
               <MapPin className="h-5 w-5 mr-2" />
-              Подобрать тур
+              Начать планирование
             </Link>
           </div>
         </DrawerContent>

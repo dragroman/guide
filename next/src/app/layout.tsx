@@ -28,13 +28,19 @@ const merriweather = localFont({
 })
 export const metadata: Metadata = {
   title: {
-    default: "Туры в Китай",
-    template: "%s | Туры в Китай",
+    default: "Индивидуальный тур в Китае",
+    template: "%s | chinq.ru",
   },
-  description: "Путеводитель по Китаю от глазами экспертов",
+  description: "A Next.js site powered by a Drupal backend.",
   icons: {
-    icon: "/favicon.ico",
+    icon: [
+      { url: "/favicon/favicon.ico" },
+      { url: "/favicon/favicon.svg", type: "image/svg+xml" },
+      { url: "/favicon/favicon-96x96.png", sizes: "96x96", type: "image/png" },
+    ],
+    apple: [{ url: "/favicon/apple-touch-icon.png" }],
   },
+  manifest: "/manifest.json",
 }
 
 export const viewport: Viewport = {

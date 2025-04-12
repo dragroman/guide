@@ -59,7 +59,7 @@ export default function ApplicationHeader({
                   alt="Запрос на индивидуальный тур"
                 />
               </div>
-              <div>Форма</div>
+              <div>Планирование</div>
             </div>
             <div className="flex justify-end">
               <MenuMobile className="text-muted-foreground" />
