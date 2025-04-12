@@ -21,9 +21,7 @@ import texts from "../localization/ru"
 export function StepBudget({ control, formData, setValue }: StepProps) {
   const t = texts.budget
 
-  const [localBudget, setLocalBudget] = useState<number>(
-    formData.budget || 30000
-  )
+  const [localBudget, setLocalBudget] = useState<number>(formData.budget)
 
   const [isDragging, setIsDragging] = useState(false)
 

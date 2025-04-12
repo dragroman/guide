@@ -506,7 +506,7 @@ export const defaultFormValues: ApplicationSchemaType = {
       needed: false,
     },
   },
-  budget: 7000,
+  budget: 0,
   needVisa: false,
   needInsurance: false,
 }

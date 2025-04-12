@@ -4,24 +4,15 @@ import { useState, useEffect } from "react"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
 import { Button } from "@/components/ui/button"
-import {
-  Drawer,
-  DrawerContent,
-  DrawerHeader,
-  DrawerTitle,
-  DrawerDescription,
-  DrawerFooter,
-  DrawerClose,
-  DrawerTrigger,
-} from "@/components/ui/drawer"
-import { Menu, X, Home, BookOpen, Phone, MapPin } from "lucide-react"
+import { Home, BookOpen, Phone } from "lucide-react"
 import { cn } from "@/lib/utils"
+import MenuMobile from "./MenuMobile"
 
 // Список путей, где хедер должен быть прозрачным
 const TRANSPARENT_PATHS = ["/", "/application"]
 
 // Структура данных для пунктов навигации
-const navigationItems = [
+export const navigationItems = [
   { title: "Главная", href: "/", icon: <Home className="h-5 w-5 mr-2" /> },
   { title: "Блог", href: "/blog", icon: <BookOpen className="h-5 w-5 mr-2" /> },
   {
@@ -34,7 +25,6 @@ const navigationItems = [
 export function Header({ className }: { className?: string }) {
   const pathname = usePathname()
   const [isScrolled, setIsScrolled] = useState(false)
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
 
   const shouldBeTransparent = TRANSPARENT_PATHS.includes(pathname)
 
@@ -78,14 +68,6 @@ export function Header({ className }: { className?: string }) {
       isScrolled || !shouldBeTransparent ? "text-foreground" : "text-white"
     )
   }
-
-  const getMenuButtonStyle = () => {
-    return cn(
-      "p-2 rounded-md",
-      isScrolled || !shouldBeTransparent ? "text-foreground" : "text-white"
-    )
-  }
-
   return (
     <header
       className={cn(
@@ -130,56 +112,7 @@ export function Header({ className }: { className?: string }) {
           </div>
 
           {/* Мобильное меню с использованием Drawer */}
-          <div className="md:hidden">
-            <Drawer open={mobileMenuOpen} onOpenChange={setMobileMenuOpen}>
-              <DrawerTrigger asChild>
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  className={getMenuButtonStyle()}
-                  aria-label="Меню"
-                >
-                  <Menu className="h-6 w-6" />
-                </Button>
-              </DrawerTrigger>
-              <DrawerContent>
-                <DrawerHeader>
-                  <DrawerTitle className="text-center text-xl">
-                    Навигация
-                  </DrawerTitle>
-                  <DrawerDescription className="text-center">
-                    Выберите раздел сайта
-                  </DrawerDescription>
-                </DrawerHeader>
-                <div className="p-4 flex flex-col space-y-2">
-                  {navigationItems.map((item) => (
-                    <Link
-                      key={item.href}
-                      href={item.href}
-                      onClick={() => setMobileMenuOpen(false)}
-                      className={cn(
-                        "flex items-center py-4 px-4 rounded-md",
-                        pathname === item.href
-                          ? "bg-primary/10 text-primary font-medium"
-                          : "hover:bg-muted"
-                      )}
-                    >
-                      {item.icon}
-                      {item.title}
-                    </Link>
-                  ))}
-                  <Link
-                    href="/application"
-                    onClick={() => setMobileMenuOpen(false)}
-                    className="flex items-center py-4 px-4 rounded-md bg-primary/10 text-primary font-medium"
-                  >
-                    <MapPin className="h-5 w-5 mr-2" />
-                    Подобрать тур
-                  </Link>
-                </div>
-              </DrawerContent>
-            </Drawer>
-          </div>
+          <MenuMobile isScrolled={isScrolled} />
         </nav>
       </div>
     </header>
