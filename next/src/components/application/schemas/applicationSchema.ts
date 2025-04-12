@@ -317,9 +317,10 @@ export const applicationSchema = z.object({
 
     preferences: z
       .object({
-        tryLocal: z.boolean(),
-        spicyOk: z.boolean(),
-        fattyOk: z.boolean(),
+        noSpicy: z.boolean(),
+        noFatty: z.boolean(),
+        vegetarian: z.boolean(),
+        halal: z.boolean(),
         other: z.boolean(),
         otherDescription: z.string(),
       })
@@ -352,6 +353,7 @@ export const applicationSchema = z.object({
         boutiques: z.boolean(),
         markets: z.boolean(),
         outlets: z.boolean(),
+        online: z.boolean(),
         other: z.boolean(),
         otherDescription: z.string(),
       })
@@ -470,9 +472,10 @@ export const defaultFormValues: ApplicationSchemaType = {
       otherDescription: "",
     },
     preferences: {
-      tryLocal: false,
-      spicyOk: false,
-      fattyOk: false,
+      noSpicy: false,
+      noFatty: false,
+      vegetarian: false,
+      halal: false,
       other: false,
       otherDescription: "",
     },
@@ -488,6 +491,7 @@ export const defaultFormValues: ApplicationSchemaType = {
       malls: false,
       boutiques: false,
       markets: false,
+      online: false,
       outlets: false,
       other: false,
       otherDescription: "",

@@ -114,28 +114,29 @@ export function StepFood({
   // Опции для предпочтений по питанию
   const foodPreferencesOptions: CardOption[] = [
     {
-      name: "tryLocal",
-      label: t.preferences.tryLocal.label,
-      description: t.preferences.tryLocal.description,
-      icon: <Star className="h-5 w-5" />,
+      name: "noSpicy",
+      label: t.preferences.noSpicy.label,
+      description: t.preferences.noSpicy.description,
     },
     {
-      name: "spicyOk",
-      label: t.preferences.spicyOk.label,
-      description: t.preferences.spicyOk.description,
-      icon: <Flame className="h-5 w-5" />,
+      name: "noFatty",
+      label: t.preferences.noFatty.label,
+      description: t.preferences.noFatty.description,
     },
     {
-      name: "fattyOk",
-      label: t.preferences.fattyOk.label,
-      description: t.preferences.fattyOk.description,
-      icon: <Leaf className="h-5 w-5" />,
+      name: "vegetarian",
+      label: t.preferences.vegetarian.label,
+      description: t.preferences.vegetarian.description,
+    },
+    {
+      name: "halal",
+      label: t.preferences.halal.label,
+      description: t.preferences.halal.description,
     },
     {
       name: "other",
       label: t.preferences.other.label,
       description: t.preferences.other.description,
-      icon: <AlertTriangle className="h-5 w-5" />,
     },
   ]
 

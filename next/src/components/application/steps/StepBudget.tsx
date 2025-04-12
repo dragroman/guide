@@ -128,6 +128,7 @@ export function StepBudget({ control, formData, setValue }: StepProps) {
       />
 
       <div>
+        <div className="">{t.label}</div>
         <div
           className={`flex ${formData.peopleCount > 1 ? "justify-between" : "justify-end"} items-center mb-8 mt-4`}
         >

@@ -84,6 +84,11 @@ export function StepShopping({
       description: t.places.outlets.description,
     },
     {
+      name: "online",
+      label: t.places.online.label,
+      description: t.places.online.description,
+    },
+    {
       name: "other",
       label: t.places.other.label,
       description: t.places.other.description,
@@ -96,13 +101,13 @@ export function StepShopping({
       name: "fewHours",
       label: t.time.fewHours.label,
       description: t.time.fewHours.description,
-      icon: <Clock className="h-5 w-5" />,
+      icon: <Clock1 className="h-5 w-5" />,
     },
     {
       name: "halfDay",
       label: t.time.halfDay.label,
       description: t.time.halfDay.description,
-      icon: <Clock1 className="h-5 w-5" />,
+      icon: <Clock className="h-5 w-5" />,
     },
     {
       name: "fullDay",

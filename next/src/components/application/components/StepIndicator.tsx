@@ -113,7 +113,7 @@ export function StepIndicator({
                   )}
                 >
                   {isCompleted ? (
-                    <Check className="h-3.5 w-3.5" />
+                    <span className="text-xs font-medium">{index + 1}</span>
                   ) : (
                     <span className="text-xs font-medium">{index + 1}</span>
                   )}
