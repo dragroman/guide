@@ -18,7 +18,7 @@ import { Switch } from "@/components/ui/switch"
 import { Label } from "@/components/ui/label"
 import texts from "../localization/ru"
 
-export function StepBudget({ control, formData, setValue }: StepProps) {
+export function StepBudget({ control, formData, setValue, errors }: StepProps) {
   const t = texts.budget
 
   const [localBudget, setLocalBudget] = useState<number>(formData.budget)
@@ -147,6 +147,14 @@ export function StepBudget({ control, formData, setValue }: StepProps) {
             <div className="text-xs ml-1 text-muted-foreground">{t.perDay}</div>
           </div>
         </div>
+
+        {errors.budget && (
+          <div className="text-sm font-medium text-destructive mb-4">
+            {typeof errors.budget === "object" && errors.budget.message
+              ? errors.budget.message
+              : "Пожалуйста, укажите бюджет"}
+          </div>
+        )}
 
         <Controller
           name="budget"

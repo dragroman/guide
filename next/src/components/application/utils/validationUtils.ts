@@ -5,6 +5,7 @@ import {
   UseFormGetValues,
 } from "react-hook-form"
 import { ApplicationSchemaType } from "../schemas/applicationSchema"
+import { isValidPhoneNumber } from "react-phone-number-input"
 
 /**
  * Проверяет, что если выбрано "Другое", то заполнено описание
@@ -304,23 +305,66 @@ export async function validateContact(
   clearErrors: Function
 ): Promise<boolean> {
   const contact = getValues("contact")
-  if (
+
+  // Проверяем, что хотя бы одно поле заполнено
+  const hasAnyContact = !!(
     contact.phone ||
     contact.email ||
     contact.wechat ||
     contact.telegram ||
     contact.whatsapp
-  ) {
-    clearErrors("contact")
-    return true
+  )
+
+  if (!hasAnyContact) {
+    setError("contact", {
+      type: "custom",
+      message: "Укажите хотя бы один способ связи",
+    })
+    return false
   }
 
-  // Если ни одно поле не заполнено, устанавливаем ошибку
-  setError("contact", {
-    type: "custom",
-    message: "Укажите хотя бы один способ связи",
-  })
-  return false
+  if (contact.phone) {
+    try {
+      // Проверяем номер телефона с помощью библиотеки
+      if (!isValidPhoneNumber(contact.phone)) {
+        setError("contact.phone", {
+          type: "custom",
+          message: "Введите корректный номер телефона в международном формате",
+        })
+        return false
+      }
+    } catch (error) {
+      // Если функция выбросила исключение, значит формат номера некорректный
+      setError("contact.phone", {
+        type: "custom",
+        message: "Некорректный формат номера телефона",
+      })
+      return false
+    }
+  }
+
+  if (contact.whatsapp) {
+    try {
+      // Check WhatsApp number using the library
+      if (!isValidPhoneNumber(contact.whatsapp)) {
+        setError("contact.whatsapp", {
+          type: "custom",
+          message: "Введите корректный номер WhatsApp в международном формате",
+        })
+        return false
+      }
+    } catch (error) {
+      setError("contact.whatsapp", {
+        type: "custom",
+        message: "Некорректный формат номера WhatsApp",
+      })
+      return false
+    }
+  }
+
+  // Запускаем стандартную валидацию через схему Zod
+  const isStepValid = await trigger(["contact"])
+  return isStepValid
 }
 
 export async function validateShopping(
@@ -352,7 +396,21 @@ export async function validateShopping(
 }
 
 export async function validateBudget(
-  trigger: UseFormTrigger<ApplicationSchemaType>
+  trigger: UseFormTrigger<ApplicationSchemaType>,
+  getValues: UseFormGetValues<ApplicationSchemaType>,
+  setError: UseFormSetError<ApplicationSchemaType>
 ): Promise<boolean> {
-  return await trigger(["budget"])
+  // Сначала проверяем стандартные поля через схему
+  const isStepValid = await trigger(["budget"])
+  if (!isStepValid) return false
+
+  // Получаем значение бюджета с помощью getValues
+  const budget = getValues("budget") as number
+
+  // Проверяем, что бюджет не 0 и не менее 1000
+  if (budget === 0) {
+    return false
+  }
+
+  return true
 }

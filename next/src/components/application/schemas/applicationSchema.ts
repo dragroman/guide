@@ -382,7 +382,25 @@ export const applicationSchema = z.object({
       needed: z.boolean(),
     }),
   }),
-  budget: z.number().min(0).max(100000),
+  budget: z
+    .union([
+      z
+        .number()
+        .min(1000, "Минимальная сумма должна быть больше 1000 руб в день")
+        .max(100000),
+      z
+        .string()
+        .refine((value) => !isNaN(Number(value)), "Должно быть числом")
+        .transform((value) => Number(value)),
+    ])
+    .transform((value) => {
+      // Гарантированно возвращаем число, даже если пришла строка
+      if (typeof value === "string") {
+        return Number(value)
+      }
+      return value
+    }),
+
   needVisa: z.boolean(),
   needInsurance: z.boolean(),
 })

@@ -95,7 +95,6 @@ export function StepConfirmation({ formData }: StepProps) {
         </div>
         <div className="font-bold text-2xl">{formData.name}</div>
       </div>
-      Город:
       <LocationDescription value={formData.city} />
       <div className="rounded-md overflow-hidden">
         {/* Информация о группе */}

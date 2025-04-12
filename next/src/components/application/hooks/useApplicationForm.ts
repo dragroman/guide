@@ -2,7 +2,7 @@ import { useReducer, useCallback, useEffect } from "react"
 import { Resolver, SubmitHandler, useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { DateRange } from "react-day-picker"
-import { differenceInDays } from "date-fns"
+import { differenceInDays, set } from "date-fns"
 import {
   applicationSchema,
   ApplicationSchemaType,
@@ -170,7 +170,7 @@ export function useApplicationForm() {
         isValid = await validateShopping(trigger, getValues, setError)
         break
       case 6:
-        isValid = await validateBudget(trigger)
+        isValid = await validateBudget(trigger, getValues, setError)
         break
       case 7:
         isValid = await validateContact(

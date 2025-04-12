@@ -20,6 +20,7 @@ import {
 } from "@/components/ui/dialog"
 import Image from "next/image"
 import { useSearchParams } from "next/navigation"
+import { Separator } from "@/components/ui/separator"
 
 interface SuccessViewProps {
   onReset: () => void
@@ -38,23 +39,20 @@ export function SuccessView({ onReset }: SuccessViewProps) {
   }, [searchParams])
 
   return (
-    <>
-      <Card className="w-full max-w-md mx-auto">
-        <CardHeader>
-          <CardTitle className="text-center">
+    <div className="h-[100vh] flex flex-col items-center justify-between">
+      <div className="w-full max-w-md mx-auto pt-20 px-4">
+        <div className="mb-4">
+          <div className="text-center text-3xl font-bold mb-4">
             Заявка успешно отправлена!
-          </CardTitle>
-          <CardDescription className="text-center">
-            Мы свяжемся с вами в ближайшее время
-          </CardDescription>
-        </CardHeader>
-        <CardContent className="flex flex-col items-center gap-4">
-          <div className="w-16 h-16 rounded-full bg-primary/20 flex items-center justify-center text-primary">
+          </div>
+        </div>
+        <div className="flex flex-col items-center gap-4 mb-8">
+          <div className="mt-4 w-16 h-16 rounded-full bg-primary/20 flex items-center justify-center text-primary animate-bounce">
             <CheckCircle2 className="h-10 w-10" />
           </div>
           <p className="text-center text-muted-foreground">
-            Спасибо за вашу заявку. Наш менеджер свяжется с вами в ближайшее
-            время для уточнения деталей.
+            Отлично! Наш координатор совсем скоро свяжется с вами, чтобы вместе
+            спланировать ваше увлекательное путешествие!
           </p>
           {expertEmail && (
             <div className="mt-2 w-full p-3 bg-blue-50 rounded-md border border-blue-100 text-sm">
@@ -64,12 +62,18 @@ export function SuccessView({ onReset }: SuccessViewProps) {
               </p>
             </div>
           )}
-        </CardContent>
-        <CardFooter className="flex justify-center">
-          <Button onClick={onReset}>Отправить еще одну заявку</Button>
-        </CardFooter>
-      </Card>
-      <div className="w-full max-w-sm mx-auto text-center mt-4">
+        </div>
+        <div className="flex flex-col text-center">
+          <Link href="/" className="mb-2">
+            <Button>Вернуться на сайт</Button>
+          </Link>
+
+          <Button variant="link" onClick={onReset}>
+            Отправить еще одну заявку
+          </Button>
+        </div>
+      </div>
+      <div className="w-full max-w-sm mx-auto text-center mb-4">
         <div className="text-muted-foreground text-sm">
           Написать разработчику формы
         </div>
@@ -90,6 +94,6 @@ export function SuccessView({ onReset }: SuccessViewProps) {
           </Dialog>
         </div>
       </div>
-    </>
+    </div>
   )
 }

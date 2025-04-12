@@ -74,19 +74,29 @@ export function StepContactInfo({ control, errors }: StepProps) {
           />
         )}
       />
-      <Controller
-        name="contact.whatsapp"
-        control={control}
-        render={({ field }) => (
-          <FormField
-            onChange={field.onChange}
-            value={field.value ?? ""}
-            label={t.whatsappLabel}
-            name="Whatsapp"
-            placeholder={t.whatsappPlaceholder}
-          />
+      <div>
+        <Label htmlFor="phone">{t.whatsappLabel}</Label>
+        <Controller
+          name="contact.whatsapp"
+          control={control}
+          render={({ field }) => (
+            <PhoneInput
+              id="Whatsapp"
+              value={field.value}
+              onChange={field.onChange}
+              className={errors.contact?.whatsapp ? "border-destructive" : ""}
+              defaultCountry="RU"
+              international
+            />
+          )}
+        />
+        <p className="text-xs text-muted-foreground">{t.phoneDescription}</p>
+        {errors.contact?.whatsapp && (
+          <p className="text-sm font-medium text-destructive">
+            {errors.contact.whatsapp.message}
+          </p>
         )}
-      />
+      </div>
       <Controller
         name="contact.telegram"
         control={control}
