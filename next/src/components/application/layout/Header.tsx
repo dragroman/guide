@@ -2,9 +2,8 @@ import React from "react"
 import { StepIndicator } from "../components/StepIndicator"
 import { STEPS } from "../constants"
 import { Button } from "@/components/ui/button"
-import { ArrowLeft, ChevronLeft, History, Menu } from "lucide-react"
+import { ChevronLeft, History } from "lucide-react"
 import Image from "next/image"
-import Link from "next/link"
 import MenuMobile from "@/components/navigation/MenuMobile"
 
 interface ApplicationHeaderProps {

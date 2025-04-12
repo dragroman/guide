@@ -62,14 +62,6 @@ export default function MenuMobile({
                 {item.title}
               </Link>
             ))}
-            <Link
-              href="/application"
-              onClick={() => setMobileMenuOpen(false)}
-              className="flex items-center py-4 px-4 rounded-md bg-primary/10 text-primary font-medium"
-            >
-              <MapPin className="h-5 w-5 mr-2" />
-              Начать планирование
-            </Link>
           </div>
         </DrawerContent>
       </Drawer>

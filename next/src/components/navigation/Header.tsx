@@ -3,11 +3,9 @@
 import { useState, useEffect } from "react"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
-import { Button } from "@/components/ui/button"
-import { Home, BookOpen, Phone, Info } from "lucide-react"
+import { Home, BookOpen, Phone, Info, User2 } from "lucide-react"
 import { cn } from "@/lib/utils"
 import MenuMobile from "./MenuMobile"
-import { title } from "process"
 
 // Список путей, где хедер должен быть прозрачным
 const TRANSPARENT_PATHS = ["/", "/application"]
@@ -19,6 +17,12 @@ export const navigationItems = [
     title: "О проекте",
     href: "/more",
     icon: <Info className="h-5 w-5 mr-2" />,
+  },
+
+  {
+    title: "Для эксперта",
+    href: "/expert",
+    icon: <User2 className="h-5 w-5 mr-2" />,
   },
   {
     title: "Подобрать тур",
@@ -82,7 +86,7 @@ export function Header({ className }: { className?: string }) {
   return (
     <header
       className={cn(
-        "fixed top-0 left-0 right-0 z-50 transition-all duration-300 py-3",
+        "fixed top-0 left-0 right-0 z-50 transition-all duration-300 py-2",
         getHeaderStyle(),
         className
       )}

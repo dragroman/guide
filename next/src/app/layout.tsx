@@ -28,7 +28,7 @@ const merriweather = localFont({
 })
 export const metadata: Metadata = {
   title: {
-    default: "Индивидуальный тур в Китае",
+    default: "Индивидуальный тур в Китай",
     template: "%s | chinq.ru",
   },
   description: "A Next.js site powered by a Drupal backend.",
