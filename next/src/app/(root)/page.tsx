@@ -3,11 +3,14 @@ import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import Link from "next/link"
 import Image from "next/image"
+import { SOCIAL } from "@/lib/constants"
 
 export const metadata: Metadata = {
   title: "Путеводитель по Китаю",
   description: "Лучший путеводитель по Китаю от местного жителя",
 }
+
+const t = SOCIAL
 
 export default async function Home() {
   return (
@@ -18,7 +21,7 @@ export default async function Home() {
         <div className="absolute inset-0 z-0">
           <Image
             src="/hero.jpg"
-            alt="Панорама Харбина"
+            alt="Китай"
             fill
             priority
             quality={85}
@@ -63,6 +66,19 @@ export default async function Home() {
                 Подробнее
               </Button>
             </Link>
+            <div className="text-white mb-2">Мы в социальных сетях</div>
+            <div className="space-x-4">
+              <a target="_blank" href={t.instagram.link}>
+                <Button variant="outline">
+                  <t.instagram.icon /> {t.instagram.label}
+                </Button>
+              </a>
+              <a target="_blank" href={t.telegram.link}>
+                <Button variant="outline">
+                  <t.telegram.icon /> {t.telegram.label}
+                </Button>
+              </a>
+            </div>
             {/* <Link href="/blog">
               <Button size="lg" variant="outline" className="px-8">
                 Читать блог

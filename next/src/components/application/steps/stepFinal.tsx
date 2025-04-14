@@ -5,6 +5,7 @@ import { StepProps } from "../types"
 import { SmilePlus } from "lucide-react"
 import texts from "../localization/ru"
 import { LocationDescription } from "../components/LocationDescription"
+import DownloadPdfButton from "../components/DownloadPdfButton"
 
 export function StepConfirmation({ formData }: StepProps) {
   const t = texts.confirmation
@@ -236,6 +237,13 @@ export function StepConfirmation({ formData }: StepProps) {
           condition={formData.needInsurance}
         />
       </div>
+      {/* TODO: PDF button */}
+      {/* <div className="flex justify-center mt-6">
+        <DownloadPdfButton
+          formData={formData}
+          className="w-full py-3 text-base"
+        />
+      </div> */}
       <div className="text-muted-foreground flex items-start border border-gray-200 rounded-md p-3">
         <SmilePlus className="flex-shrink-0 mr-4 w-6 h-6 mt-1" />
         <div>

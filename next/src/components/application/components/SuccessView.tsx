@@ -1,30 +1,22 @@
 import React, { useEffect, useState } from "react"
 import { CheckCircle2 } from "lucide-react"
 import { Button } from "@/components/ui/button"
-import {
-  Card,
-  CardHeader,
-  CardContent,
-  CardFooter,
-  CardTitle,
-  CardDescription,
-} from "@/components/ui/card"
 import Link from "next/link"
 import {
   Dialog,
   DialogContent,
-  DialogDescription,
-  DialogHeader,
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog"
 import Image from "next/image"
 import { useSearchParams } from "next/navigation"
-import { Separator } from "@/components/ui/separator"
+import { SOCIAL } from "@/lib/constants"
 
 interface SuccessViewProps {
   onReset: () => void
 }
+
+const t = SOCIAL
 
 export function SuccessView({ onReset }: SuccessViewProps) {
   const searchParams = useSearchParams()
@@ -63,11 +55,26 @@ export function SuccessView({ onReset }: SuccessViewProps) {
             </div>
           )}
         </div>
-        <div className="flex flex-col text-center">
+        <div className="flex flex-col text-center space-y-4">
+          <p className="">
+            А пока можете подписаться наши социальные сети, чтобы бы быть в
+            курсе
+          </p>
+          <div className="space-x-4">
+            <a target="_blank" href={t.instagram.link}>
+              <Button>
+                <t.instagram.icon /> {t.instagram.label}
+              </Button>
+            </a>
+            <a target="_blank" href={t.telegram.link}>
+              <Button>
+                <t.telegram.icon /> {t.telegram.label}
+              </Button>
+            </a>
+          </div>
           <Link href="/" className="mb-2">
-            <Button>Вернуться на сайт</Button>
+            <Button variant="outline">Вернуться на сайт</Button>
           </Link>
-
           <Button variant="link" onClick={onReset}>
             Отправить еще одну заявку
           </Button>
