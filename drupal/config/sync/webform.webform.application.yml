@@ -114,9 +114,10 @@ elements: |-
     '#type': checkboxes
     '#title': food_preferences
     '#options':
-      tryLocal: tryLocal
-      spicyOk: spicyOk
-      fattyOk: fattyOk
+      noSpicy: noSpicy
+      noFatty: noFatty
+      vegetarian: vegetarian
+      halal: halal
       other: other
   food_preferences_other:
     '#type': textarea
@@ -159,6 +160,7 @@ elements: |-
       boutiques: boutiques
       markets: markets
       outlets: outlets
+      online: online
       other: other
   shopping_places_other:
     '#type': textarea
