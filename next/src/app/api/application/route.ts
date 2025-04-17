@@ -51,6 +51,7 @@ export async function POST(request: NextRequest) {
         budget: body.budget,
         needVisa: body.needVisa,
         needInsurance: body.needInsurance,
+        needGuide: body.needGuide,
         expert_email: expertEmail,
         city: body.city,
         cityInternalId: body.cityInternalId,
@@ -138,6 +139,7 @@ export async function POST(request: NextRequest) {
           accommodation_other: body.accommodation.options.other
             ? body.accommodation.options.otherDescription
             : "",
+          accommodation_need_breakfast: body.accommodation.needBreakfast,
           accommodation_preferences: accommodationPreferencesArray,
           accommodation_preferences_other: body.accommodation.preferences.other
             ? body.accommodation.options.otherDescription
@@ -168,6 +170,7 @@ export async function POST(request: NextRequest) {
           budget: body.budget,
           need_visa: body.needVisa,
           need_insurance: body.needInsurance,
+          need_guide: body.needGuide,
           expert_email: body.expertEmail,
           city: body.cityInternalId,
         }),

@@ -22,7 +22,6 @@ export function ShareForm({ formId }: ShareLinkButtonProps) {
   const [showError, setShowError] = useState(false)
   const [expertEmail, setExpertEmail] = useState("")
 
-  // Генерация ссылки для шаринга
   const generateShareLink = () => {
     if (!expertEmail || !isValidEmail(expertEmail)) {
       setShowError(true)
@@ -30,8 +29,8 @@ export function ShareForm({ formId }: ShareLinkButtonProps) {
     }
 
     setShowError(false)
-    const currentUrl = window.location.origin + window.location.pathname
-    return `${currentUrl}?email=${encodeURIComponent(expertEmail)}`
+    const shareUrl = `${window.location.origin}/application`
+    return `${shareUrl}?email=${encodeURIComponent(expertEmail)}`
   }
 
   // Проверка валидности email

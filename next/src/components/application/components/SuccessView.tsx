@@ -44,7 +44,8 @@ export function SuccessView({ onReset }: SuccessViewProps) {
           </div>
           <p className="text-center text-muted-foreground">
             Отлично! Наш координатор совсем скоро свяжется с вами, чтобы вместе
-            спланировать ваше увлекательное путешествие!
+            спланировать ваше увлекательное путешествие! Примерное время
+            ожидания ~2 недели.
           </p>
           {expertEmail && (
             <div className="mt-2 w-full p-3 bg-blue-50 rounded-md border border-blue-100 text-sm">

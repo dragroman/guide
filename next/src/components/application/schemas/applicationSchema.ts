@@ -209,6 +209,7 @@ export const applicationSchema = z.object({
         }
       ),
 
+    needBreakfast: z.boolean(),
     preferences: z
       .object({
         centralLocation: z.boolean(),
@@ -403,6 +404,7 @@ export const applicationSchema = z.object({
 
   needVisa: z.boolean(),
   needInsurance: z.boolean(),
+  needGuide: z.boolean(),
 })
 
 // Типизированная структура данных приложения с единым стилем
@@ -454,6 +456,7 @@ export const defaultFormValues: ApplicationSchemaType = {
       other: false,
       otherDescription: "",
     },
+    needBreakfast: false,
     preferences: {
       centralLocation: false,
       nearShoppingCenters: false,
@@ -527,4 +530,5 @@ export const defaultFormValues: ApplicationSchemaType = {
   budget: 0,
   needVisa: false,
   needInsurance: false,
+  needGuide: false,
 }

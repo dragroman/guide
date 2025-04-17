@@ -12,6 +12,7 @@ import Link from "next/link"
 import { navigationItems } from "./Header"
 import { useState } from "react"
 import { cn } from "@/lib/utils"
+import { SOCIAL } from "@/lib/constants"
 
 export default function MenuMobile({
   isScrolled,
@@ -22,6 +23,7 @@ export default function MenuMobile({
   shouldBeTransparent?: boolean
   className?: string
 }) {
+  const t = SOCIAL
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   const getMenuButtonStyle = () => {
     return cn(
@@ -62,6 +64,19 @@ export default function MenuMobile({
                 {item.title}
               </Link>
             ))}
+          </div>
+          <div className="text-center">Мы в социальных сетях</div>
+          <div className="flex justify-center space-x-4 py-4">
+            <a target="_blank" href={t.instagram.link}>
+              <Button variant="outline">
+                <t.instagram.icon /> {t.instagram.label}
+              </Button>
+            </a>
+            <a target="_blank" href={t.telegram.link}>
+              <Button variant="outline">
+                <t.telegram.icon /> {t.telegram.label}
+              </Button>
+            </a>
           </div>
         </DrawerContent>
       </Drawer>

@@ -20,11 +20,13 @@ import {
   getErrorMessage,
 } from "../utils/errorHelpers"
 import texts from "../localization/ru"
+import { Switch } from "@/components/ui/switch"
 
 export function StepAccommodation({
   control,
   errors,
   formData,
+  setValue,
   handleOptionChange,
   handleTextChange,
 }: StepProps) {
@@ -128,6 +130,13 @@ export function StepAccommodation({
     handleTextChange?.("accommodation.preferences", value)
   }
 
+  const shouldShowBreakfastOption = () => {
+    const selectedOptions = formData.accommodation.options
+    return (
+      selectedOptions.hotel3 || selectedOptions.hotel4 || selectedOptions.hotel5
+    )
+  }
+
   return (
     <div className="space-y-8">
       <h1 className="text-3xl font-bold">{t.title}</h1>
@@ -138,6 +147,28 @@ export function StepAccommodation({
             {texts.common.selectMultiple}
           </div>
         </div>
+        {shouldShowBreakfastOption() && (
+          <Controller
+            name="accommodation.needBreakfast"
+            control={control}
+            render={({ field }) => (
+              <div className="flex items-center space-x-2">
+                <Switch
+                  id="accommodation.needBreakfast"
+                  checked={field.value}
+                  onChange={field.onChange}
+                  onCheckedChange={(checked) => {
+                    field.onChange(checked)
+                    setValue("accommodation.needBreakfast", checked)
+                  }}
+                />
+                <Label htmlFor="accommodation.needBreakfast">
+                  {t.needBreakfast}
+                </Label>
+              </div>
+            )}
+          />
+        )}
         {hasAccommodationOptionsError() && (
           <p className="text-sm font-medium text-destructive mt-2">
             {getErrorMessage(

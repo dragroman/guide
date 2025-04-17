@@ -82,8 +82,9 @@ export const texts = {
         description: "Местная кухня, рестораны, уличная еда, дегустации",
       },
       fun: {
-        label: "Развлечения и события",
-        description: "Парки, мероприятия, вечеринки",
+        label: "События и фестивали",
+        description:
+          "Традиционные праздники, мероприятия, вечеринки, фестивали, традиционные праздники",
       },
       health: {
         label: "Оздоровление и релакс",
@@ -105,6 +106,7 @@ export const texts = {
     otherPlaceholder: "Опишите предпочитаемый тип размещения",
     preferenceOtherLabel: "Укажите ваши пожелания",
     preferenceOtherPlaceholder: "Опишите ваши пожелания к размещению",
+    needBreakfast: "С завтраком",
 
     // Типы размещения
     options: {
@@ -351,9 +353,10 @@ export const texts = {
   budget: {
     title: "Подберём идеальный тур!",
     description:
-      "Укажите, сколько вы примерно готовы тратить в день (включая проживание) — это не финальная стоимость тура, а ориентир, чтобы мы могли подобрать предложения, подходящие именно вам.",
+      "Укажите, сколько вы примерно готовы тратить в день — это не финальная стоимость тура, а ориентир, чтобы мы могли подобрать предложения, подходящие именно вам.",
     visaQuestion: "Мне нужна виза",
     insuranceQuestion: "Мне нужна страховка",
+    guideQuestion: "Мне нужен гид",
     label: "",
     perPerson: "на человека в день",
     perDay: "всего в день",
@@ -366,7 +369,7 @@ export const texts = {
     messages: [
       {
         emotion: "joy",
-        title: "Чем точнее бюджет – тем лучше путешествие!",
+        title: "Сколько вы готовы тратить в день?",
         text: "Давайте сделаем ваш отдых незабываемым, подобрав оптимальные варианты!",
       },
       {
@@ -383,7 +386,6 @@ export const texts = {
 
     // Включённые услуги
     services: [
-      { key: "accommodation", title: "Проживание", included: true },
       { key: "transport", title: "Транспорт внутри страны", included: true },
       { key: "impressions", title: "Незабываемые впечатления", included: true },
       {
@@ -391,16 +393,15 @@ export const texts = {
         title: "Дорожный путеводитель с рекомендациями",
         included: true,
       },
-      { key: "support", title: "Круглосуточная поддержка", included: true },
       {
         key: "planning",
         title: "Индивидуальное планирование путешествия",
         included: true,
       },
       {
-        key: "assistance",
-        title: "Помощь при въезде и выезде",
-        included: true,
+        key: "accommodation",
+        title: "Проживание не включено",
+        included: false,
       },
       {
         key: "flights",

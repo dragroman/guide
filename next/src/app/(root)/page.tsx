@@ -61,24 +61,15 @@ export default async function Home() {
                 Начать планирование
               </Button>
             </Link>
+            <div className="text-sm text-white">
+              Заполнение формы займет всего 3-4 минуты
+            </div>
             <Link href="/more">
               <Button size="lg" variant="link" className="text-white">
                 Подробнее
               </Button>
             </Link>
-            <div className="text-white mb-2">Мы в социальных сетях</div>
-            <div className="space-x-4">
-              <a target="_blank" href={t.instagram.link}>
-                <Button variant="outline">
-                  <t.instagram.icon /> {t.instagram.label}
-                </Button>
-              </a>
-              <a target="_blank" href={t.telegram.link}>
-                <Button variant="outline">
-                  <t.telegram.icon /> {t.telegram.label}
-                </Button>
-              </a>
-            </div>
+
             {/* <Link href="/blog">
               <Button size="lg" variant="outline" className="px-8">
                 Читать блог

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react"
+import React, { useState, useEffect, Suspense } from "react"
 import { Controller } from "react-hook-form"
 import { StepProps } from "../types"
 import { Slider } from "@/components/ui/slider"
@@ -6,17 +6,10 @@ import { Badge } from "@/components/ui/badge"
 import { getDaysText } from "../utils"
 import { formatNumberWithSpaces } from "../utils/formatUtils"
 import { HelpCircle, Check, CircleX } from "lucide-react"
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog"
 import { Switch } from "@/components/ui/switch"
 import { Label } from "@/components/ui/label"
 import texts from "../localization/ru"
+import { HelpTotal, HelpVisa } from "../components/Help"
 
 export function StepBudget({ control, formData, setValue, errors }: StepProps) {
   const t = texts.budget
@@ -102,6 +95,13 @@ export function StepBudget({ control, formData, setValue, errors }: StepProps) {
               }}
             />
             <Label htmlFor="needVisa">{t.visaQuestion}</Label>
+            <Suspense
+              fallback={
+                <HelpCircle className="h-4 w-4 text-muted-foreground" />
+              }
+            >
+              <HelpVisa />
+            </Suspense>
           </div>
         )}
       />
@@ -121,6 +121,25 @@ export function StepBudget({ control, formData, setValue, errors }: StepProps) {
               }}
             />
             <Label htmlFor="needInsurance">{t.insuranceQuestion}</Label>
+          </div>
+        )}
+      />
+
+      <Controller
+        name="needGuide"
+        control={control}
+        render={({ field }) => (
+          <div className="flex items-center space-x-2">
+            <Switch
+              id="needGuide"
+              checked={field.value}
+              onChange={field.onChange}
+              onCheckedChange={(checked) => {
+                field.onChange(checked)
+                setValue("needGuide", checked)
+              }}
+            />
+            <Label htmlFor="needGuide">{t.guideQuestion}</Label>
           </div>
         )}
       />
@@ -199,37 +218,8 @@ export function StepBudget({ control, formData, setValue, errors }: StepProps) {
         <div className="bg-muted/30 p-4 rounded-lg text-center">
           <div className="flex items-center gap-1 text-xs text-muted-foreground mb-1 justify-center">
             <div>{t.totalAmount}</div>
-            <Dialog>
-              <DialogTrigger asChild>
-                <button className="text-muted-foreground hover:text-primary transition-colors">
-                  <HelpCircle className="h-4 w-4" />
-                </button>
-              </DialogTrigger>
-              <DialogContent>
-                <DialogHeader className="text-left">
-                  <DialogTitle>
-                    Расчет стоимости по возрастным группам
-                  </DialogTitle>
-                  <DialogDescription>
-                    Для удобства расчета общей стоимости применяются следующие
-                    коэффициенты
-                  </DialogDescription>
-                </DialogHeader>
-                <div className="mt-4">
-                  <p>
-                    Стоимость рассчитывается с учетом возрастных коэффициентов:
-                  </p>
-                  <ul className="list-disc list-inside mt-3 space-y-1">
-                    <li>Взрослые: 100% стоимости</li>
-                    <li>Подростки (13-17 лет): 90% стоимости</li>
-                    <li>Пожилые (70+ лет): 80% стоимости</li>
-                    <li>Дети (7-12 лет): 50% стоимости</li>
-                    <li>Дети (3-6 лет): 30% стоимости</li>
-                    <li>Младенцы (до 2 лет): бесплатно</li>
-                  </ul>
-                </div>
-              </DialogContent>
-            </Dialog>
+
+            <HelpTotal />
           </div>
           <div className="text-xl font-bold">
             {formatNumberWithSpaces(totalBudget)} ₽
