@@ -1,10 +1,8 @@
-// src/components/application/components/LocationSelect.tsx (обновленная версия)
-
-import React, { useState } from "react"
+import React, { useEffect, useRef, useState } from "react"
 import TaxonomySelect from "@/components/drupal/TaxonomySelect"
 import { Label } from "@/components/ui/label"
 import { LocationDescription } from "./LocationDescription"
-import { useLocationData } from "../hooks/useLocationData"
+
 import { Button } from "@/components/ui/button"
 import { PlusCircle, X } from "lucide-react"
 
@@ -33,11 +31,15 @@ export function LocationSelect({
   className,
 }: LocationSelectProps) {
   // Преобразуем value в массив в случае, если это строка
-  const initialValue = Array.isArray(value) ? value : value ? [value] : []
+  const initialValue = Array.isArray(value)
+    ? value
+    : value && typeof value === "string"
+      ? [value]
+      : []
 
   // Состояние для хранения списка городов
   const [cities, setCities] = useState<City[]>(
-    initialValue.map((id) => ({ id }))
+    initialValue.length > 0 ? initialValue.map((id) => ({ id })) : [{ id: "" }]
   )
 
   // Если нет городов, добавляем пустой элемент
@@ -45,8 +47,32 @@ export function LocationSelect({
     setCities([{ id: "" }])
   }
 
-  // Используем хук для загрузки данных первого города
-  const { locationData } = useLocationData(cities[0]?.id || "")
+  const prevValueRef = useRef<string | string[]>(value)
+
+  // Добавляем useEffect для реагирования на изменения props
+  useEffect(() => {
+    // Сравниваем текущее значение с предыдущим
+    const prevValue = prevValueRef.current
+    const valueChanged = JSON.stringify(prevValue) !== JSON.stringify(value)
+
+    // Обновляем ref на новое значение
+    prevValueRef.current = value
+
+    // Обновляем состояние только если значение изменилось
+    if (valueChanged) {
+      const currentValue = Array.isArray(value)
+        ? value
+        : value && typeof value === "string"
+          ? [value]
+          : []
+
+      setCities(
+        currentValue.length > 0
+          ? currentValue.map((id) => ({ id }))
+          : [{ id: "" }]
+      )
+    }
+  }, [value])
 
   // Обработчик выбора локации
   const handleCityChange = (

@@ -186,6 +186,24 @@ export function useDraftForm(
             // Установка объекта напрямую
             setValue(path as any, { ...value })
           }
+          // Специальная обработка для массива городов
+          else if (path === "cities" && Array.isArray(value)) {
+            setValue("cities", value)
+
+            // Если массив не пустой, устанавливаем первый город как основной для обратной совместимости
+            if (value.length > 0) {
+              setValue("city", value[0])
+            }
+          }
+          // Специальная обработка для массива ID городов
+          else if (path === "citiesInternalIds" && Array.isArray(value)) {
+            setValue("citiesInternalIds", value)
+
+            // Если массив не пустой, устанавливаем первый ID как основной для обратной совместимости
+            if (value.length > 0) {
+              setValue("cityInternalId", value[0])
+            }
+          }
           // Если значение - объект и не null/undefined, обрабатываем его рекурсивно
           else if (
             value !== null &&

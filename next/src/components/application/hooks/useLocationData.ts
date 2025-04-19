@@ -1,5 +1,3 @@
-// src/components/application/hooks/useLocationData.ts
-
 import { useState, useEffect } from "react"
 import { LocationData } from "../types"
 

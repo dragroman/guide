@@ -48,7 +48,7 @@ export function StepPersonalInfo({
     setValue("city", value)
     setValue("cityInternalId", internalId || 0)
 
-    // Устанавливаем массив всех выбранных городов, если доступно
+    // Устанавливаем массив всех выбранных городов
     if (cities) {
       setValue("cities", cities.map((city) => city.id).filter(Boolean))
       setValue(
@@ -111,7 +111,7 @@ export function StepPersonalInfo({
           render={({ field }) => (
             <LocationSelect
               label={t.city}
-              value={field.value}
+              value={formData.cities?.length ? formData.cities : field.value}
               placeholder={t.cityPlaceholder}
               onChange={handleCitiesChange}
               error={errors.city?.message as string}
