@@ -10,11 +10,13 @@ import { useLocationData } from "../hooks/useLocationData"
 import { LocationData } from "../types"
 
 interface LocationDescriptionProps {
+  length?: number
   value: string
   locationData?: LocationData
 }
 
 export function LocationDescription({
+  length,
   value,
   locationData,
 }: LocationDescriptionProps) {
@@ -41,7 +43,7 @@ export function LocationDescription({
   if (!dataToUse) return null
 
   return (
-    <Card className="mt-4 overflow-hidden">
+    <Card className="overflow-hidden">
       {dataToUse.image && (
         <div className="relative w-full h-40">
           {imageLoading && (
@@ -63,34 +65,40 @@ export function LocationDescription({
           <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent" />
           <div className="absolute bottom-4 left-6">
             {dataToUse.field_title_cn && (
-              <div className="text-white text-2xl font-bold">
+              <div
+                className={`text-white font-bold ${(length ?? 0) < 1 ? "text-lg" : "text-md"}`}
+              >
                 {dataToUse.field_title_cn}
               </div>
             )}
-            <div className="text-4xl text-white font-bold">
+            <div
+              className={`text-white font-bold ${(length ?? 0) < 1 ? "text-3xl" : "text-xl"}`}
+            >
               {dataToUse.name}
             </div>
           </div>
         </div>
       )}
 
-      <CardContent className={dataToUse.image ? "pt-4" : "pt-6"}>
-        {!dataToUse.image && (
-          <div className="flex items-center gap-2 mb-3">
-            <Badge variant="secondary" className="text-lg px-3 py-1">
-              {dataToUse.name}
-            </Badge>
-          </div>
-        )}
-        {dataToUse.field_select_text && (
-          <div
-            className="text-muted-foreground mt-2"
-            dangerouslySetInnerHTML={{
-              __html: dataToUse.field_select_text,
-            }}
-          />
-        )}
-      </CardContent>
+      {(length ?? 0) < 1 && (
+        <CardContent className={dataToUse.image ? "pt-4" : "pt-6"}>
+          {!dataToUse.image && (
+            <div className="flex items-center gap-2 mb-3">
+              <Badge variant="secondary" className="text-lg px-3 py-1">
+                {dataToUse.name}
+              </Badge>
+            </div>
+          )}
+          {dataToUse.field_select_text && (
+            <div
+              className="text-muted-foreground mt-2"
+              dangerouslySetInnerHTML={{
+                __html: dataToUse.field_select_text,
+              }}
+            />
+          )}
+        </CardContent>
+      )}
     </Card>
   )
 }

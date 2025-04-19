@@ -35,6 +35,8 @@ export const applicationSchema = z.object({
 
   city: z.string().min(1, "Город обязателен для заполнения"),
   cityInternalId: z.number(),
+  cities: z.array(z.string()).min(1, "Выберите хотя бы один город"),
+  citiesInternalIds: z.array(z.number()).min(1, "Выберите хотя бы один город"),
 
   expertEmail: z
     .string()
@@ -419,6 +421,8 @@ export const defaultFormValues: ApplicationSchemaType = {
   },
   city: "",
   cityInternalId: 0,
+  cities: [],
+  citiesInternalIds: [],
   expertEmail: "",
 
   contact: {

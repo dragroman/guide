@@ -55,12 +55,18 @@ export async function POST(request: NextRequest) {
         expert_email: expertEmail,
         city: body.city,
         cityInternalId: body.cityInternalId,
+        cities: body.cities,
+        citiesInternalIds: body.citiesInternalIds,
       })
     } catch (error) {
       if (error instanceof Error) {
         return NextResponse.json({ message: error.message }, { status: 400 })
       }
     }
+
+    const citiesArray = Object.entries(body.citiesInternalIds).map(
+      ([key, value]) => value
+    )
 
     const purposeArray = Object.entries(body.trip.purpose.options)
       .filter(([key, value]) => key !== "otherDescription" && value === true)
@@ -173,6 +179,7 @@ export async function POST(request: NextRequest) {
           need_guide: body.needGuide,
           expert_email: body.expertEmail,
           city: body.cityInternalId,
+          cities: citiesArray,
         }),
       }
     )

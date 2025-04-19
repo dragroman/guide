@@ -1,12 +1,14 @@
+// src/components/application/steps/StepPersonalInfo.tsx (обновленный)
+
 import React, { useEffect, useState } from "react"
 import { Controller } from "react-hook-form"
 import { FormField } from "../components/FormField"
 import { AgeGroupDrawer } from "../components/PeopleCounter"
 import { StepProps } from "../types"
 import texts from "../localization/ru"
-import { LocationSelect } from "../components/LocationSelect"
 import { useSearchParams } from "next/navigation"
 import { ShareForm } from "../components/ShareForm"
+import { LocationSelect } from "../components/LocationSelect"
 
 export function StepPersonalInfo({
   control,
@@ -36,10 +38,24 @@ export function StepPersonalInfo({
     return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)
   }
 
-  // Функция для включения редактирования предзаполненного email
-  const handleEnableExpertEmailEdit = () => {
-    setIsExpertEmailDisabled(false)
-    setIsEditExpertEmail(true)
+  // Обработчик выбора городов
+  const handleCitiesChange = (
+    value: string,
+    internalId?: number,
+    cities?: Array<{ id: string; internalId?: number }>
+  ) => {
+    // Устанавливаем значение основного города (для обратной совместимости)
+    setValue("city", value)
+    setValue("cityInternalId", internalId || 0)
+
+    // Устанавливаем массив всех выбранных городов, если доступно
+    if (cities) {
+      setValue("cities", cities.map((city) => city.id).filter(Boolean))
+      setValue(
+        "citiesInternalIds",
+        cities.map((city) => city.internalId || 0)
+      )
+    }
   }
 
   return (
@@ -64,7 +80,6 @@ export function StepPersonalInfo({
       />
 
       {/* Компонент с возрастными группами */}
-
       <div className="space-y-2">
         <label className="text-sm font-medium">{t.travelers}</label>
         <Controller
@@ -88,7 +103,7 @@ export function StepPersonalInfo({
           )}
         />
       </div>
-      {/* Выбор города */}
+
       <div className="space-y-2">
         <Controller
           name="city"
@@ -98,14 +113,9 @@ export function StepPersonalInfo({
               label={t.city}
               value={field.value}
               placeholder={t.cityPlaceholder}
-              onChange={(value, internalId) => {
-                field.onChange(value)
-                // Сохраняем drupal_internal__tid в отдельное поле формы
-                if (internalId) {
-                  setValue("cityInternalId", internalId)
-                }
-              }}
+              onChange={handleCitiesChange}
               error={errors.city?.message as string}
+              multiSelect={true}
             />
           )}
         />
