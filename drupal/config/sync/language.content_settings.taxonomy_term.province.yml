@@ -1,0 +1,11 @@
+uuid: 7186f500-ef8b-4c8a-9d07-f88751f1195e
+langcode: en
+status: true
+dependencies:
+  config:
+    - taxonomy.vocabulary.province
+id: taxonomy_term.province
+target_entity_type_id: taxonomy_term
+target_bundle: province
+default_langcode: site_default
+language_alterable: false

@@ -1,0 +1,9 @@
+uuid: 5580f8f7-355e-44b6-8ccb-92deae1df207
+langcode: ru
+status: true
+dependencies: {  }
+name: Province
+vid: province
+description: null
+weight: 0
+new_revision: false

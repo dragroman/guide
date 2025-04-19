@@ -66,6 +66,9 @@ elements: |-
   accommodation_other:
     '#type': textarea
     '#title': accommodation_other
+  accommodation_need_breakfast:
+    '#type': checkbox
+    '#title': accommodation_need_breakfast
   accommodation_preferences:
     '#type': checkboxes
     '#title': accommodation_preferences
@@ -192,6 +195,14 @@ elements: |-
   expert_email:
     '#type': email
     '#title': expert_email
+  need_guide:
+    '#type': checkbox
+    '#title': need_guide
+  cities:
+    '#type': webform_term_select
+    '#title': cities
+    '#multiple': true
+    '#vocabulary': location
 css: ''
 javascript: ''
 settings:
