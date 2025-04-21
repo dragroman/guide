@@ -42,7 +42,7 @@ export function StepPersonalInfo({
   const handleCitiesChange = (
     value: string,
     internalId?: number,
-    cities?: Array<{ id: string; internalId?: number }>
+    cities?: Array<{ id: string; internalId?: number; name?: string }>
   ) => {
     // Устанавливаем значение основного города (для обратной совместимости)
     setValue("city", value)
@@ -50,11 +50,20 @@ export function StepPersonalInfo({
 
     // Устанавливаем массив всех выбранных городов
     if (cities) {
-      setValue("cities", cities.map((city) => city.id).filter(Boolean))
+      const validCities = cities.filter((city) => city.id)
+
       setValue(
-        "citiesInternalIds",
-        cities.map((city) => city.internalId || 0)
+        "cities",
+        validCities.map((city) => city.id)
       )
+
+      // Проверяем и устанавливаем internalIds
+      const internalIds = validCities.map((city) => {
+        if (city.internalId) return city.internalId
+        return 0
+      })
+
+      setValue("citiesInternalIds", internalIds)
     }
   }
 

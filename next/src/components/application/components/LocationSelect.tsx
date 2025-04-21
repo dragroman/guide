@@ -5,6 +5,7 @@ import { LocationDescription } from "./LocationDescription"
 
 import { Button } from "@/components/ui/button"
 import { PlusCircle, X } from "lucide-react"
+import { useLocationData } from "../hooks/useLocationData"
 
 interface City {
   id: string
@@ -31,11 +32,7 @@ export function LocationSelect({
   className,
 }: LocationSelectProps) {
   // Преобразуем value в массив в случае, если это строка
-  const initialValue = Array.isArray(value)
-    ? value
-    : value && typeof value === "string"
-      ? [value]
-      : []
+  const initialValue = Array.isArray(value) ? value : value ? [value] : []
 
   // Состояние для хранения списка городов
   const [cities, setCities] = useState<City[]>(
@@ -49,7 +46,6 @@ export function LocationSelect({
 
   const prevValueRef = useRef<string | string[]>(value)
 
-  // Добавляем useEffect для реагирования на изменения props
   useEffect(() => {
     // Сравниваем текущее значение с предыдущим
     const prevValue = prevValueRef.current
@@ -66,13 +62,20 @@ export function LocationSelect({
           ? [value]
           : []
 
-      setCities(
+      // Важно! Сохраняем существующие internalId при обновлении
+      const newCities =
         currentValue.length > 0
-          ? currentValue.map((id) => ({ id }))
+          ? currentValue.map((id) => {
+              // Ищем существующий город с таким id
+              const existingCity = cities.find((city) => city.id === id)
+              // Возвращаем город с сохраненным internalId, если он есть
+              return existingCity ? existingCity : { id }
+            })
           : [{ id: "" }]
-      )
+
+      setCities(newCities)
     }
-  }, [value])
+  }, [value, cities])
 
   // Обработчик выбора локации
   const handleCityChange = (
@@ -91,7 +94,7 @@ export function LocationSelect({
 
     // Возвращаем первый город для обратной совместимости
     // и полный список городов для нового функционала
-    onChange(newCities[0]?.id || "", newCities[0]?.internalId, newCities)
+    onChange(newCities[0].id || "", newCities[0].internalId, newCities)
   }
 
   // Добавление нового города
@@ -103,11 +106,6 @@ export function LocationSelect({
   const handleRemoveCity = (index: number) => {
     const newCities = [...cities]
     newCities.splice(index, 1)
-
-    // Если удалили все города, добавляем пустой
-    if (newCities.length === 0) {
-      newCities.push({ id: "" })
-    }
 
     setCities(newCities)
     onChange(newCities[0]?.id || "", newCities[0]?.internalId, newCities)

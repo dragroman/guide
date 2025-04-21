@@ -96,7 +96,8 @@ export function StepConfirmation({ formData }: StepProps) {
         </div>
         <div className="font-bold text-2xl">{formData.name}</div>
       </div>
-      <LocationDescription value={formData.city} />
+      <LocationsList cities={formData.cities} />
+
       <div className="rounded-md overflow-hidden">
         {/* Информация о группе */}
         {formData.peopleCount > 1 && (
@@ -250,6 +251,31 @@ export function StepConfirmation({ formData }: StepProps) {
           <div className="mb-1">{t.reminderTitle}</div>
           <div className="text-muted-foreground text-xs">{t.reminderText}</div>
         </div>
+      </div>
+    </div>
+  )
+}
+
+function LocationsList({ cities }: { cities: string[] }) {
+  if (!cities || cities.length === 0) return null
+
+  // Если только один город
+  if (cities.length === 1) {
+    return <LocationDescription value={cities[0]} />
+  }
+
+  // Если несколько городов
+  return (
+    <div className="space-y-4">
+      <div className="text-md font-medium">Выбранные города:</div>
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
+        {cities.map((cityId, index) => (
+          <LocationDescription
+            key={index}
+            value={cityId}
+            length={cities.length}
+          />
+        ))}
       </div>
     </div>
   )
