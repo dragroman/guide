@@ -50,7 +50,7 @@ export const RestaurantDetail = ({
   return (
     <Dialog open={open} onOpenChange={onClose}>
       <DialogContent className="max-w-3xl max-h-[90vh] overflow-auto sm:rounded-lg">
-        <DialogHeader className="border-b pb-2 mb-4">
+        <DialogHeader className="border-b pb-2 mb-4 text-left">
           <DialogTitle className="text-xl">{restaurant.name}</DialogTitle>
           <div className="flex flex-wrap gap-2 mt-2">
             <Badge variant="secondary">{restaurant.category}</Badge>
@@ -153,7 +153,7 @@ export const RestaurantDetail = ({
         )}
 
         {/* Кнопки для карт */}
-        <h3 className="font-bold text-2xl flex items-center">
+        <h3 className="font-bold text-xl flex items-center">
           <MapIcon className="mr-3" />
           Ссылки на карты
         </h3>

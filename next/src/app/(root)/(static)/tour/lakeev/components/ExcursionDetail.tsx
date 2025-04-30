@@ -21,23 +21,23 @@ import { Badge } from "@/components/ui/badge"
 import { Card, CardContent } from "@/components/ui/card"
 
 interface Excursion {
-  name: string;
-  address: string;
-  hours: string;
-  price: string;
-  description: string;
-  duration: string;
-  directions: string;
-  travelTime: string;
-  baiduUrl?: string;
-  omapsUrl?: string;
-  tips?: string;
+  name: string
+  address: string
+  hours: string
+  price: string
+  description: string
+  duration: string
+  directions: string
+  travelTime: string
+  baiduUrl?: string
+  omapsUrl?: string
+  tips?: string
 }
 
 interface ExcursionDetailProps {
-  excursion: Excursion;
-  onClose: () => void;
-  open?: boolean;
+  excursion: Excursion
+  onClose: () => void
+  open?: boolean
 }
 
 export const ExcursionDetail = ({
@@ -48,7 +48,7 @@ export const ExcursionDetail = ({
   return (
     <Dialog open={open} onOpenChange={onClose}>
       <DialogContent className="max-w-3xl max-h-[90vh] overflow-auto sm:rounded-lg">
-        <DialogHeader className="border-b pb-2 mb-4">
+        <DialogHeader className="border-b pb-2 mb-4 text-left">
           <DialogTitle className="text-xl">{excursion.name}</DialogTitle>
           <div className="flex flex-wrap gap-2 mt-2">
             <Badge variant="secondary">Достопримечательность</Badge>
@@ -125,7 +125,7 @@ export const ExcursionDetail = ({
         )}
 
         {/* Кнопки для карт */}
-        <h3 className="font-bold text-2xl flex items-center">
+        <h3 className="font-bold text-xl flex items-center">
           <MapIcon className="mr-3" />
           Ссылки на карты
         </h3>

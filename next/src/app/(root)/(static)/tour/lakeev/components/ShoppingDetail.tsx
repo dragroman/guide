@@ -1,13 +1,6 @@
 "use client"
 import React from "react"
-import {
-  Clock,
-  MapPin,
-  ShoppingBag,
-  MapIcon,
-  Bus,
-  Tag,
-} from "lucide-react"
+import { Clock, MapPin, ShoppingBag, MapIcon, Bus, Tag } from "lucide-react"
 import {
   Dialog,
   DialogContent,
@@ -18,20 +11,20 @@ import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 
 interface ShoppingPlace {
-  name: string;
-  category: string;
-  address: string;
-  hours: string;
-  description: string;
-  directions: string;
-  baiduUrl?: string;
-  omapsUrl?: string;
+  name: string
+  category: string
+  address: string
+  hours: string
+  description: string
+  directions: string
+  baiduUrl?: string
+  omapsUrl?: string
 }
 
 interface ShoppingDetailProps {
-  shopping: ShoppingPlace;
-  onClose: () => void;
-  open?: boolean;
+  shopping: ShoppingPlace
+  onClose: () => void
+  open?: boolean
 }
 
 export const ShoppingDetail = ({
@@ -42,7 +35,7 @@ export const ShoppingDetail = ({
   return (
     <Dialog open={open} onOpenChange={onClose}>
       <DialogContent className="max-w-3xl max-h-[90vh] overflow-auto sm:rounded-lg">
-        <DialogHeader className="border-b pb-2 mb-4">
+        <DialogHeader className="border-b pb-2 mb-4 text-left">
           <DialogTitle className="text-xl">{shopping.name}</DialogTitle>
           <div className="flex flex-wrap gap-2 mt-2">
             <Badge variant="secondary">{shopping.category}</Badge>
@@ -92,7 +85,7 @@ export const ShoppingDetail = ({
         </div>
 
         {/* Кнопки для карт */}
-        <h3 className="font-bold text-2xl flex items-center">
+        <h3 className="font-bold text-xl flex items-center">
           <MapIcon className="mr-3" />
           Ссылки на карты
         </h3>

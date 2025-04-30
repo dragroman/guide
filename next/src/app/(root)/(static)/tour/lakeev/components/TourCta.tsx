@@ -13,6 +13,7 @@ interface TourCtaProps {
 
 const contact = {
   phone: "8615545199386",
+  whatsapp: "79841058137",
 }
 
 export const TourCta = ({
@@ -36,7 +37,7 @@ export const TourCta = ({
           </Button>
         </a>
         <a
-          href={`https://api.whatsapp.com/send/?phone=${contact.phone}`}
+          href={`https://api.whatsapp.com/send/?phone=${contact.whatsapp}`}
           target="_blank"
         >
           <Button size="lg" variant="outline" onClick={onSecondaryClick}>

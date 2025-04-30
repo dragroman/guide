@@ -227,7 +227,10 @@ export const TourPage = () => {
                 </div>
 
                 <div className="border-t pt-4 mt-2">
-                  <a href="https://img.chinq.ru/guide/public/pdf/lakeev.pdf">
+                  <a
+                    target="_blank"
+                    href="https://img.chinq.ru/guide/public/pdf/lakeev.pdf"
+                  >
                     <Button className="w-full mt-2" variant="outline">
                       <Download className="mr-2 h-4 w-4" />
                       Скачать полную заявку
