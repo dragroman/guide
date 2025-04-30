@@ -1,5 +1,6 @@
 // components/tours/TourCta.tsx
 import { Button } from "@/components/ui/button"
+import { Phone } from "lucide-react"
 
 interface TourCtaProps {
   title: string
@@ -8,6 +9,10 @@ interface TourCtaProps {
   secondaryButtonText: string
   onPrimaryClick?: () => void
   onSecondaryClick?: () => void
+}
+
+const contact = {
+  phone: "8615545199386",
 }
 
 export const TourCta = ({
@@ -25,12 +30,19 @@ export const TourCta = ({
         {description}
       </p>
       <div className="flex flex-col sm:flex-row justify-center gap-4">
-        <Button size="lg" onClick={onPrimaryClick}>
-          {primaryButtonText}
-        </Button>
-        <Button size="lg" variant="outline" onClick={onSecondaryClick}>
-          {secondaryButtonText}
-        </Button>
+        <a href={`tel:${contact.phone}`} target="_blank">
+          <Button size="lg" onClick={onPrimaryClick}>
+            <Phone /> {primaryButtonText}
+          </Button>
+        </a>
+        <a
+          href={`https://api.whatsapp.com/send/?phone=${contact.phone}`}
+          target="_blank"
+        >
+          <Button size="lg" variant="outline" onClick={onSecondaryClick}>
+            {secondaryButtonText}
+          </Button>
+        </a>
       </div>
     </div>
   )

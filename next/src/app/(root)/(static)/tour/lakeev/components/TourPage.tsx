@@ -3,201 +3,59 @@ import { TourHeader } from "./TourHeader"
 import { TourDetailContainer } from "./TourDetailContainer"
 import { TourFeatureCard } from "./TourFeatureCard"
 import { TourHighlights } from "./TourHighlights"
-import { TourDaySchedule } from "./TourDaySchedule"
 import { TourInfoCard } from "./TourInfoCard"
-import { TourPricePackage } from "./TourPricePackage"
-import { TourRecommendedCard } from "./TourRecommendedCard"
 import { TourCta } from "./TourCta"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
-import { Check, AlertTriangle, Link2 } from "lucide-react"
+import { Check, AlertTriangle, Link2, UserCircle2Icon } from "lucide-react"
 import {
   Users,
   Hotel,
   UtensilsCrossed,
   Rocket,
-  Cloud,
   Leaf,
   Gift,
   Download,
-  MessageCircle,
-  Camera,
   ShoppingBag,
 } from "lucide-react"
 import { Badge } from "@/components/ui/badge"
 import { TourMapPoints } from "./TourMapPoints"
 import Link from "next/link"
+import TourRestaurant from "./TourRestaurant"
+import TourExcursion from "./TourExcursion"
+import TourShopping from "./TourShopping"
 
 export const TourPage = () => {
   // Данные для вкладок
   const tourTabs = [
     {
-      id: "program",
-      label: "Программа",
-      content: (
-        <div className="space-y-6">
-          <TourDaySchedule
-            day={1}
-            title="Прибытие и знакомство с Харбином"
-            items={[
-              {
-                time: "14:00",
-                title: "Заселение в отель Shangri-La Harbin",
-                description:
-                  "Отель 4* в центре города с гипоаллергенными номерами",
-              },
-              {
-                time: "15:30",
-                title: "Обед в ресторане Fusheng Yuan",
-                description:
-                  "Ресторан с меню без молочных продуктов и яиц (для аллергика)",
-              },
-              {
-                time: "17:00",
-                title: "Прогулка по Центральной улице",
-                description:
-                  "Знаменитая пешеходная улица с русской архитектурой",
-              },
-              {
-                time: "19:00",
-                title: "Ужин в ресторане Da Wan Ju",
-                description:
-                  "Традиционная китайская кухня с индивидуальным заказом для ребенка с аллергией",
-              },
-            ]}
-          />
-
-          <TourDaySchedule
-            day={2}
-            title="Культурные достопримечательности"
-            items={[
-              {
-                time: "09:30",
-                title: "Экскурсия в Софийский собор",
-                description:
-                  "Главная историческая достопримечательность города",
-              },
-              {
-                time: "12:00",
-                title: "Обед в Modern Pot",
-                description:
-                  "Ресторан с безглютеновыми и безлактозными блюдами",
-              },
-              {
-                time: "14:00",
-                title: "Посещение Музея провинции Хэйлунцзян",
-                description:
-                  "Интерактивные экспозиции интересные для детей и подростков",
-              },
-              {
-                time: "17:00",
-                title: "Прогулка по парку Сталина",
-                description: "Красивый парк с исторической атмосферой",
-              },
-              {
-                time: "19:00",
-                title: "Ужин в ресторане Huamei Western Restaurant",
-                description: "Западная кухня с отдельным меню для аллергиков",
-              },
-            ]}
-          />
-
-          <TourDaySchedule
-            day={3}
-            title="Шоппинг-день"
-            items={[
-              {
-                time: "10:00",
-                title: "Посещение Qiulin Sport Trade Area",
-                description:
-                  "Специализированный район с качественными спортивными товарами",
-              },
-              {
-                time: "13:00",
-                title: "Обед в Daqucun",
-                description: "Китайская кухня с блюдами без аллергенов",
-              },
-              {
-                time: "14:30",
-                title: "Шоппинг в Harbin Far East Fashion Shopping Mall",
-                description:
-                  "Крупный торговый центр с товарами местных и международных брендов",
-              },
-              {
-                time: "18:00",
-                title: "Ужин в Xin Zhong Guo Dumplings",
-                description:
-                  "Известный ресторан пельменей с вариантами без яиц и молока",
-              },
-            ]}
-          />
-
-          <TourDaySchedule
-            day={4}
-            title="Гастрономический день"
-            items={[
-              {
-                time: "09:00",
-                title: "Посещение Центрального рынка",
-                description: "Знакомство с местными продуктами и деликатесами",
-              },
-              {
-                time: "12:00",
-                title: "Мастер-класс китайской кухни",
-                description:
-                  "Специальный мастер-класс с учетом пищевой аллергии ребенка",
-              },
-              {
-                time: "15:00",
-                title: "Посещение шоколадной фабрики Qiaokou",
-                description: "Дегустация темного шоколада без молока",
-              },
-              {
-                time: "17:00",
-                title: "Шоппинг в Mykal Department Store",
-                description: "Популярный аутлет с хорошими скидками",
-              },
-              {
-                time: "19:30",
-                title: "Ужин в Harbin Grand Dynasty Culture Hotel",
-                description:
-                  "Ресторан маньчжурской кухни с адаптированным меню",
-              },
-            ]}
-          />
-
-          <TourDaySchedule
-            day={5}
-            title="Отъезд"
-            items={[
-              {
-                time: "10:00",
-                title: "Завтрак в отеле",
-                description: "Специальное меню без аллергенов",
-              },
-              {
-                time: "11:00",
-                title: "Последние покупки в сувенирных магазинах",
-                description: "Рядом с отелем",
-              },
-              {
-                time: "14:00",
-                title: "Выселение из отеля и трансфер",
-                description: "Самостоятельный выезд (по запросу клиента)",
-              },
-            ]}
-            isLast={true}
-          />
-        </div>
-      ),
-    },
-    {
-      id: "overview",
-      label: "Проживание",
+      id: "info",
+      label: "Информация",
       content: (
         <>
-          <div className="grid grid-cols-2  gap-4">
+          <TourInfoCard
+            title="Важная информация"
+            items={[
+              {
+                title: "Особые потребности в питании",
+                content:
+                  "Все рестораны маршрута проверены на наличие блюд без молочного белка и белка куриного яйца для ребенка с аллергией",
+              },
+              {
+                title: "Транспорт",
+                content:
+                  "Комбинация общественного транспорта и такси по запросу клиента (трансфер не требуется)",
+              },
+              {
+                title: "Шоппинг",
+                content:
+                  "Выделено специальное время для шоппинга спортивных товаров в лучших торговых центрах и аутлетах",
+              },
+            ]}
+          />
+
+          <div className="grid gap-4">
             <TourFeatureCard
               title="Для кого"
               icon={<Users className="h-5 w-5 mr-2 text-muted-foreground" />}
@@ -211,10 +69,12 @@ export const TourPage = () => {
             >
               <div className="space-y-2">
                 <div>Отель 4* в центре</div>
-                <div>雪黎酒店西城红场</div>
+                <div>万达假日酒店</div>
                 <Button variant="outline">
                   <Link2 />
-                  <Link href="/">Ссылка на карте</Link>
+                  <Link href="https://j.map.baidu.com/0d/0Ryi" target="_blank">
+                    Ссылка на карте
+                  </Link>
                 </Button>
               </div>
             </TourFeatureCard>
@@ -266,70 +126,6 @@ export const TourPage = () => {
               учетом аллергии ребенка и интересов всех членов семьи.
             </p>
           </div>
-        </>
-      ),
-    },
-
-    {
-      id: "info",
-      label: "Информация",
-      content: (
-        <>
-          <TourInfoCard
-            title="Важная информация"
-            items={[
-              {
-                title: "Особые потребности в питании",
-                content:
-                  "Все рестораны маршрута проверены на наличие блюд без молочного белка и белка куриного яйца для ребенка с аллергией",
-              },
-              {
-                title: "Транспорт",
-                content:
-                  "Комбинация общественного транспорта и такси по запросу клиента (трансфер не требуется)",
-              },
-              {
-                title: "Шоппинг",
-                content:
-                  "Выделено специальное время для шоппинга спортивных товаров в лучших торговых центрах и аутлетах",
-              },
-            ]}
-          />
-
-          <Card>
-            <CardHeader>
-              <CardTitle>Что включено</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <ul className="space-y-2">
-                <li className="flex items-start">
-                  <Check className="h-5 w-5 mr-2 text-green-600 flex-shrink-0 mt-0.5" />
-                  <span>
-                    Проживание в отеле 4* в центре города с гипоаллергенными
-                    номерами
-                  </span>
-                </li>
-                <li className="flex items-start">
-                  <Check className="h-5 w-5 mr-2 text-green-600 flex-shrink-0 mt-0.5" />
-                  <span>Завтраки с учетом пищевой аллергии</span>
-                </li>
-                <li className="flex items-start">
-                  <Check className="h-5 w-5 mr-2 text-green-600 flex-shrink-0 mt-0.5" />
-                  <span>Русскоговорящий гид на экскурсиях</span>
-                </li>
-                <li className="flex items-start">
-                  <Check className="h-5 w-5 mr-2 text-green-600 flex-shrink-0 mt-0.5" />
-                  <span>Все входные билеты по программе</span>
-                </li>
-                <li className="flex items-start">
-                  <Check className="h-5 w-5 mr-2 text-green-600 flex-shrink-0 mt-0.5" />
-                  <span>
-                    Подбор ресторанов с учетом пищевой аллергии ребенка
-                  </span>
-                </li>
-              </ul>
-            </CardContent>
-          </Card>
 
           <Card>
             <CardHeader>
@@ -338,20 +134,11 @@ export const TourPage = () => {
             <CardContent>
               <ul className="space-y-2">
                 <li className="flex items-start">
-                  <Gift className="h-5 w-5 mr-2 text-blue-600 flex-shrink-0 mt-0.5" />
+                  <UserCircle2Icon className="h-5 w-5 mr-2 text-blue-600 flex-shrink-0 mt-0.5" />
                   <div>
                     <span className="font-medium">Личный шоппинг-гид</span>
                     <p className="text-sm text-muted-foreground">
-                      +$120 за день шоппинга
-                    </p>
-                  </div>
-                </li>
-                <li className="flex items-start">
-                  <Gift className="h-5 w-5 mr-2 text-blue-600 flex-shrink-0 mt-0.5" />
-                  <div>
-                    <span className="font-medium">Трансфер в/из аэропорта</span>
-                    <p className="text-sm text-muted-foreground">
-                      +$50 в одну сторону
+                      +1000¥ за день
                     </p>
                   </div>
                 </li>
@@ -362,8 +149,24 @@ export const TourPage = () => {
       ),
     },
     {
-      id: "map",
-      label: "Карта",
+      id: "restaurant",
+      label: "Рестораны",
+      content: <TourRestaurant />,
+    },
+    {
+      id: "excursion",
+      label: "Экскурсии",
+      content: <TourExcursion />,
+    },
+    {
+      id: "shopping",
+      label: "Шоппинг",
+      content: <TourShopping />,
+    },
+
+    {
+      id: "other",
+      label: "Другое",
       content: <TourMapPoints />,
     },
   ]
@@ -372,7 +175,7 @@ export const TourPage = () => {
     <div className="container mx-auto py-6 px-4 max-w-7xl">
       <TourHeader
         title="Харбин: гастрономия, шоппинг и культура"
-        subtitle="Персонализированное путешествие для семьи с учетом пищевой аллергии ребенка"
+        subtitle="Персонализированное путешествие для семьи Лакеевых в Харбин"
         dates="29 апреля – 3 мая 2025"
         duration="5 дней"
         imagePath="/harbin-family.jpg"
@@ -384,10 +187,10 @@ export const TourPage = () => {
         ]}
       />
 
-      <div className="flex flex-col space-y-6">
+      <div className="flex flex-col space-y-6 mb-6">
         {/* Основной контент */}
         <div>
-          <TourDetailContainer tabs={tourTabs} defaultTab="overview" />
+          <TourDetailContainer tabs={tourTabs} defaultTab="info" />
         </div>
 
         {/* Боковая панель */}
@@ -424,10 +227,12 @@ export const TourPage = () => {
                 </div>
 
                 <div className="border-t pt-4 mt-2">
-                  <Button className="w-full mt-2" variant="outline">
-                    <Download className="mr-2 h-4 w-4" />
-                    Скачать полную заявку
-                  </Button>
+                  <a href="https://img.chinq.ru/guide/public/pdf/lakeev.pdf">
+                    <Button className="w-full mt-2" variant="outline">
+                      <Download className="mr-2 h-4 w-4" />
+                      Скачать полную заявку
+                    </Button>
+                  </a>
                 </div>
               </CardContent>
             </Card>
@@ -439,8 +244,8 @@ export const TourPage = () => {
       <TourCta
         title="Связь с экспертом"
         description="Мы внимательно изучили вашу заявку и подготовили персонализированный маршрут с учетом всех пожеланий, включая особые диетические требования вашего ребенка. Готовы обсудить детали и внести корректировки."
-        primaryButtonText="Связаться с клиентом"
-        secondaryButtonText="Обсудить детали"
+        primaryButtonText="Позвонить"
+        secondaryButtonText="Whatsapp"
       />
     </div>
   )
