@@ -61,6 +61,7 @@ export interface LocationData {
   id: string
   name: string
   field_title_cn: string
+  machine_name: string
   description?: string
   field_select_text?: string
   drupal_internal__tid?: number

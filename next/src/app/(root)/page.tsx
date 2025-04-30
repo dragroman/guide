@@ -4,6 +4,7 @@ import { Badge } from "@/components/ui/badge"
 import Link from "next/link"
 import Image from "next/image"
 import { SOCIAL } from "@/lib/constants"
+import { Clock } from "lucide-react"
 
 export const metadata: Metadata = {
   title: "Путеводитель по Китаю",
@@ -61,8 +62,9 @@ export default async function Home() {
                 Начать планирование
               </Button>
             </Link>
-            <div className="text-sm text-white">
-              Заполнение формы займет всего 3-4 минуты
+            <div className="text-sm text-white flex items-center justify-center">
+              <Clock className="w-6 h-6 mr-2" />
+              Примерное время заполнения 3-4 минуты
             </div>
             <Link href="/more">
               <Button size="lg" variant="link" className="text-white">

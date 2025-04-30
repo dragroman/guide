@@ -28,6 +28,7 @@ export function useLocationData(locationId: string | null | undefined) {
           id: data.id,
           name: data.name,
           description: data.description,
+          machine_name: data.machine_name,
           field_title_cn: data.field_title_cn,
           field_select_text: data.field_select_text,
           drupal_internal__tid: data.drupal_internal__tid,

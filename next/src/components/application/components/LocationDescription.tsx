@@ -8,6 +8,8 @@ import { Badge } from "@/components/ui/badge"
 import { Skeleton } from "@/components/ui/skeleton"
 import { useLocationData } from "../hooks/useLocationData"
 import { LocationData } from "../types"
+import { Info } from "lucide-react"
+import Link from "next/link"
 
 interface LocationDescriptionProps {
   length?: number
@@ -39,6 +41,8 @@ export function LocationDescription({
       </div>
     )
   }
+
+  console.log(dataToUse)
 
   if (!dataToUse) return null
 
@@ -76,6 +80,11 @@ export function LocationDescription({
             >
               {dataToUse.name}
             </div>
+          </div>
+          <div className="absolute top-4 right-6 text-white">
+            <Link href={`city/${dataToUse.machine_name}`}>
+              <Info />
+            </Link>
           </div>
         </div>
       )}
