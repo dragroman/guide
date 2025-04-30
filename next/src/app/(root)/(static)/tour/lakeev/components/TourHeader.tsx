@@ -21,7 +21,7 @@ export const TourHeader = ({
 }: TourHeaderProps) => {
   return (
     <div className="mb-6">
-      <Badge className="mb-2">Для семей с детьми</Badge>
+      <Badge className="mb-2">Для семьи: Лакеевы</Badge>
       <h1 className="text-3xl md:text-4xl font-bold tracking-tight">{title}</h1>
       <p className="text-muted-foreground mt-2">{subtitle}</p>
 

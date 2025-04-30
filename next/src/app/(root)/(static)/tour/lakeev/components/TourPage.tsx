@@ -11,7 +11,7 @@ import { TourCta } from "./TourCta"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
-import { Check, AlertTriangle } from "lucide-react"
+import { Check, AlertTriangle, Link2 } from "lucide-react"
 import {
   Users,
   Hotel,
@@ -27,12 +27,9 @@ import {
 } from "lucide-react"
 import { Badge } from "@/components/ui/badge"
 import { TourMapPoints } from "./TourMapPoints"
+import Link from "next/link"
 
 export const TourPage = () => {
-  // Константы и данные для тура на основе заявки
-  const BASE_PRICE = 3300 * 4 * 5 // Цена в день * 4 человека * 5 дней
-  const VIP_PRICE = 4500 * 4 * 5 // Повышенная цена в день * 4 человека * 5 дней
-
   // Данные для вкладок
   const tourTabs = [
     {
@@ -197,10 +194,10 @@ export const TourPage = () => {
     },
     {
       id: "overview",
-      label: "Обзор",
+      label: "Проживание",
       content: (
         <>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <div className="grid grid-cols-2  gap-4">
             <TourFeatureCard
               title="Для кого"
               icon={<Users className="h-5 w-5 mr-2 text-muted-foreground" />}
@@ -212,16 +209,14 @@ export const TourPage = () => {
               title="Проживание"
               icon={<Hotel className="h-5 w-5 mr-2 text-muted-foreground" />}
             >
-              <span>Отель 4* в центре</span>
-            </TourFeatureCard>
-
-            <TourFeatureCard
-              title="Питание"
-              icon={
-                <UtensilsCrossed className="h-5 w-5 mr-2 text-muted-foreground" />
-              }
-            >
-              <span>С учетом аллергии</span>
+              <div className="space-y-2">
+                <div>Отель 4* в центре</div>
+                <div>雪黎酒店西城红场</div>
+                <Button variant="outline">
+                  <Link2 />
+                  <Link href="/">Ссылка на карте</Link>
+                </Button>
+              </div>
             </TourFeatureCard>
           </div>
 
