@@ -23,7 +23,7 @@ export function Article({ node, ...props }: ArticleProps) {
       {node.field_image && (
         <figure>
           <Image
-            src={absoluteUrl(node.field_image.uri.url)}
+            src={absoluteUrl(node.field_image.url.uri)}
             width={768}
             height={400}
             alt={node.field_image.resourceIdObjMeta.alt || ""}
