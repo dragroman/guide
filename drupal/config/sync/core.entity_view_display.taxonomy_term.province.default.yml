@@ -1,0 +1,60 @@
+uuid: e319f5ce-dc54-47c0-a8f5-0ea982e1ebad
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.taxonomy_term.province.feeds_item
+    - field.field.taxonomy_term.province.field_capital
+    - field.field.taxonomy_term.province.field_name_cn
+    - field.field.taxonomy_term.province.field_name_ru
+    - field.field.taxonomy_term.province.field_type
+    - taxonomy.vocabulary.province
+  module:
+    - options
+    - text
+id: taxonomy_term.province.default
+targetEntityType: taxonomy_term
+bundle: province
+mode: default
+content:
+  description:
+    type: text_default
+    label: hidden
+    settings: {  }
+    third_party_settings: {  }
+    weight: 0
+    region: content
+  field_capital:
+    type: entity_reference_label
+    label: above
+    settings:
+      link: true
+    third_party_settings: {  }
+    weight: 1
+    region: content
+  field_name_cn:
+    type: string
+    label: above
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    weight: 3
+    region: content
+  field_name_ru:
+    type: string
+    label: above
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    weight: 4
+    region: content
+  field_type:
+    type: list_default
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    weight: 2
+    region: content
+hidden:
+  feeds_item: true
+  langcode: true

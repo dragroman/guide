@@ -1,0 +1,23 @@
+uuid: 4a38702e-ddf5-41db-b865-437d3609ce81
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.taxonomy_term.field_avg_monthly_salary
+    - taxonomy.vocabulary.location
+id: taxonomy_term.location.field_avg_monthly_salary
+field_name: field_avg_monthly_salary
+entity_type: taxonomy_term
+bundle: location
+label: avg_monthly_salary
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  min: null
+  max: null
+  prefix: ''
+  suffix: ''
+field_type: float

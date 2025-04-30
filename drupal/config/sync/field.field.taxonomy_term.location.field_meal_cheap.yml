@@ -1,0 +1,23 @@
+uuid: 8224ea25-592e-4eab-9929-228b2d644a5d
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.taxonomy_term.field_meal_cheap
+    - taxonomy.vocabulary.location
+id: taxonomy_term.location.field_meal_cheap
+field_name: field_meal_cheap
+entity_type: taxonomy_term
+bundle: location
+label: meal_cheap
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  min: null
+  max: null
+  prefix: ''
+  suffix: ''
+field_type: float

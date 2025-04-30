@@ -1,0 +1,23 @@
+uuid: 3cd57c17-59be-4ee0-b43d-8f5060eb86d1
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.taxonomy_term.field_apt_1bed_center
+    - taxonomy.vocabulary.location
+id: taxonomy_term.location.field_apt_1bed_center
+field_name: field_apt_1bed_center
+entity_type: taxonomy_term
+bundle: location
+label: apt_1bed_center
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  min: null
+  max: null
+  prefix: ''
+  suffix: ''
+field_type: float

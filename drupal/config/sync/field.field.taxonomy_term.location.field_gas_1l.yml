@@ -1,0 +1,23 @@
+uuid: 84730d73-49fe-4585-991a-db661eb0b0d7
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.taxonomy_term.field_gas_1l
+    - taxonomy.vocabulary.location
+id: taxonomy_term.location.field_gas_1l
+field_name: field_gas_1l
+entity_type: taxonomy_term
+bundle: location
+label: gas_1l
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  min: null
+  max: null
+  prefix: ''
+  suffix: ''
+field_type: float

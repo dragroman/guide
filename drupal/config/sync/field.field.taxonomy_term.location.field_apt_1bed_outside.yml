@@ -1,0 +1,23 @@
+uuid: fda106c8-52bd-45b5-a99f-8effb63d3299
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.taxonomy_term.field_apt_1bed_outside
+    - taxonomy.vocabulary.location
+id: taxonomy_term.location.field_apt_1bed_outside
+field_name: field_apt_1bed_outside
+entity_type: taxonomy_term
+bundle: location
+label: apt_1bed_outside
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  min: null
+  max: null
+  prefix: ''
+  suffix: ''
+field_type: float

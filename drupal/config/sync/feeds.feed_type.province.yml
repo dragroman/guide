@@ -1,0 +1,120 @@
+uuid: 826494e9-c044-4ee9-8c3a-d363792b5e50
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.taxonomy_term.province.field_capital
+    - field.field.taxonomy_term.province.field_name_cn
+    - field.field.taxonomy_term.province.field_name_ru
+    - field.field.taxonomy_term.province.field_type
+    - taxonomy.vocabulary.province
+  module:
+    - taxonomy
+label: Province
+id: province
+description: ''
+help: ''
+import_period: -1
+fetcher: directory
+fetcher_configuration:
+  allowed_extensions: 'txt csv tsv xml opml'
+  allowed_schemes:
+    private: private
+  recursive_scan: false
+parser: csv
+parser_configuration:
+  delimiter: TAB
+  no_headers: false
+  line_limit: 100
+processor: 'entity:taxonomy_term'
+processor_configuration:
+  values:
+    vid: province
+  langcode: ru
+  insert_new: 1
+  update_existing: 2
+  update_non_existent: _keep
+  skip_hash_check: false
+  skip_validation: false
+  skip_validation_types: {  }
+  authorize: false
+  revision: false
+  expire: -1
+  owner_feed_author: false
+  owner_id: 0
+custom_sources:
+  tid:
+    value: tid
+    label: tid
+    machine_name: tid
+    type: csv
+  capital:
+    value: capital
+    label: capital
+    machine_name: capital
+    type: csv
+  name_cn:
+    value: name_cn
+    label: name_cn
+    machine_name: name_cn
+    type: csv
+  name_ru:
+    value: name_ru
+    label: name_ru
+    machine_name: name_ru
+    type: csv
+  type:
+    value: type
+    label: type
+    machine_name: type
+    type: csv
+  name:
+    value: name
+    label: name
+    machine_name: name
+    type: csv
+mappings:
+  -
+    target: tid
+    map:
+      value: tid
+    settings: {  }
+    unique:
+      value: 1
+  -
+    target: field_capital
+    map:
+      target_id: capital
+    settings:
+      language: ''
+      reference_by: tid
+      feeds_item: guid
+      autocreate: 0
+      autocreate_bundle: location
+  -
+    target: field_name_cn
+    map:
+      value: name_cn
+    settings:
+      language: null
+    unique: {  }
+  -
+    target: field_name_ru
+    map:
+      value: name_ru
+    settings:
+      language: null
+    unique: {  }
+  -
+    target: field_type
+    map:
+      value: type
+    settings:
+      language: null
+  -
+    target: name
+    map:
+      value: name
+    settings:
+      language: null
+    unique: {  }

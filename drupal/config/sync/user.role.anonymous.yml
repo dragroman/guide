@@ -12,6 +12,7 @@ dependencies:
     - media
     - rest
     - search
+    - subrequests
     - system
 _core:
   default_config_hash: 6WavjUYXIegP9AAg2zXGx54MWIVoomC3SZhNiqe-Dyk
@@ -23,6 +24,7 @@ permissions:
   - 'access comments'
   - 'access content'
   - 'access site-wide contact form'
+  - 'issue subrequests'
   - 'restful post webform_rest_submit'
   - 'search content'
   - 'use text format restricted_html'

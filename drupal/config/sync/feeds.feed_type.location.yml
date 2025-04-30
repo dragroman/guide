@@ -5,7 +5,17 @@ dependencies:
   config:
     - core.base_field_override.taxonomy_term.location.name
     - core.base_field_override.taxonomy_term.location.status
+    - field.field.taxonomy_term.location.field_apt_1bed_center
+    - field.field.taxonomy_term.location.field_apt_1bed_outside
+    - field.field.taxonomy_term.location.field_apt_3bed_center
+    - field.field.taxonomy_term.location.field_apt_3bed_outside
+    - field.field.taxonomy_term.location.field_avg_monthly_salary
+    - field.field.taxonomy_term.location.field_cigarettes
     - field.field.taxonomy_term.location.field_country
+    - field.field.taxonomy_term.location.field_gas_1l
+    - field.field.taxonomy_term.location.field_image
+    - field.field.taxonomy_term.location.field_meal_cheap
+    - field.field.taxonomy_term.location.field_meal_mid
     - field.field.taxonomy_term.location.field_select_text
     - field.field.taxonomy_term.location.field_title_cn
     - taxonomy.vocabulary.location
@@ -52,7 +62,7 @@ processor_configuration:
   insert_new: 1
   update_existing: 2
   update_non_existent: _keep
-  skip_hash_check: true
+  skip_hash_check: false
   skip_validation: false
   skip_validation_types: {  }
   authorize: false
@@ -121,6 +131,51 @@ custom_sources:
     label: field_select_text
     machine_name: field_select_text
     type: csv
+  avg_monthly_salary:
+    value: avg_monthly_salary
+    label: avg_monthly_salary
+    machine_name: avg_monthly_salary
+    type: csv
+  meal_cheap:
+    value: meal_cheap
+    label: meal_cheap
+    machine_name: meal_cheap
+    type: csv
+  meal_mid:
+    value: meal_mid
+    label: meal_mid
+    machine_name: meal_mid
+    type: csv
+  cigarettes:
+    value: cigarettes
+    label: cigarettes
+    machine_name: cigarettes
+    type: csv
+  gas_1l:
+    value: gas_1l
+    label: gas_1l
+    machine_name: gas_1l
+    type: csv
+  apt_1bed_center:
+    value: apt_1bed_center
+    label: apt_1bed_center
+    machine_name: apt_1bed_center
+    type: csv
+  apt_1bed_outside:
+    value: apt_1bed_outside
+    label: apt_1bed_outside
+    machine_name: apt_1bed_outside
+    type: csv
+  apt_3bed_center:
+    value: apt_3bed_center
+    label: apt_3bed_center
+    machine_name: apt_3bed_center
+    type: csv
+  apt_3bed_outside:
+    value: apt_3bed_outside
+    label: apt_3bed_outside
+    machine_name: apt_3bed_outside
+    type: csv
 mappings:
   -
     target: field_country
@@ -173,3 +228,69 @@ mappings:
       value: description
     settings:
       language: ''
+  -
+    target: field_avg_monthly_salary
+    map:
+      value: avg_monthly_salary
+    settings:
+      language: null
+  -
+    target: field_meal_cheap
+    map:
+      value: meal_cheap
+    settings:
+      language: null
+  -
+    target: field_meal_mid
+    map:
+      value: meal_mid
+    settings:
+      language: null
+  -
+    target: field_cigarettes
+    map:
+      value: cigarettes
+    settings:
+      language: null
+  -
+    target: field_gas_1l
+    map:
+      value: gas_1l
+    settings:
+      language: null
+  -
+    target: field_apt_1bed_center
+    map:
+      value: apt_1bed_center
+    settings:
+      language: null
+  -
+    target: field_apt_1bed_outside
+    map:
+      value: apt_1bed_outside
+    settings:
+      language: null
+  -
+    target: field_apt_3bed_center
+    map:
+      value: apt_3bed_center
+    settings:
+      language: null
+  -
+    target: field_apt_3bed_outside
+    map:
+      value: apt_3bed_outside
+    settings:
+      language: null
+  -
+    target: field_image
+    map:
+      target_id: field_image_url
+      alt: title_ru
+      title: title_ru
+    settings:
+      existing: 2
+      language: null
+      reference_by: filename
+      autocreate: false
+      autocreate_bundle: false
