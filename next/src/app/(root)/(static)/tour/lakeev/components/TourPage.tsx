@@ -172,84 +172,79 @@ export const TourPage = () => {
   ]
 
   return (
-    <div className="container mx-auto py-6 px-4 max-w-7xl">
-      <TourHeader
-        title="Харбин: гастрономия, шоппинг и культура"
-        subtitle="Персонализированное путешествие для семьи Лакеевых в Харбин"
-        dates="29 апреля – 3 мая 2025"
-        duration="5 дней"
-        imagePath="/harbin-family.jpg"
-        badges={[
-          "Учет пищевой аллергии",
-          "Шоппинг спортивных товаров",
-          "Гастрономические открытия",
-          "Культурные экскурсии",
-        ]}
-      />
-
-      <div className="flex flex-col space-y-6 mb-6">
+    <>
+      <div className="flex flex-col space-y-4">
+        <TourHeader
+          title="Харбин: гастрономия, шоппинг и культура"
+          subtitle="Персонализированное путешествие для семьи Лакеевых в Харбин"
+          dates="29 апреля – 3 мая 2025"
+          duration="5 дней"
+          imagePath="/harbin-family.jpg"
+          badges={[
+            "Учет пищевой аллергии",
+            "Шоппинг спортивных товаров",
+            "Гастрономические открытия",
+            "Культурные экскурсии",
+          ]}
+        />
         {/* Основной контент */}
-        <div>
-          <TourDetailContainer tabs={tourTabs} defaultTab="info" />
+        <TourDetailContainer tabs={tourTabs} defaultTab="info" />
+
+        {/* Дополнительный контент */}
+        <div className="space-y-6">
+          <Card>
+            <CardHeader>
+              <CardTitle>Сведения о заявке</CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <div className="space-y-2">
+                <div className="flex justify-between">
+                  <span className="text-muted-foreground">Имя:</span>
+                  <span className="font-semibold">Ольга</span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-muted-foreground">Состав:</span>
+                  <span className="font-semibold">2 взр, 1 реб, 1 подр</span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-muted-foreground">Даты:</span>
+                  <span className="font-semibold">29.04 - 03.05.2025</span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-muted-foreground">Бюджет/день:</span>
+                  <span className="font-semibold">3 300 ₽/чел</span>
+                </div>
+              </div>
+
+              <div className="flex flex-wrap gap-2 mt-2">
+                <Badge variant="secondary">Экскурсии</Badge>
+                <Badge variant="secondary">Шоппинг</Badge>
+                <Badge variant="secondary">Гастрономия</Badge>
+              </div>
+
+              <div className="border-t pt-4 mt-2">
+                <a
+                  target="_blank"
+                  href="https://img.chinq.ru/guide/public/pdf/lakeev.pdf"
+                >
+                  <Button className="w-full mt-2" variant="outline">
+                    <Download className="mr-2 h-4 w-4" />
+                    Скачать полную заявку
+                  </Button>
+                </a>
+              </div>
+            </CardContent>
+          </Card>
         </div>
 
-        {/* Боковая панель */}
-        <div>
-          <div className="sticky top-6 space-y-6">
-            <Card>
-              <CardHeader>
-                <CardTitle>Сведения о заявке</CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                <div className="space-y-2">
-                  <div className="flex justify-between">
-                    <span className="text-muted-foreground">Имя:</span>
-                    <span className="font-semibold">Ольга</span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span className="text-muted-foreground">Состав:</span>
-                    <span className="font-semibold">2 взр, 1 реб, 1 подр</span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span className="text-muted-foreground">Даты:</span>
-                    <span className="font-semibold">29.04 - 03.05.2025</span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span className="text-muted-foreground">Бюджет/день:</span>
-                    <span className="font-semibold">3 300 ₽/чел</span>
-                  </div>
-                </div>
-
-                <div className="flex flex-wrap gap-2 mt-2">
-                  <Badge variant="secondary">Экскурсии</Badge>
-                  <Badge variant="secondary">Шоппинг</Badge>
-                  <Badge variant="secondary">Гастрономия</Badge>
-                </div>
-
-                <div className="border-t pt-4 mt-2">
-                  <a
-                    target="_blank"
-                    href="https://img.chinq.ru/guide/public/pdf/lakeev.pdf"
-                  >
-                    <Button className="w-full mt-2" variant="outline">
-                      <Download className="mr-2 h-4 w-4" />
-                      Скачать полную заявку
-                    </Button>
-                  </a>
-                </div>
-              </CardContent>
-            </Card>
-          </div>
-        </div>
+        {/* CTA в конце страницы */}
+        <TourCta
+          title="Связь с экспертом"
+          description="Мы внимательно изучили вашу заявку и подготовили персонализированный маршрут с учетом всех пожеланий, включая особые диетические требования вашего ребенка. Готовы обсудить детали и внести корректировки."
+          primaryButtonText="Позвонить"
+          secondaryButtonText="Whatsapp"
+        />
       </div>
-
-      {/* CTA в конце страницы */}
-      <TourCta
-        title="Связь с экспертом"
-        description="Мы внимательно изучили вашу заявку и подготовили персонализированный маршрут с учетом всех пожеланий, включая особые диетические требования вашего ребенка. Готовы обсудить детали и внести корректировки."
-        primaryButtonText="Позвонить"
-        secondaryButtonText="Whatsapp"
-      />
-    </div>
+    </>
   )
 }
