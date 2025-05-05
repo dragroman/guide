@@ -6,7 +6,6 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card"
-import { LucideIcon } from "lucide-react"
 import { ReactNode } from "react"
 
 interface HighlightProps {
