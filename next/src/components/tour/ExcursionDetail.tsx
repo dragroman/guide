@@ -19,6 +19,7 @@ import {
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import { Card, CardContent } from "@/components/ui/card"
+import { DetailInfoItem } from "./DetailInfoItem"
 
 interface Excursion {
   name: string
@@ -61,50 +62,46 @@ export const ExcursionDetail = ({
         {/* Детальная информация */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-4 mb-6">
           {/* Время работы */}
-          <div className="flex items-start">
-            <Clock className="h-5 w-5 text-muted-foreground mr-3 mt-0.5" />
-            <div>
-              <h4 className="font-medium text-gray-900">Часы работы</h4>
-              <p className="text-muted-foreground">{excursion.hours}</p>
-            </div>
-          </div>
+          <DetailInfoItem
+            icon={Clock}
+            title="Часы работы"
+            value={excursion.hours}
+          />
 
           {/* Стоимость */}
-          <div className="flex items-start">
-            <CircleDollarSign className="h-5 w-5 text-muted-foreground mr-3 mt-0.5" />
-            <div>
-              <h4 className="font-medium text-gray-900">Стоимость билетов</h4>
-              <p className="text-muted-foreground">{excursion.price}</p>
-            </div>
-          </div>
+          <DetailInfoItem
+            icon={CircleDollarSign}
+            title="Стоимость билетов"
+            value={excursion.price}
+          />
 
           {/* Адрес */}
-          <div className="flex items-start">
-            <MapPin className="h-5 w-5 text-muted-foreground mr-3 mt-0.5" />
-            <div>
-              <h4 className="font-medium text-gray-900">Адрес</h4>
-              <p className="text-muted-foreground">{excursion.address}</p>
-            </div>
-          </div>
+          <DetailInfoItem
+            icon={MapPin}
+            title="Адрес"
+            value={excursion.address}
+          />
 
           {/* Длительность */}
-          <div className="flex items-start">
-            <Info className="h-5 w-5 text-muted-foreground mr-3 mt-0.5" />
-            <div>
-              <h4 className="font-medium text-gray-900">Время на экскурсию</h4>
-              <p className="text-muted-foreground">{excursion.duration}</p>
-            </div>
-          </div>
+          <DetailInfoItem
+            icon={Info}
+            title="Время на экскурсию"
+            value={excursion.duration}
+          />
 
           {/* Как добраться */}
-          <div className="flex items-start">
-            <Bus className="h-5 w-5 text-muted-foreground mr-3 mt-0.5" />
-            <div>
-              <h4 className="font-medium text-gray-900">Как добраться</h4>
-              <p className="text-muted-foreground">{excursion.directions}</p>
-              <p className="text-gray-500 text-sm">{excursion.travelTime}</p>
-            </div>
-          </div>
+          <DetailInfoItem
+            icon={Bus}
+            title="Как добраться"
+            value={
+              <>
+                <div>{excursion.directions}</div>
+                <div className="text-gray-500 text-sm">
+                  {excursion.travelTime}
+                </div>
+              </>
+            }
+          />
         </div>
 
         {/* Советы */}

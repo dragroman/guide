@@ -9,6 +9,7 @@ import {
 } from "@/components/ui/dialog"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
+import { DetailInfoItem } from "./DetailInfoItem"
 
 interface ShoppingPlace {
   name: string
@@ -48,40 +49,32 @@ export const ShoppingDetail = ({
         {/* Детальная информация */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-4 mb-6">
           {/* Время работы */}
-          <div className="flex items-start">
-            <Clock className="h-5 w-5 text-muted-foreground mr-3 mt-0.5" />
-            <div>
-              <h4 className="font-medium text-gray-900">Часы работы</h4>
-              <p className="text-muted-foreground">{shopping.hours}</p>
-            </div>
-          </div>
+          <DetailInfoItem
+            icon={Clock}
+            title="Часы работы"
+            value={shopping.hours}
+          />
 
           {/* Категория */}
-          <div className="flex items-start">
-            <Tag className="h-5 w-5 text-muted-foreground mr-3 mt-0.5" />
-            <div>
-              <h4 className="font-medium text-gray-900">Категория товаров</h4>
-              <p className="text-muted-foreground">{shopping.category}</p>
-            </div>
-          </div>
+          <DetailInfoItem
+            icon={Tag}
+            title="Категория товаров"
+            value={shopping.category}
+          />
 
           {/* Адрес */}
-          <div className="flex items-start">
-            <MapPin className="h-5 w-5 text-muted-foreground mr-3 mt-0.5" />
-            <div>
-              <h4 className="font-medium text-gray-900">Адрес</h4>
-              <p className="text-muted-foreground">{shopping.address}</p>
-            </div>
-          </div>
+          <DetailInfoItem
+            icon={MapPin}
+            title="Адрес"
+            value={shopping.address}
+          />
 
           {/* Как добраться */}
-          <div className="flex items-start">
-            <Bus className="h-5 w-5 text-muted-foreground mr-3 mt-0.5" />
-            <div>
-              <h4 className="font-medium text-gray-900">Как добраться</h4>
-              <p className="text-muted-foreground">{shopping.directions}</p>
-            </div>
-          </div>
+          <DetailInfoItem
+            icon={Bus}
+            title="Как добраться"
+            value={shopping.directions}
+          />
         </div>
 
         {/* Кнопки для карт */}

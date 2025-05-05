@@ -1,4 +1,4 @@
-import { AlertTriangle, Hotel, Link, Link2, Users } from "lucide-react"
+import { AlertTriangle, Hotel, Link2, Users } from "lucide-react"
 import { TourFeatureCard } from "../TourFeatureCard"
 import { TourInfoCard } from "../TourInfoCard"
 import { Button } from "@/components/ui/button"
@@ -34,23 +34,24 @@ export default function TourBaseInfo({
             <div>{data.accommodation.name}</div>
             <Button variant="outline">
               <Link2 />
-              <Link href={data.accommodation.urlMap} target="_blank">
+              <a href={data.accommodation.urlMap} target="_blank">
                 Ссылка на карте
-              </Link>
+              </a>
             </Button>
           </div>
         </TourFeatureCard>
       </div>
-
-      <Alert className="mt-4 mb-6 border-amber-500">
-        <AlertTriangle className="h-4 w-4 text-amber-500" />
-        <AlertTitle>{data.remarks.title}</AlertTitle>
-        <AlertDescription>{data.remarks.description}</AlertDescription>
-      </Alert>
+      {data.remarks.title && (
+        <Alert className="mt-4 mb-6 border-amber-500">
+          <AlertTriangle className="h-4 w-4 text-amber-500" />
+          <AlertTitle>{data.remarks.title}</AlertTitle>
+          <AlertDescription>{data.remarks.description}</AlertDescription>
+        </Alert>
+      )}
 
       <TourHighlights
         highlights={data.highlights.map((h) => ({
-          icon: <h.icon className="h-5 w-5 text-primary" />, // dynamic icon
+          icon: <h.icon className="h-5 w-5 text-primary" />,
           title: h.title,
           description: h.description,
         }))}

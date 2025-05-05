@@ -41,14 +41,16 @@ export default function TourAdditional({
               </Badge>
             ))}
           </div>
-          <div className="border-t pt-4 mt-2">
-            <a target="_blank" href={application.pdf}>
-              <Button className="w-full mt-2" variant="outline">
-                <Download className="mr-2 h-4 w-4" />
-                Скачать полную заявку
-              </Button>
-            </a>
-          </div>
+          {application.pdf && (
+            <div className="border-t pt-4 mt-2">
+              <a target="_blank" href={application.pdf}>
+                <Button className="w-full mt-2" variant="outline">
+                  <Download className="mr-2 h-4 w-4" />
+                  Скачать полную заявку
+                </Button>
+              </a>
+            </div>
+          )}
         </CardContent>
       </Card>
     </div>
