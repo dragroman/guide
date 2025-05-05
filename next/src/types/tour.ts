@@ -9,11 +9,6 @@ export type Accommodation = {
   urlMap: string
 }
 
-export type Remark = {
-  title: string
-  description: string
-}
-
 export type Highlight = {
   icon: React.ComponentType<any>
   title: string
@@ -34,7 +29,7 @@ export type BaseInfo = {
   ageGroups: string
   accommodation: Accommodation
   header: TourHeaderProps
-  remarks: Remark
+  remarks?: Remark | null
   highlights: Highlight[]
   personal: {
     title: string
@@ -54,6 +49,10 @@ export type BaseInfo = {
   }
 }
 
+export type Remark = {
+  title: string
+  description: string
+}
 export type TourApplication = {
   name: string
   group: string
@@ -113,8 +112,8 @@ export type ShoppingPlace = {
   hours: string
   description: string
   directions: string
-  baiduUrl: string
-  omapsUrl: string
+  baiduUrl?: string
+  omapsUrl?: string
 }
 
 export type ShoppingData = ShoppingPlace[]

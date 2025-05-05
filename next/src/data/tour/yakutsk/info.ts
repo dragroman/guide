@@ -29,7 +29,10 @@ export const baseInfoData = {
     name: "金爵精品酒店(哈尔滨西站万达广场店)",
     urlMap: "https://j.map.baidu.com/56/wgh",
   },
-  remarks: "",
+  remarks: {
+    title: "",
+    description: "",
+  },
   highlights: [
     {
       icon: Rocket,
@@ -70,7 +73,7 @@ export const baseInfoData = {
     title: "Харбин: гастрономия, шоппинг и культура",
     subtitle: "Персонализированное путешествие для группы из Якутска в Харбин",
     dates: "05 мая – 13 мая 2025",
-    duration: "5 дней",
+    duration: "7 дней",
     imagePath: "/harbin-family.jpg",
     badges: ["Шоппинг", "Гастрономические открытия", "Культурные экскурсии"],
   },
@@ -79,7 +82,7 @@ export const baseInfoData = {
     name: "Туйаара",
     group: "5 взрослых",
     dates: "05.05 - 13.05.2025",
-    budget: "100 000 ₽/чел",
+    budget: "7000 - 14000 ₽/чел",
     tags: ["Экскурсии", "Шоппинг", "Гастрономия"],
     pdf: "",
   },

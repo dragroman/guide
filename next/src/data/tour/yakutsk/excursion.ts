@@ -14,7 +14,7 @@ export const excursionData: ExcursionData = [
     directions:
       "От гостиницы до метро 646 метров пешком. На метро: 2 ветка (зеленая)中央大街站 Zhongyangstreet（вход 1) проехать 2 остановки и выйти на остановке 太阳岛站 Sun Island (выход 3) пройти 459 метров до входа парка 1",
     travelTime: "23 минуты",
-    baiduUrl: "https://j.map.baidu.com/3b/L3hk",
+    baiduUrl: "https://j.map.baidu.com/3c/sGhk",
     omapsUrl: "https://omaps.app/_8UYCncZte/",
     tips: "Парк очень большой и во время праздничных выходных возможны очереди. Обратно можно воспользоваться канатной дорогой 松花江索道 у выхода 3 из парка. Стоимость билета 60 юаней в одну сторону на человека",
   },

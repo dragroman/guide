@@ -41,7 +41,7 @@ export default function TourBaseInfo({
           </div>
         </TourFeatureCard>
       </div>
-      {data.remarks.title && (
+      {data.remarks && (
         <Alert className="mt-4 mb-6 border-amber-500">
           <AlertTriangle className="h-4 w-4 text-amber-500" />
           <AlertTitle>{data.remarks.title}</AlertTitle>
