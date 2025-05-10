@@ -1,149 +1,15 @@
-# HaoHub Guide
+# Basic Starter
 
-## О проекте
+A simple starter for building your site with Next.js and Drupal.
 
-HaoHub Guide — персональный путеводитель по Харбину (Китай) с блогом и сервисом подбора индивидуальных туров. Сайт построен на базе headless архитектуры с использованием Drupal 11 в качестве бэкенда и Next.js 15 на TypeScript для фронтенда.
+## How to use
 
-## Технологический стек
+`npx create-next-app -e https://github.com/chapter-three/next-drupal-basic-starter`
 
-### Бэкенд
+## Deploy to Vercel
 
-- Drupal 11
-- JSON API
-- Webform для обработки форм
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fchapter-three%2Fnext-drupal-basic-starter&env=NEXT_PUBLIC_DRUPAL_BASE_URL,NEXT_IMAGE_DOMAIN,DRUPAL_CLIENT_ID,DRUPAL_CLIENT_SECRET&envDescription=Learn%20more%20about%20environment%20variables&envLink=https%3A%2F%2Fnext-drupal.org%2Fdocs%2Fenvironment-variables&project-name=next-drupal&demo-title=Next.js%20for%20Drupal&demo-description=A%20next-generation%20front-end%20for%20your%20Drupal%20site.&demo-url=https%3A%2F%2Fdemo.next-drupal.org&demo-image=https%3A%2F%2Fnext-drupal.org%2Fimages%2Fdemo-screenshot.jpg)
 
-### Фронтенд
+## Documentation
 
-- Next.js 15
-- TypeScript
-- React Hook Form с Zod для валидации
-- Tailwind CSS
-- Shadcn/UI компоненты
-- date-fns для работы с датами
-
-## Основные возможности
-
-- Блог с материалами о городе и китайской культуре
-- Контактная форма
-- Многоступенчатая форма заявки на индивидуальный тур (9 шагов)
-- Сохранение черновиков форм в localStorage
-- Адаптивный дизайн для мобильных устройств
-- Поддержка русского языков
-
-## Локальная разработка
-
-### Предварительные требования
-
-- Node.js 18+ и npm
-- Docker и Docker Compose (для локального запуска Drupal)
-
-### Установка и запуск
-
-1. Клонировать репозиторий:
-
-   ```bash
-   git clone https://github.com/dragroman/guide.git
-   cd guide
-   ```
-
-2. Установить зависимости Next.js:
-
-   ```bash
-   cd next
-   npm install
-   ```
-
-3. Создать файл `.env.local` с переменными окружения:
-
-   ```
-   NEXT_PUBLIC_DRUPAL_BASE_URL=http://localhost:8080
-   DRUPAL_CLIENT_ID=your_client_id
-   DRUPAL_CLIENT_SECRET=your_client_secret
-   DRUPAL_REVALIDATE_SECRET=your_revalidate_secret
-   ```
-
-4. Запустить Next.js в режиме разработки:
-
-   ```bash
-   npm run dev
-   ```
-
-5. Открыть http://localhost:3000 в браузере
-
-### Структура проекта
-
-```
-/next
-  /src
-    /app                 # Next.js 15 App Router
-      /api               # API маршруты для взаимодействия с Drupal
-      /[...slug]         # Динамические маршруты для страниц и статей
-      /(root)            # Корневые маршруты
-      /application       # Страница формы заявки на тур
-      /contact           # Страница контактной формы
-
-    /components
-      /application       # Компоненты многоступенчатой формы
-      /drupal            # Компоненты для рендеринга контента из Drupal
-      /navigation        # Компоненты навигации
-      /shared            # Общие компоненты
-      /ui                # UI компоненты на базе shadcn/ui
-
-    /lib
-      /drupal.ts         # Конфигурация клиента Next-Drupal
-      /utils.ts          # Вспомогательные функции
-
-    /styles              # Глобальные стили
-```
-
-## Деплой
-
-### Тестовое окружение
-
-Для деплоя тестового окружения используйте:
-
-```bash
-npm run build
-npm run start
-```
-
-### Продакшн
-
-Рекомендуется использовать Vercel для деплоя Next.js приложения:
-
-1. Подключите репозиторий к Vercel
-2. Настройте переменные окружения
-3. Vercel автоматически выполнит сборку и деплой
-
-## Интеграция с Drupal
-
-Проект использует [next-drupal](https://next-drupal.org/) для интеграции Next.js с Drupal.
-
-Основные компоненты интеграции:
-
-- JSON API для получения контента
-- Webform REST для обработки форм
-- Revalidation API для инвалидации кэша при изменении контента
-
-## Особенности реализации
-
-### Многоступенчатая форма
-
-Реализована с использованием:
-
-- React Hook Form для управления состоянием и валидацией
-- Zod для типизированной валидации данных
-- useReducer для управления переходами между шагами
-- Custom hooks для сохранения черновиков
-
-### Рендеринг контента Drupal
-
-Поддерживаются следующие типы контента:
-
-- Статьи (node--article)
-- Базовые страницы (node--page)
-- Параграфы с текстом и изображениями (paragraph--text, paragraph--image)
-
-## Лицензия
-
-MIT
+See https://next-drupal.org

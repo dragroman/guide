@@ -1,49 +1,6 @@
 stages:
-  - build_drupal
-  - deploy_drupal
   - build_next
   - deploy_next
-build-drupal:
-  stage: build_drupal
-  image: docker:latest
-  services:
-    - docker:dind
-  before_script:
-    - |
-      if [ -z "$CI_REGISTRY" ] || [ -z "$CI_REGISTRY_USER" ] || [ -z "$CI_REGISTRY_PASSWORD" ]; then
-        echo "ERROR: Missing registry credentials variables"
-        exit 1
-      fi
-    - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
-  script:
-    - echo "Building Drupal image..."
-    - docker compose build drupal
-    - docker compose push drupal
-  after_script:
-    - echo "DONE DRUPAL"
-  tags:
-    - production
-  only:
-    - main
-deploy-drupal:
-  stage: deploy_drupal
-  before_script:
-    - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
-  script:
-    - cd /var/www/haohub
-    - echo "Pulling images..."
-    - docker compose pull drupal
-    - docker compose up -d drupal mariadb
-    - echo "Waiting for Drupal to be ready..."
-    - sleep 60
-    - docker exec drupal vendor/bin/drush cim -y
-    - docker exec drupal vendor/bin/drush updb -y
-    - docker exec drupal vendor/bin/drush cr
-    - echo "DONE DRUPAL"
-  tags:
-    - production
-  only:
-    - main
 
 build-next:
   stage: build_next

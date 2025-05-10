@@ -1,9 +1,0 @@
-uuid: c5e5abfd-fa72-4815-a94a-a143f134ac75
-langcode: ru
-status: true
-dependencies: {  }
-name: Location
-vid: location
-description: null
-weight: 0
-new_revision: false
