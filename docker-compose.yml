@@ -1,46 +1,7 @@
 services:
-  drupal:
-    build:
-      context: ./drupal
-      dockerfile: Dockerfile
-      args:
-        - DATABASE=${DATABASE}
-        - DRUPAL_USERNAME=${DRUPAL_USERNAME}
-        - DRUPAL_PASSWORD=${DRUPAL_PASSWORD}
-    image: registry.gitlab.com/dragroman/guide/drupal:latest
-    container_name: drupal
-    platform: linux/amd64
-    ports:
-      - "8080:80"
-    environment:
-      - DRUPAL_DATABASE_HOST=mariadb
-      - DRUPAL_DATABASE_PORT=3306
-      - DRUPAL_DATABASE_NAME=${DATABASE}
-      - DRUPAL_DATABASE_USERNAME=${DRUPAL_USERNAME}
-      - DRUPAL_DATABASE_PASSWORD=${DRUPAL_PASSWORD}
-    volumes:
-      - ./config/drupal/settings.php:/var/www/html/drupal/web/sites/default/settings.php
-    networks:
-      drupal_network:
-        ipv4_address: 172.20.0.2
-    depends_on:
-      - mariadb
-
-  mariadb:
-    image: mariadb:11.3
-    container_name: mariadb
-    environment:
-      - MARIADB_ROOT_PASSWORD=${MARIADB_ROOT_PASSWORD}
-      - MARIADB_DATABASE=${DATABASE}
-      - MARIADB_USER=${DRUPAL_USERNAME}
-      - MARIADB_PASSWORD=${DRUPAL_PASSWORD}
-    networks:
-      drupal_network:
-        ipv4_address: 172.20.0.3
-
   next:
     build:
-      context: ./next
+      context: ./
       dockerfile: Dockerfile
       network: host
       args:
@@ -56,15 +17,3 @@ services:
     platform: linux/amd64
     ports:
       - "3000:3000"
-    networks:
-      drupal_network:
-        ipv4_address: 172.20.0.4
-
-networks:
-  drupal_network:
-    name: drupal_network
-    driver: bridge
-    ipam:
-      config:
-        - subnet: 172.20.0.0/16
-          gateway: 172.20.0.1
