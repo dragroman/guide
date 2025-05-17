@@ -1,5 +1,5 @@
 // components/tours/TourHeader.tsx
-import { Badge } from "@/components/ui/badge"
+import { Badge } from "@shared/ui/badge"
 import { Calendar, Clock } from "lucide-react"
 import Image from "next/image"
 

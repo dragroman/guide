@@ -1,5 +1,5 @@
-import { ShareForm } from "@/components/application/components/ShareForm"
-import ContactForm from "@/components/ContactForm"
+import { ShareForm } from "@/processes/application/ui/ShareForm"
+import ContactForm from "@/features/contact/ContactForm"
 
 export default function ExpertInfo() {
   return (

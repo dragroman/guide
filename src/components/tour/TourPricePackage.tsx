@@ -1,5 +1,5 @@
 // components/tours/TourPricePackage.tsx
-import { Button } from "@/components/ui/button"
+import { Button } from "@shared/ui/button"
 import {
   Card,
   CardContent,
@@ -7,9 +7,9 @@ import {
   CardFooter,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card"
+} from "@shared/ui/card"
 import { Check } from "lucide-react"
-import { ButtonProps } from "@/components/ui/button"
+import { ButtonProps } from "@shared/ui/button"
 
 interface TourPricePackageProps {
   title: string

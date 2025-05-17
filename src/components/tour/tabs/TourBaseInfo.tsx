@@ -1,10 +1,10 @@
 import { AlertTriangle, Hotel, Link2, Users } from "lucide-react"
 import { TourFeatureCard } from "../TourFeatureCard"
 import { TourInfoCard } from "../TourInfoCard"
-import { Button } from "@/components/ui/button"
-import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
+import { Button } from "@shared/ui/button"
+import { Alert, AlertDescription, AlertTitle } from "@shared/ui/alert"
 import { TourHighlights } from "../TourHighlights"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { Card, CardContent, CardHeader, CardTitle } from "@shared/ui/card"
 import { BaseInfo } from "@/types/tour"
 
 export default function TourBaseInfo({

@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server"
-import { applicationSchema } from "@/components/application/schemas/applicationSchema"
+import { applicationSchema } from "@/processes/application/config/schemas/applicationSchema"
 
 export async function POST(request: NextRequest) {
   try {

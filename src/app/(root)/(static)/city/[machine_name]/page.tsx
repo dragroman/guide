@@ -1,9 +1,9 @@
-import { drupal } from "@/lib/drupal"
-import { absoluteUrl } from "@/lib/utils"
+import { drupal } from "@shared/lib/drupal"
+import { absoluteUrl } from "@shared/lib/utils"
 import Image from "next/image"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Table, TableBody, TableCell, TableRow } from "@/components/ui/table"
-import { Badge } from "@/components/ui/badge"
+import { Card, CardContent, CardHeader, CardTitle } from "@shared/ui/card"
+import { Table, TableBody, TableCell, TableRow } from "@shared/ui/table"
+import { Badge } from "@shared/ui/badge"
 
 export default async function CityDetail({
   params,

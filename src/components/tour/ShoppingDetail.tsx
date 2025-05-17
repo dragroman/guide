@@ -6,9 +6,9 @@ import {
   DialogContent,
   DialogHeader,
   DialogTitle,
-} from "@/components/ui/dialog"
-import { Button } from "@/components/ui/button"
-import { Badge } from "@/components/ui/badge"
+} from "@shared/ui/dialog"
+import { Button } from "@shared/ui/button"
+import { Badge } from "@shared/ui/badge"
 import { DetailInfoItem } from "./DetailInfoItem"
 
 interface ShoppingPlace {

@@ -1,7 +1,7 @@
 "use client"
 import { ReactNode, useEffect, useState } from "react"
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area"
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@shared/ui/tabs"
+import { ScrollArea, ScrollBar } from "@shared/ui/scroll-area"
 import { ChevronLeft, ChevronRight } from "lucide-react"
 
 interface TourTab {

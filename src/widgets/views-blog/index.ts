@@ -1,0 +1,1 @@
+export { ViewsBlog } from "./ui/ViewsBlog"

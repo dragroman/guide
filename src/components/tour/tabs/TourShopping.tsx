@@ -1,11 +1,11 @@
 "use client"
-import { Badge } from "@/components/ui/badge"
-import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card"
-import { cn } from "@/lib/utils"
+import { Badge } from "@shared/ui/badge"
+import { Card, CardContent, CardFooter, CardHeader } from "@shared/ui/card"
+import { cn } from "@shared/lib/utils"
 import { Clock, MapPin, ShoppingBag, Building, Store } from "lucide-react"
 import { useState } from "react"
 import { ShoppingDetail } from "../ShoppingDetail"
-import { Button } from "@/components/ui/button"
+import { Button } from "@shared/ui/button"
 import { ShoppingData } from "@/types/tour"
 
 export default function TourShopping({

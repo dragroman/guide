@@ -1,4 +1,4 @@
-import ContactForm from "@/components/ContactForm"
+import ContactForm from "@/features/contact/ContactForm"
 
 export const metadata = {
   title: "Контакты | Next.js для Drupal",

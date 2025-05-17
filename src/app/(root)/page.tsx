@@ -1,9 +1,9 @@
 import type { Metadata } from "next"
-import { Button } from "@/components/ui/button"
-import { Badge } from "@/components/ui/badge"
+import { Button } from "@shared/ui/button"
+import { Badge } from "@shared/ui/badge"
 import Link from "next/link"
 import Image from "next/image"
-import { SOCIAL } from "@/lib/constants"
+import { SOCIAL } from "@shared/lib/constants"
 import { Clock } from "lucide-react"
 
 export const metadata: Metadata = {

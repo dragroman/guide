@@ -1,5 +1,5 @@
 // components/tours/TourInfoCard.tsx
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { Card, CardContent, CardHeader, CardTitle } from "@shared/ui/card"
 import { ReactNode } from "react"
 
 interface TourInfoItem {

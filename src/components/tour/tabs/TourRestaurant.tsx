@@ -1,11 +1,11 @@
 "use client"
-import { Badge } from "@/components/ui/badge"
-import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card"
-import { cn } from "@/lib/utils"
+import { Badge } from "@shared/ui/badge"
+import { Card, CardContent, CardFooter, CardHeader } from "@shared/ui/card"
+import { cn } from "@shared/lib/utils"
 import { CircleDollarSign, Clock, MapPin, Star } from "lucide-react"
 import { useState } from "react"
 import { RestaurantDetail } from "../RestaurantDetail"
-import { Button } from "@/components/ui/button"
+import { Button } from "@shared/ui/button"
 import { RestaurantData } from "@/types/tour"
 
 export default function TourRestaurant({

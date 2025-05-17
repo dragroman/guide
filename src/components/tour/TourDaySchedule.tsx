@@ -1,5 +1,5 @@
 // components/tours/TourDaySchedule.tsx
-import { Separator } from "@/components/ui/separator"
+import { Separator } from "@shared/ui/separator"
 import { ReactNode } from "react"
 
 interface ScheduleItemProps {

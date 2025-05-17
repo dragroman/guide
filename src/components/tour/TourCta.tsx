@@ -1,5 +1,5 @@
 // components/tours/TourCta.tsx
-import { Button } from "@/components/ui/button"
+import { Button } from "@shared/ui/button"
 import { Phone } from "lucide-react"
 
 interface TourCtaProps {

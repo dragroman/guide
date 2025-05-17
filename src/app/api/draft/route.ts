@@ -1,4 +1,4 @@
-import { drupal } from "@/lib/drupal"
+import { drupal } from "@shared/lib/drupal"
 import { enableDraftMode } from "next-drupal/draft"
 import type { NextRequest } from "next/server"
 

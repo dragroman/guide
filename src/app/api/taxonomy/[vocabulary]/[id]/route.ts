@@ -1,6 +1,6 @@
 // src/app/api/taxonomy/[vocabulary]/[id]/route.ts
 import { NextRequest, NextResponse } from "next/server"
-import { drupal } from "@/lib/drupal"
+import { drupal } from "@shared/lib/drupal"
 
 export async function GET(
   request: NextRequest,
