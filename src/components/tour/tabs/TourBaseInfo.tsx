@@ -5,7 +5,7 @@ import { Button } from "@shared/ui/button"
 import { Alert, AlertDescription, AlertTitle } from "@shared/ui/alert"
 import { TourHighlights } from "../TourHighlights"
 import { Card, CardContent, CardHeader, CardTitle } from "@shared/ui/card"
-import { BaseInfo } from "@/types/tour"
+import { BaseInfo } from "@/shared/types/tour"
 
 export default function TourBaseInfo({
   baseInfoData,

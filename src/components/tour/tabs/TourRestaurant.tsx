@@ -6,7 +6,7 @@ import { CircleDollarSign, Clock, MapPin, Star } from "lucide-react"
 import { useState } from "react"
 import { RestaurantDetail } from "../RestaurantDetail"
 import { Button } from "@shared/ui/button"
-import { RestaurantData } from "@/types/tour"
+import { RestaurantData } from "@/shared/types/tour"
 
 export default function TourRestaurant({
   restaurantData,

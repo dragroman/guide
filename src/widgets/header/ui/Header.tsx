@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
-import { Home, BookOpen, Phone, Info, User2 } from "lucide-react"
+import { Home, BookOpen, Phone, Info, User2, Hotel } from "lucide-react"
 import { cn } from "@shared/lib/utils"
 import MenuMobile from "./MenuMobile"
 import AuthStatus from "./AuthStatus"
@@ -34,6 +34,11 @@ export const navigationItems = [
     title: "Блог",
     href: "/blog",
     icon: <BookOpen className="h-5 w-5 mr-2" />,
+  },
+  {
+    title: "Добавить отель",
+    href: "/hotel/add",
+    icon: <Hotel className="h-5 w-5 mr-2" />,
   },
   // { title: "Блог", href: "/blog", icon: <BookOpen className="h-5 w-5 mr-2" /> },
   // {
@@ -89,6 +94,7 @@ export function Header({ className }: { className?: string }) {
       isScrolled || !shouldBeTransparent ? "text-foreground" : "text-white"
     )
   }
+
   return (
     <header
       className={cn(

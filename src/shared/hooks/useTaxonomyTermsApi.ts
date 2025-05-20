@@ -80,8 +80,6 @@ export function useTaxonomyTermsApi({
         throw new Error(`Ошибка при загрузке терминов: ${response.statusText}`)
       }
 
-      console.log()
-
       const { data } = await response.json()
       setTerms(data || [])
     } catch (error) {

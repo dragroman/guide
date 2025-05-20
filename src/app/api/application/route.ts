@@ -4,7 +4,6 @@ import { applicationSchema } from "@/processes/application/config/schemas/applic
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json()
-    console.log("Полученные данные API:", body)
 
     // Проверяем что получены все необходимые данные
     if (

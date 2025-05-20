@@ -6,7 +6,7 @@ import { Clock, MapPin, ShoppingBag, Building, Store } from "lucide-react"
 import { useState } from "react"
 import { ShoppingDetail } from "../ShoppingDetail"
 import { Button } from "@shared/ui/button"
-import { ShoppingData } from "@/types/tour"
+import { ShoppingData } from "@/shared/types/tour"
 
 export default function TourShopping({
   shoppingData,

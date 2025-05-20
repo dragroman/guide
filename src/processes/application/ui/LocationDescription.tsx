@@ -42,8 +42,6 @@ export function LocationDescription({
     )
   }
 
-  console.log(dataToUse)
-
   if (!dataToUse) return null
 
   return (

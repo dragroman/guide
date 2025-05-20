@@ -5,7 +5,7 @@ import type { ReactNode } from "react"
 import localFont from "next/font/local"
 import { GoogleTagManager } from "@next/third-parties/google"
 import "@shared/styles/globals.css"
-import SessionProvider from "@/shared/SessionProvider"
+import { Providers } from "@/features/auth/ui/Providers"
 
 const merriweather = localFont({
   src: [
@@ -65,7 +65,7 @@ export default async function RootLayout({
     >
       {gtmId && <GoogleTagManager gtmId={gtmId} />}
       <body>
-        <SessionProvider>{children}</SessionProvider>
+        <Providers>{children}</Providers>
       </body>
     </html>
   )

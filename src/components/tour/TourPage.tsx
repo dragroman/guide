@@ -13,7 +13,7 @@ import {
   ExcursionData,
   RestaurantData,
   ShoppingData,
-} from "@/types/tour"
+} from "@/shared/types/tour"
 
 export const metadata = {
   title: "Харбин для детей: наука, природа и приключения",

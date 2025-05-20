@@ -1,4 +1,4 @@
-import { ExcursionData } from "@/types/tour"
+import { ExcursionData } from "@/shared/types/tour"
 
 export const excursionData: ExcursionData = [
   {

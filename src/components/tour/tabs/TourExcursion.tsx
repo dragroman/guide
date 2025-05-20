@@ -6,7 +6,7 @@ import { CircleDollarSign, Clock, MapPin, Info, Ticket } from "lucide-react"
 import { useState } from "react"
 import { ExcursionDetail } from "../ExcursionDetail"
 import { Button } from "@shared/ui/button"
-import { ExcursionData } from "@/types/tour"
+import { ExcursionData } from "@/shared/types/tour"
 
 export default function TourExcursion({
   excursionData,

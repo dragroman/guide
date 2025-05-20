@@ -2,7 +2,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@shared/ui/card"
 import { Badge } from "@shared/ui/badge"
 import { Button } from "@shared/ui/button"
 import { Download } from "lucide-react"
-import { TourApplication } from "@/types/tour"
+import { TourApplication } from "@/shared/types/tour"
 
 export default function TourAdditional({
   application,
