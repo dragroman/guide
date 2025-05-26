@@ -3,8 +3,9 @@
 import { useState } from "react"
 import { signIn } from "next-auth/react"
 import { useRouter } from "next/navigation"
+import Link from "next/link"
 
-export const LoginForm = () => {
+export const LoginForm = ({ onSuccess }: { onSuccess?: () => void }) => {
   const [username, setUsername] = useState("")
   const [password, setPassword] = useState("")
   const [error, setError] = useState("")
@@ -26,7 +27,11 @@ export const LoginForm = () => {
       if (result?.error) {
         setError("Неверные учетные данные")
       } else {
-        router.push("/")
+        if (onSuccess) {
+          onSuccess()
+        } else {
+          router.push("/")
+        }
       }
     } catch (error) {
       setError("Произошла ошибка при входе")
@@ -36,11 +41,8 @@ export const LoginForm = () => {
   }
 
   return (
-    <div className="w-full max-w-md mx-auto">
-      <form
-        onSubmit={handleSubmit}
-        className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4"
-      >
+    <>
+      <form onSubmit={handleSubmit}>
         <div className="mb-4">
           <label
             className="block text-gray-700 text-sm font-bold mb-2"
@@ -84,6 +86,7 @@ export const LoginForm = () => {
           </button>
         </div>
       </form>
-    </div>
+      <Link href="/signup">Sign up</Link>
+    </>
   )
 }

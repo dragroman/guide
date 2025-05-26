@@ -5,6 +5,7 @@ import { Button } from "@shared/ui/button"
 import { ChevronLeft, History } from "lucide-react"
 import Image from "next/image"
 import MenuMobile from "@/widgets/header/ui/MenuMobile"
+import Link from "next/link"
 
 interface ApplicationHeaderProps {
   currentStep: number
@@ -51,12 +52,14 @@ export default function ApplicationHeader({
             </div>
             <div className="flex flex-row justify-center items-center gap-4">
               <div>
-                <Image
-                  src="/logo/logo.svg"
-                  width={30}
-                  height={30}
-                  alt="Запрос на индивидуальный тур"
-                />
+                <Link href="/" title="На главную">
+                  <Image
+                    src="/logo/logo.svg"
+                    width={30}
+                    height={30}
+                    alt="Запрос на индивидуальный тур"
+                  />
+                </Link>
               </div>
               <div>Планирование</div>
             </div>

@@ -2,13 +2,12 @@ import Image from "next/image"
 import { DrupalNode } from "next-drupal"
 import { absoluteUrl, formatDate } from "@shared/lib/utils"
 import { Paragraph } from "@entities/paragraph"
+import { PageTitle } from "@shared/ui/page-title"
 
 export const BlogFull = ({ node }: { node: DrupalNode }) => {
   return (
     <article>
-      <h1 className="mb-4 text-3xl font-black leading-tight">
-        {node.title} - {new Date().toLocaleTimeString()}
-      </h1>
+      <PageTitle title={node.title} />
       <div className="mb-4 text-gray-600">
         {node.uid?.display_name ? (
           <span>

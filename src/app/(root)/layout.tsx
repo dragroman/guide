@@ -5,10 +5,12 @@ import type { ReactNode } from "react"
 
 export default function MainLayout({ children }: { children: ReactNode }) {
   return (
-    <div>
+    <>
       <Header />
-      <main>{children}</main>
-      {/* <Footer /> */}
-    </div>
+      <div className="container max-w-[600px] mx-auto py-20 md:py-32 px-4">
+        <main>{children}</main>
+        {/* <Footer /> */}
+      </div>
+    </>
   )
 }

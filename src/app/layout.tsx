@@ -55,8 +55,10 @@ const gtmId = process.env.NEXT_PUBLIC_GTM_ID
 
 export default async function RootLayout({
   children,
+  modal,
 }: {
   children: ReactNode
+  modal?: ReactNode
 }) {
   return (
     <html
@@ -65,7 +67,10 @@ export default async function RootLayout({
     >
       {gtmId && <GoogleTagManager gtmId={gtmId} />}
       <body>
-        <Providers>{children}</Providers>
+        <Providers>
+          {modal}
+          {children}
+        </Providers>
       </body>
     </html>
   )

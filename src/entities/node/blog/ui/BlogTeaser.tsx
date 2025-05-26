@@ -1,5 +1,12 @@
 import { absoluteUrl, cn, formatDate } from "@shared/lib/utils"
-import { Card, CardContent, CardFooter } from "@shared/ui/card"
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@shared/ui/card"
 import { DrupalNode } from "next-drupal"
 import Link from "next/link"
 import { ArrowRight, CalendarDays, Clock, User } from "lucide-react"
@@ -28,89 +35,81 @@ export const BlogTeaser = ({ node }: { node: DrupalNode }) => {
           </Link>
         </div>
       )} */}
-
-      {/* Контент */}
-      <div className="flex flex-col flex-grow">
-        <CardContent className={cn("flex-grow flex flex-col")}>
-          <div className="flex items-center text-sm text-muted-foreground mb-3">
+      <CardHeader>
+        <CardTitle>
+          <Link href={node.path.alias}>{node.title}</Link>
+        </CardTitle>
+        <CardDescription>
+          <div className="flex items-center">
             <CalendarDays className="h-4 w-4 mr-1" />
             <time dateTime={node.created}>{formatDate(node.created)}</time>
             <span className="mx-2">•</span>
             <Clock className="h-4 w-4 mr-1" />
             <span>5 мин. чтения</span>
           </div>
+        </CardDescription>
+      </CardHeader>
 
-          <Link href={node.path.alias} className="no-underline group">
-            <h2
-              className={cn(
-                "font-bold mb-3 group-hover:text-primary transition-colors"
-              )}
-            >
-              {node.title}
-            </h2>
-          </Link>
+      {/* Контент */}
+      <CardContent className={cn("flex-grow flex flex-col")}>
+        <p className="text-muted-foreground mb-4 line-clamp-3">
+          {node.field_image?.resourceIdObjMeta?.alt ||
+            "Погрузитесь в увлекательное путешествие по уголкам Харбина. Узнайте о скрытых жемчужинах города и получите практические советы от местного жителя."}
+        </p>
 
-          <p className="text-muted-foreground mb-4 line-clamp-3">
-            {node.field_image?.resourceIdObjMeta?.alt ||
-              "Погрузитесь в увлекательное путешествие по уголкам Харбина. Узнайте о скрытых жемчужинах города и получите практические советы от местного жителя."}
-          </p>
-
-          {/* Категории статьи (если они есть) */}
-          {node.field_tags && (
-            <div className="flex flex-wrap gap-2 mt-auto">
-              {Array.isArray(node.field_tags) ? (
-                node.field_tags.map((tag) => (
-                  <Badge key={tag.id} variant="secondary" className="text-xs">
-                    {tag.name}
-                  </Badge>
-                ))
-              ) : (
-                <Badge variant="secondary" className="text-xs">
-                  {node.field_tags.name}
+        {/* Категории статьи (если они есть) */}
+        {node.field_tags && (
+          <div className="flex flex-wrap gap-2 mt-auto">
+            {Array.isArray(node.field_tags) ? (
+              node.field_tags.map((tag) => (
+                <Badge key={tag.id} variant="secondary" className="text-xs">
+                  {tag.name}
                 </Badge>
-              )}
-            </div>
-          )}
-        </CardContent>
+              ))
+            ) : (
+              <Badge variant="secondary" className="text-xs">
+                {node.field_tags.name}
+              </Badge>
+            )}
+          </div>
+        )}
+      </CardContent>
 
-        <CardFooter
-          className={cn("border-t px-6 py-4 flex justify-between items-center")}
+      <CardFooter
+        className={cn("border-t px-6 py-4 flex justify-between items-center")}
+      >
+        {node.uid?.display_name ? (
+          <div className="flex items-center">
+            <Avatar className="h-8 w-8 mr-2">
+              <AvatarFallback className="bg-muted">
+                {node.uid.display_name.charAt(0)}
+              </AvatarFallback>
+            </Avatar>
+            <span className="text-sm font-medium">{node.uid.display_name}</span>
+          </div>
+        ) : (
+          <div className="flex items-center">
+            <Avatar className="h-8 w-8 mr-2">
+              <AvatarFallback className="bg-muted">
+                <User className="h-4 w-4" />
+              </AvatarFallback>
+            </Avatar>
+            <span className="text-sm font-medium">Автор</span>
+          </div>
+        )}
+
+        <Button
+          variant="ghost"
+          size="sm"
+          className="flex items-center text-primary group"
+          asChild
         >
-          {node.uid?.display_name ? (
-            <div className="flex items-center">
-              <Avatar className="h-8 w-8 mr-2">
-                <AvatarFallback className="bg-muted">
-                  {node.uid.display_name.charAt(0)}
-                </AvatarFallback>
-              </Avatar>
-              <span className="text-sm font-medium">
-                {node.uid.display_name}
-              </span>
-            </div>
-          ) : (
-            <div className="flex items-center">
-              <Avatar className="h-8 w-8 mr-2">
-                <AvatarFallback className="bg-muted">
-                  <User className="h-4 w-4" />
-                </AvatarFallback>
-              </Avatar>
-              <span className="text-sm font-medium">Автор</span>
-            </div>
-          )}
-
-          <Button
-            variant="ghost"
-            size="sm"
-            className="flex items-center text-primary group"
-            asChild
-          >
-            <Link href={`/blog/${node.drupal_internal__nid}`}>
-              Читать
-              <ArrowRight className="ml-1 w-4 h-4 transition-transform group-hover:translate-x-1" />
-            </Link>
-          </Button>
-        </CardFooter>
-      </div>
+          <Link href={`/blog/${node.drupal_internal__nid}`}>
+            Читать
+            <ArrowRight className="ml-1 w-4 h-4 transition-transform group-hover:translate-x-1" />
+          </Link>
+        </Button>
+      </CardFooter>
     </Card>
   )
 }
