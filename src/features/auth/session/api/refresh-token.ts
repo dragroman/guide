@@ -5,8 +5,11 @@ export async function refreshAccessToken(token: JWT) {
   try {
     const formData = new URLSearchParams()
     formData.append("grant_type", "refresh_token")
-    formData.append("client_id", process.env.DRUPAL_CLIENT_ID as string)
-    formData.append("client_secret", process.env.DRUPAL_CLIENT_SECRET as string)
+    formData.append("client_id", process.env.DRUPAL_USER_CLIENT_ID as string)
+    formData.append(
+      "client_secret",
+      process.env.DRUPAL_USER_CLIENT_SECRET as string
+    )
     formData.append("refresh_token", token.refreshToken)
 
     const response = await fetch(

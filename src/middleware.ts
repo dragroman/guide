@@ -2,7 +2,7 @@ import { NextResponse } from "next/server"
 import type { NextRequest } from "next/server"
 import { getToken } from "next-auth/jwt"
 
-const authRoutes = ["/login", "/register"]
+const authRoutes = ["/signin", "/register"]
 const protectedRoutes = ["/dashboard", "/profile", "/settings"]
 
 export async function middleware(req: NextRequest) {
@@ -37,7 +37,7 @@ export async function middleware(req: NextRequest) {
     // И пытается зайти на защищенную страницу
     if (isProtectedRoute) {
       // Сохраняем URL для редиректа после авторизации
-      const loginUrl = new URL("/login", req.url)
+      const loginUrl = new URL("/signin", req.url)
       loginUrl.searchParams.set("callbackUrl", pathname)
       return NextResponse.redirect(loginUrl)
     }

@@ -1,6 +1,6 @@
 "use client"
 
-import { LoginForm, Modal } from "@features/login"
+import { SignInForm, Modal } from "@features/auth/sign-in"
 import { DialogContent, DialogHeader, DialogTitle } from "@shared/ui/dialog"
 import { useRouter } from "next/navigation"
 
@@ -25,7 +25,7 @@ export default function LoginModal() {
         <DialogHeader>
           <DialogTitle>Вход в систему</DialogTitle>
         </DialogHeader>
-        <LoginForm onSuccess={handleLoginSuccess} />
+        <SignInForm onSuccess={handleLoginSuccess} />
       </DialogContent>
     </Modal>
   )

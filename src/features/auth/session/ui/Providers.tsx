@@ -13,7 +13,7 @@ function SessionMonitor({ children }: { children: ReactNode }) {
       session?.error === "SessionExpired"
     ) {
       // Выход при ошибке обновления токена
-      signOut({ callbackUrl: "/login" })
+      signOut({ callbackUrl: "/signin" })
     }
   }, [session])
 

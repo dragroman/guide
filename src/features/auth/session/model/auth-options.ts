@@ -17,8 +17,11 @@ export const authOptions: NextAuthOptions = {
         // Код не меняется
         const formData = new URLSearchParams()
         formData.append("grant_type", "password")
-        formData.append("client_id", process.env.DRUPAL_CLIENT_ID || "")
-        formData.append("client_secret", process.env.DRUPAL_CLIENT_SECRET || "")
+        formData.append("client_id", process.env.DRUPAL_USER_CLIENT_ID || "")
+        formData.append(
+          "client_secret",
+          process.env.DRUPAL_USER_CLIENT_SECRET || ""
+        )
         formData.append("username", credentials?.username || "")
         formData.append("password", credentials?.password || "")
 
@@ -36,25 +39,42 @@ export const authOptions: NextAuthOptions = {
 
           const data = await response.json()
 
-          if (response.ok && data?.access_token && data?.refresh_token) {
-            const decoded = jwtDecode<{ uuid: string }>(data.access_token)
-            const userId = decoded.uuid
+          if (response.ok && data?.access_token) {
+            const decoded = jwtDecode<{ sub: string }>(data.access_token)
 
             try {
-              const userData = await drupal.getResource<DrupalUser>(
-                "user--user",
-                userId,
+              // Загружаем полные данные пользователя
+              const userData = await drupal.getResourceByPath<DrupalUser>(
+                `/user/${decoded.sub}`,
                 {
-                  withAuth: data.access_token,
+                  params: {
+                    // Указываем нужные поля
+                    "fields[user--user]":
+                      "drupal_internal__uid,name,mail,field_firstname,field_lastname,field_phone,status,created",
+                  },
+                  withAuth: {
+                    access_token: data.access_token,
+                    token_type: "Bearer",
+                    expires_in: data.expires_in,
+                  },
                 }
               )
+
               return {
                 ...data,
                 user: userData,
               }
             } catch (error) {
-              console.error("Ошибка при получении данных пользователя:", error)
-              return null
+              console.error("Ошибка загрузки профиля пользователя:", error)
+              // Можно вернуть базовые данные из токена
+              return {
+                ...data,
+                user: {
+                  id: decoded.sub,
+                  name: credentials?.username,
+                  // остальные поля будут загружены позже
+                },
+              }
             }
           }
           return null
@@ -67,11 +87,27 @@ export const authOptions: NextAuthOptions = {
   ],
   callbacks: {
     async jwt({ token, user }) {
-      // При первом входе пользователя
       if (user) {
+        // Сохраняем токены
         token.accessToken = user.access_token
         token.accessTokenExpires = Date.now() + user.expires_in * 1000
         token.refreshToken = user.refresh_token
+
+        // Сохраняем данные пользователя только если они есть
+        if (user.user && typeof user.user === "object") {
+          token.userData = {
+            id: user.user.id,
+            uid: user.user.drupal_internal__uid,
+            name: user.user.name,
+            email: user.user.mail,
+            firstName: user.user.field_firstname || null,
+            lastName: user.user.field_lastname || null,
+            phone: user.user.field_phone || null,
+            created: user.user.created,
+          }
+        } else {
+          console.warn("No user data found in user object:", user)
+        }
       }
 
       // Если токен не истек или время истечения не определено, возвращаем его
@@ -88,18 +124,18 @@ export const authOptions: NextAuthOptions = {
         session.accessToken = token.accessToken
         session.refreshToken = token.refreshToken || ""
 
-        try {
-          const decoded = jwtDecode<{
-            uuid: string
-            email?: string
-            username?: string
-          }>(token.accessToken)
-          session.user.id = decoded.uuid
-          session.user.email = decoded.email || null
-          session.user.username = decoded.username
-        } catch (e) {
-          console.error("Ошибка декодирования токена:", e)
-          session.error = "TokenDecodeError"
+        if (token.userData) {
+          session.user = {
+            ...session.user,
+            id: token.userData.id,
+            uid: token.userData.uid,
+            name: token.userData.name,
+            email: token.userData.email,
+            firstName: token.userData.firstName,
+            lastName: token.userData.lastName,
+            phone: token.userData.phone,
+            created: token.userData.created,
+          }
         }
 
         if (token.error && !session.error) {
@@ -110,7 +146,7 @@ export const authOptions: NextAuthOptions = {
     },
   },
   pages: {
-    signIn: "/login",
+    signIn: "/signin",
   },
   secret: process.env.NEXTAUTH_SECRET,
 }

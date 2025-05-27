@@ -5,7 +5,7 @@ import { signIn } from "next-auth/react"
 import { useRouter } from "next/navigation"
 import Link from "next/link"
 
-export const LoginForm = ({ onSuccess }: { onSuccess?: () => void }) => {
+export const SignInForm = ({ onSuccess }: { onSuccess?: () => void }) => {
   const [username, setUsername] = useState("")
   const [password, setPassword] = useState("")
   const [error, setError] = useState("")

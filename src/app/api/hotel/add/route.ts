@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server"
 import { getServerSession } from "next-auth/next"
-import { authOptions } from "@features/auth"
+import { authOptions } from "@features/auth/session"
 import { drupal } from "@shared/lib/drupal"
 import fs from "fs/promises"
 import os from "os"
@@ -144,21 +144,6 @@ export async function POST(request: NextRequest) {
     // Формируем информативное сообщение об ошибке
     let errorMessage = "Внутренняя ошибка сервера"
     let status = 500
-
-    if (error.response) {
-      try {
-        const errorData = error.response.errors || []
-        errorMessage = errorData
-          .map((err) => err.detail || err.title)
-          .join(", ")
-        status = error.response.status || 500
-      } catch (e) {
-        // Если не удалось распарсить ошибку
-        errorMessage = error.message || errorMessage
-      }
-    } else {
-      errorMessage = error.message || errorMessage
-    }
 
     return NextResponse.json({ message: errorMessage }, { status })
   }

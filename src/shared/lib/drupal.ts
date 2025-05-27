@@ -9,10 +9,10 @@ const clientSecret = process.env.DRUPAL_CLIENT_SECRET || "dummy_secret"
 
 export const drupal = new NextDrupal(baseUrl, {
   // Enable to use authentication
-  // auth: {
-  //   clientId: clientId,
-  //   clientSecret: clientSecret,
-  // },
-  // withAuth: true,
+  auth: {
+    clientId: clientId,
+    clientSecret: clientSecret,
+  },
+  withAuth: true,
   debug: true,
 })

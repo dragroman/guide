@@ -1,9 +1,8 @@
-import { authOptions } from "@features/auth"
-import { drupal } from "@shared/lib/drupal"
+import { authOptions } from "@/features/auth/session"
 import { PageTitle } from "@shared/ui/page-title"
 import { DrupalJsonApiParams } from "drupal-jsonapi-params"
 import { getServerSession, Session } from "next-auth"
-import { DrupalUser } from "next-drupal"
+import { SignOut } from "@/features/auth/sign-out"
 
 export default async function UserProfile() {
   const session = await getServerSession(authOptions)
@@ -11,13 +10,11 @@ export default async function UserProfile() {
   if (!session) {
     return null
   }
-  const user = await drupal.getResource<DrupalUser>(
-    "user--user",
-    `${session.user.id}`
-  )
+  console.log(session)
   return (
     <>
       <PageTitle title="Логин" />
+      <SignOut />
     </>
   )
 }

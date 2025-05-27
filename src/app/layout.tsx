@@ -5,7 +5,8 @@ import type { ReactNode } from "react"
 import localFont from "next/font/local"
 import { GoogleTagManager } from "@next/third-parties/google"
 import "@shared/styles/globals.css"
-import { Providers } from "@/features/auth/ui/Providers"
+import { Providers } from "@features/auth/session"
+import { Toaster } from "@shared/ui/sonner"
 
 const merriweather = localFont({
   src: [
@@ -58,7 +59,7 @@ export default async function RootLayout({
   modal,
 }: {
   children: ReactNode
-  modal?: ReactNode
+  modal: ReactNode
 }) {
   return (
     <html
@@ -70,6 +71,7 @@ export default async function RootLayout({
         <Providers>
           {modal}
           {children}
+          <Toaster />
         </Providers>
       </body>
     </html>
