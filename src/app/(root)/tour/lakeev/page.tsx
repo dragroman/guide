@@ -4,8 +4,8 @@ import {
   restaurantData,
   excursionData,
   shoppingData,
-} from "@/data/tour/lakeev"
-import TourPage from "@/components/tour/TourPage"
+} from "@entities/tour/data/tour/lakeev"
+import TourPage from "@entities/tour/TourPage"
 
 export const metadata = {
   title: "Харбин для детей: наука, природа и приключения",

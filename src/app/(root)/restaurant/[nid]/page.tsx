@@ -1,6 +1,6 @@
-import { RestaurantFull } from "@/entities/node/restaurant"
-import { TRestaurantFull } from "@/entities/node/restaurant/model/types"
-import { drupal } from "@/shared/lib/drupal"
+import { RestaurantFull } from "@entities/node/restaurant"
+import { TRestaurantFull } from "@entities/node/restaurant/model/types"
+import { drupal } from "@shared/lib/drupal"
 import { DrupalJsonApiParams } from "drupal-jsonapi-params"
 
 export default async function RestaurantFullPage({

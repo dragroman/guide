@@ -4,7 +4,7 @@ import { STEPS } from "../config/constants"
 import { Button } from "@shared/ui/button"
 import { ChevronLeft, History } from "lucide-react"
 import Image from "next/image"
-import MenuMobile from "@/widgets/header/ui/MenuMobile"
+import MenuMobile from "@widgets/header/ui/MenuMobile"
 import Link from "next/link"
 
 interface ApplicationHeaderProps {

@@ -1,2 +1,2 @@
 export type { User } from "./model/types"
-export { UserProfile } from "./ui/UserProfile"
+export { UserFull } from "./ui/Full"

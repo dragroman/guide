@@ -20,7 +20,6 @@
       }
     ],
     "paths": {
-      "@/*": ["./src/*"],
       "@processes/*": ["./src/processes/*"],
       "@pages/*": ["./src/pages/*"],
       "@widgets/*": ["./src/widgets/*"],

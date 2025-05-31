@@ -1,7 +1,5 @@
 export async function createDrupalUser(userData: any) {
   try {
-    console.log("Trying to create user in Drupal:", userData)
-
     const drupalResponse = await fetch(
       `${process.env.NEXT_PUBLIC_DRUPAL_BASE_URL}/user/register?_format=json`,
       {
@@ -18,8 +16,6 @@ export async function createDrupalUser(userData: any) {
         }),
       }
     )
-
-    console.log("Drupal response:", drupalResponse)
 
     if (!drupalResponse.ok) {
       const error = await drupalResponse.json()

@@ -6,7 +6,7 @@ import {
   createDrupalUser,
 } from "@features/auth/sign-up"
 import { z } from "zod"
-import { otpService } from "@/features/auth/sign-up/server"
+import { otpService } from "@features/auth/sign-up/server"
 
 export async function POST(
   request: NextRequest

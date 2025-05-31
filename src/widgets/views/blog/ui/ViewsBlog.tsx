@@ -1,4 +1,4 @@
-import { BlogTeaser } from "@/entities/node/blog"
+import { BlogTeaser } from "@entities/node/blog"
 import { DrupalNode } from "next-drupal"
 
 export const ViewsBlog = async ({ nodes }: { nodes: DrupalNode[] }) => {

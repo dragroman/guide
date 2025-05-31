@@ -1,6 +1,6 @@
 import Link from "next/link"
 import { TRestaurantFull } from "../model/types"
-import { Paragraph } from "@entities/paragraph"
+import { Paragraph, ParagraphRenderer } from "@entities/paragraph"
 import { PageTitle } from "@shared/ui/page-title"
 
 export const RestaurantFull = ({ item }: { item: TRestaurantFull }) => {
@@ -22,7 +22,6 @@ export const RestaurantFull = ({ item }: { item: TRestaurantFull }) => {
       {item.field_phone && (
         <div className="mb-2">Phone: {item.field_phone}</div>
       )}
-      <Paragraph paragraphs={item.field_body} />
     </div>
   )
 }

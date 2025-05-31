@@ -4,8 +4,8 @@ import {
   restaurantData,
   excursionData,
   shoppingData,
-} from "@/data/tour/yakutsk"
-import TourPage from "@/components/tour/TourPage"
+} from "@entities/tour/data/tour/yakutsk"
+import TourPage from "@entities/tour/TourPage"
 
 export const metadata = {
   title: "Харбин для группы из Якутска",

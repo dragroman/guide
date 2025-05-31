@@ -1,4 +1,4 @@
-import { TCityTeaser } from "@/entities/term/city"
+import { TCityTeaser } from "@entities/term/city"
 import { DrupalNode, DrupalParagraph, DrupalTaxonomyTerm } from "next-drupal"
 
 export interface TRestaurantFull extends DrupalNode {

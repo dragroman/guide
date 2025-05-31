@@ -3,7 +3,8 @@ import type { NextRequest } from "next/server"
 import { getToken } from "next-auth/jwt"
 
 const authRoutes = ["/signin", "/register"]
-const protectedRoutes = ["/dashboard", "/profile", "/settings"]
+const protectedRoutes = ["/dashboard", "/profile"]
+const protectedPatterns = ["/add/"] // Паттерны для защищенных маршрутов
 
 export async function middleware(req: NextRequest) {
   const token = await getToken({
@@ -13,36 +14,36 @@ export async function middleware(req: NextRequest) {
 
   const { pathname } = req.nextUrl
 
-  // Проверяем, является ли маршрут авторизационным (login, register)
+  // Проверяем, является ли маршрут авторизационным
   const isAuthRoute = authRoutes.some((route) => pathname.startsWith(route))
 
-  // Проверяем, является ли маршрут защищенным
-  const isProtectedRoute = protectedRoutes.some((route) =>
+  // Проверяем защищенные маршруты по точному совпадению
+  const isExactProtectedRoute = protectedRoutes.some((route) =>
     pathname.startsWith(route)
   )
 
+  // Проверяем защищенные маршруты по паттернам
+  const isPatternProtectedRoute = protectedPatterns.some((pattern) =>
+    pathname.includes(pattern)
+  )
+
+  const isProtectedRoute = isExactProtectedRoute || isPatternProtectedRoute
+
   // Если пользователь авторизован
   if (token) {
-    // И пытается зайти на страницы авторизации
     if (isAuthRoute) {
       return NextResponse.redirect(new URL("/dashboard", req.url))
     }
-
-    // Разрешаем доступ к защищенным и публичным страницам
     return NextResponse.next()
   }
 
   // Если пользователь НЕ авторизован
   if (!token) {
-    // И пытается зайти на защищенную страницу
     if (isProtectedRoute) {
-      // Сохраняем URL для редиректа после авторизации
       const loginUrl = new URL("/signin", req.url)
       loginUrl.searchParams.set("callbackUrl", pathname)
       return NextResponse.redirect(loginUrl)
     }
-
-    // Разрешаем доступ к публичным и авторизационным страницам
     return NextResponse.next()
   }
 

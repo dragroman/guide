@@ -1,7 +1,7 @@
 import { drupal } from "@shared/lib/drupal"
-import { CityFull, TCityFull } from "@/entities/term/city"
-import { ViewsCityRestaurant } from "@/widgets/views/restaurant"
-import { TRestaurantTeaser } from "@/entities/node/restaurant"
+import { CityFull, TCityFull } from "@entities/term/city"
+import { ViewsCityRestaurant } from "@widgets/views/restaurant"
+import { TRestaurantTeaser } from "@entities/node/restaurant"
 import { DrupalJsonApiParams } from "drupal-jsonapi-params"
 
 export default async function CityFullPage({

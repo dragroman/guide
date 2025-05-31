@@ -1,4 +1,4 @@
-import { RestaurantTeaser, TRestaurantTeaser } from "@/entities/node/restaurant"
+import { RestaurantTeaser, TRestaurantTeaser } from "@entities/node/restaurant"
 import Link from "next/link"
 
 export const ViewsCityRestaurant = ({

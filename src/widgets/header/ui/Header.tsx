@@ -8,9 +8,10 @@ import { cn } from "@shared/lib/utils"
 import MenuMobile from "./MenuMobile"
 import { Logo } from "./Logo"
 import { navigationItems } from "./Nav"
-import { Button } from "@/shared/ui/button"
-import { EditIcon, SquareChevronRightIcon, User } from "lucide-react"
+
+import { EditIcon, User } from "lucide-react"
 import { useSession } from "next-auth/react"
+import { Button } from "@shared/ui/button"
 
 // Список путей, где хедер должен быть прозрачным
 const TRANSPARENT_PATHS = ["/", "/application"]
@@ -96,26 +97,25 @@ export function Header({ className }: { className?: string }) {
           </div>
 
           {/* Мобильное меню */}
-          <div
-            className={`${isTransparentPage && "text-white"} hidden flex-1 md:flex justify-end`}
-          >
-            <Link
-              href="/application"
-              className="font-bold hover:text-primary flex items-center"
-            >
-              <EditIcon className="w-5 h-5 mr-1" />
-              Оставить заявку
-            </Link>
-          </div>
-          <MenuMobile
-            className="md:hidden"
-            isScrolled={isScrolled}
-            shouldBeTransparent={isTransparentPage && !isScrolled}
-          />
 
-          <Link href={session ? "/dashboard" : "/signin"}>
-            <User className="w-5 h-5 text-white" />
-          </Link>
+          <div className="flex items-center gap-2">
+            <MenuMobile
+              className="md:hidden"
+              isScrolled={isScrolled}
+              shouldBeTransparent={isTransparentPage && !isScrolled}
+            />
+            <Button
+              variant="ghost"
+              className={`${isTransparentPage && "text-white hover:text-black"}`}
+              size="icon"
+              aria-label="Меню"
+              asChild
+            >
+              <Link href={session ? "/dashboard" : "/signin"}>
+                <User className="w-5 h-5" />
+              </Link>
+            </Button>
+          </div>
         </nav>
       </div>
     </header>

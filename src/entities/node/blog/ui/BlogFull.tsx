@@ -1,7 +1,7 @@
 import Image from "next/image"
 import { DrupalNode } from "next-drupal"
 import { absoluteUrl, formatDate } from "@shared/lib/utils"
-import { Paragraph } from "@entities/paragraph"
+import { ParagraphRenderer } from "@entities/paragraph"
 import { PageTitle } from "@shared/ui/page-title"
 
 export const BlogFull = ({ node }: { node: DrupalNode }) => {
@@ -33,7 +33,7 @@ export const BlogFull = ({ node }: { node: DrupalNode }) => {
           )}
         </figure>
       )}
-      <Paragraph paragraphs={node.field_body} />
+      <ParagraphRenderer paragraphs={node.field_body} />
     </article>
   )
 }

@@ -6,7 +6,6 @@ import {
   OtpForm,
   SuccessScreen,
 } from "@features/auth/sign-up"
-import { Toaster } from "sonner"
 
 export default function RegisterPage() {
   const {
@@ -22,32 +21,30 @@ export default function RegisterPage() {
   } = useRegistration()
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4">
-      <div className="w-full max-w-md">
-        {step === "form" && (
-          <RegistrationForm
-            onSubmit={sendOtp}
-            isLoading={isLoading}
-            error={error}
-          />
-        )}
+    <>
+      {step === "form" && (
+        <RegistrationForm
+          onSubmit={sendOtp}
+          isLoading={isLoading}
+          error={error}
+        />
+      )}
 
-        {step === "otp" && registrationData && (
-          <OtpForm
-            email={registrationData.email}
-            onSubmit={verifyOtp}
-            onResend={resendOtp}
-            onBack={goBack}
-            isLoading={isLoading}
-            error={error}
-            otpInfo={otpInfo}
-          />
-        )}
+      {step === "otp" && registrationData && (
+        <OtpForm
+          email={registrationData.email}
+          onSubmit={verifyOtp}
+          onResend={resendOtp}
+          onBack={goBack}
+          isLoading={isLoading}
+          error={error}
+          otpInfo={otpInfo}
+        />
+      )}
 
-        {step === "success" && registrationData && (
-          <SuccessScreen email={registrationData.email} />
-        )}
-      </div>
-    </div>
+      {step === "success" && registrationData && (
+        <SuccessScreen email={registrationData.email} />
+      )}
+    </>
   )
 }

@@ -35,7 +35,6 @@ export async function POST(request: NextRequest) {
 
       try {
         errorData = await response.json()
-        console.log("Error data:", errorData)
       } catch (parseError) {
         console.error("Не удалось распарсить ошибку:", parseError)
       }

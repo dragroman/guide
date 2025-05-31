@@ -5,7 +5,7 @@ import Link from "next/link"
 import Image from "next/image"
 import { SOCIAL } from "@shared/lib/constants"
 import { Clock } from "lucide-react"
-import { Header } from "@/widgets/header"
+import { Header } from "@widgets/header"
 
 export const metadata: Metadata = {
   title: "Путеводитель по Китаю",
@@ -39,13 +39,13 @@ export default async function Home() {
         </div>
 
         {/* Контент */}
-        <div className="container relative h-full flex flex-col justify-center items-start max-w-5xl mx-auto px-4 z-10 text-center">
+        <div className="container relative h-full flex flex-col justify-center items-start mx-auto px-4 z-10 text-center">
           <div className="w-full">
             <Badge className="mb-4 text-white" variant="outline">
               Местный эксперт в Китае
             </Badge>
           </div>
-          <h1 className="text-3xl md:text-7xl font-bold mb-6 tracking-tight text-white w-full">
+          <h1 className="text-2xl md:text-4xl font-bold mb-6 tracking-tight text-white w-full">
             Путешествия, созданные лично для вас
             <br />
             <span className="text-primary">местными экспертами</span>

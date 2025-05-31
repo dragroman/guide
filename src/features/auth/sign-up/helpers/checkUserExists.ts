@@ -1,4 +1,4 @@
-import { drupal } from "@/shared/lib/drupal"
+import { drupal } from "@shared/lib/drupal"
 
 export async function checkUserExists(
   email: string,
