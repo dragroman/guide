@@ -19,6 +19,7 @@ import { CategorySelect } from "@entities/term/category"
 import { formRestaurantSchema } from "../model/schema"
 import { toast } from "sonner" // или ваша система уведомлений
 import { useCreateNode } from "../api/apiAddNode"
+import { FileUpload } from "@features/file-upload"
 
 type FormData = z.infer<typeof formRestaurantSchema>
 
@@ -162,7 +163,9 @@ export const AddRestaurantForm = () => {
           render={({ field }) => (
             <FormItem>
               <FormLabel>Описание</FormLabel>
-              <FormControl></FormControl>
+              <FormControl>
+                <Input placeholder="Описание ресторана" {...field} />
+              </FormControl>
               <FormDescription>
                 Добавьте краткое описание ресторана.
               </FormDescription>
@@ -200,6 +203,8 @@ export const AddRestaurantForm = () => {
             </FormItem>
           )}
         />
+
+        <FileUpload />
 
         <Button type="submit" disabled={loading}>
           {loading ? "Создание..." : "Создать ресторан"}

@@ -3,6 +3,7 @@ const nextConfig = {
   reactStrictMode: true,
   output: "standalone",
   images: {
+    domains: ["img.chinq.ru", "guide.test"],
     remotePatterns: [
       {
         // protocol: 'https',

@@ -17,18 +17,16 @@ export const TextParagraph: React.FC<TextParagraphProps> = ({
   // Проверяем, является ли контент Markdown
   const isMarkdown = paragraph.field_body?.format === "markdown"
 
+  console.log(paragraph)
+
   return (
     <div className={cn("paragraph-text", className)}>
       {/* Заголовок параграфа */}
-      {paragraph.field_title && (
-        <h3 className="text-2xl font-semibold mb-4 text-gray-900 dark:text-gray-100">
-          {paragraph.field_title}
-        </h3>
-      )}
+      {paragraph.field_title && <h3>{paragraph.field_title}</h3>}
 
       {/* Контент параграфа */}
       {paragraph.field_body?.processed && (
-        <div className="prose prose-lg max-w-none dark:prose-invert">
+        <div>
           {isMarkdown ? (
             <ReactMarkdown rehypePlugins={[rehypeRaw]}>
               {paragraph.field_body.processed}

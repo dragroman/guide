@@ -85,7 +85,10 @@ export const ParagraphRenderer: React.FC<ParagraphRendererProps> = ({
 
   return (
     <div
-      className={cn("paragraph-renderer space-y-8 md:space-y-12", className)}
+      className={cn(
+        "prose prose-lg max-w-none dark:prose-invert space-y-8 md:space-y-12 prose-img:bg-gray-100 prose-img:dark:bg-gray-800 prose-img:rounded-lg prose-img:shadow-md",
+        className
+      )}
     >
       {paragraphs.map((paragraph, index) => renderParagraph(paragraph, index))}
     </div>

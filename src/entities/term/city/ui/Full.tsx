@@ -3,11 +3,21 @@ import Image from "next/image"
 import { Card, CardContent, CardHeader, CardTitle } from "@shared/ui/card"
 import { Badge } from "@shared/ui/badge"
 import { absoluteUrl } from "@shared/lib/utils"
-import { TCityFull } from "../model/types"
-import { getCityLabels } from "../lib/constants"
+import { CityPrices, TCityFull } from "../model/types"
+import { AveragePrices } from "./AveragePrices"
 
 export const CityFull = async ({ city }: { city: TCityFull }) => {
-  const labels = getCityLabels(city)
+  const cityPrices: CityPrices = {
+    apt_1bed_center: city.field_apt_1bed_center,
+    apt_1bed_outside: city.field_apt_1bed_outside,
+    apt_3bed_center: city.field_apt_3bed_center,
+    apt_3bed_outside: city.field_apt_3bed_outside,
+    avg_monthly_salary: city.field_avg_monthly_salary,
+    cigarettes: city.field_cigarettes,
+    gas_1l: city.field_gas_1l,
+    meal_cheap: city.field_meal_cheap,
+    meal_mid: city.field_meal_mid,
+  }
   return (
     <>
       {/* Обложка города */}
@@ -44,35 +54,7 @@ export const CityFull = async ({ city }: { city: TCityFull }) => {
           )}
         </CardContent>
       </Card>
-      {/* Блок ресторанов */}
-
-      {/* Блок средних цен */}
-      <div className="text-xl">Средние цены</div>
-      <div className="grid grid-cols-2 md:grid-cols-3 gap-2">
-        {labels.map(
-          (item) =>
-            item.value && (
-              <div className="border p-4 shadow-sm rounded-md" key={item.label}>
-                <div className="font-medium text-sm text-muted-foreground ">
-                  {item.label}
-                </div>
-                <div className="font-bold text-xl">
-                  {Math.round(item.value).toLocaleString()} ¥
-                </div>
-              </div>
-            )
-        )}
-      </div>
-      {city.field_comment && (
-        <Card>
-          <CardHeader>
-            <CardTitle>Комментарий</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="text-muted-foreground">{city.field_comment}</div>
-          </CardContent>
-        </Card>
-      )}
+      <AveragePrices prices={cityPrices} />
     </>
   )
 }

@@ -1,6 +1,24 @@
 import Link from "next/link"
 import { TCityTeaser } from "../model/types"
+import Image from "next/image"
 
 export const CityTeaser = async ({ term }: { term: TCityTeaser }) => {
-  return <Link href={`/city/${term.machine_name}`}>{term.name}</Link>
+  return (
+    <div className="relative rounded-lg overflow-hidden">
+      <div className="absolute inset-0 bg-opacity-50 bg-gradient-to-t from-black/60"></div>
+      <Image
+        src={term.field_image.uri.url}
+        alt={term.name}
+        width={600}
+        height={300}
+        className="object-cover"
+      />
+      <Link
+        href={`/city/${term.machine_name}`}
+        className="absolute bottom-0 right-0 p-4 text-white text-2xl font-bold"
+      >
+        {term.name}
+      </Link>
+    </div>
+  )
 }

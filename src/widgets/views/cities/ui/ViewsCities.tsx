@@ -1,10 +1,10 @@
 import { CityTeaser, TCityTeaser } from "@entities/term/city"
 
-export const ViewsCities = ({ cities }: { cities: TCityTeaser[] }) => {
+export const ViewsCities = ({ terms }: { terms: TCityTeaser[] }) => {
   return (
     <>
-      {cities.map((item) => (
-        <CityTeaser key={item.machine_name} term={item} />
+      {terms.map((term) => (
+        <CityTeaser key={term.id} term={term} />
       ))}
     </>
   )

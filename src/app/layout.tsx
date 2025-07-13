@@ -64,7 +64,7 @@ export default async function RootLayout({
   return (
     <html
       lang="ru"
-      className={`${merriweather.className} antialiased scroll-smooth`}
+      // className={`${merriweather.className} antialiased scroll-smooth`}
     >
       {gtmId && <GoogleTagManager gtmId={gtmId} />}
       <body>

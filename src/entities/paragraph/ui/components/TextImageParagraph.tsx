@@ -41,11 +41,7 @@ export const TextImageParagraph: React.FC<TextImageParagraphProps> = ({
   return (
     <div className={cn("paragraph-text-image", className)}>
       {/* Заголовок параграфа */}
-      {paragraph.field_title && (
-        <h3 className="text-2xl font-semibold mb-6 text-gray-900 dark:text-gray-100">
-          {paragraph.field_title}
-        </h3>
-      )}
+      {paragraph.field_title && <h3>{paragraph.field_title}</h3>}
 
       {/* Контейнер с текстом и изображением */}
       <div
@@ -55,7 +51,7 @@ export const TextImageParagraph: React.FC<TextImageParagraphProps> = ({
         )}
       >
         {/* Текстовый контент */}
-        <div className="flex-1 prose prose-lg max-w-none dark:prose-invert">
+        <div className="flex-1">
           {paragraph.field_body?.processed &&
             (isMarkdown ? (
               <ReactMarkdown rehypePlugins={[rehypeRaw]}>
@@ -73,7 +69,7 @@ export const TextImageParagraph: React.FC<TextImageParagraphProps> = ({
 
         {/* Изображение */}
         <div className="flex-shrink-0 w-full lg:w-1/3 xl:w-2/5">
-          <div className="relative aspect-[4/3] w-full overflow-hidden rounded-lg bg-gray-100 dark:bg-gray-800 shadow-lg">
+          <div className="relative aspect-[4/3] w-full">
             <Image
               src={imageUrl}
               alt={altText}

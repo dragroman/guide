@@ -42,14 +42,10 @@ export const ImageParagraph: React.FC<ImageParagraphProps> = ({
   return (
     <figure className={cn("paragraph-image", className)}>
       {/* Заголовок параграфа */}
-      {paragraph.field_title && (
-        <h3 className="text-2xl font-semibold mb-4 text-gray-900 dark:text-gray-100">
-          {paragraph.field_title}
-        </h3>
-      )}
+      {paragraph.field_title && <h3>{paragraph.field_title}</h3>}
 
       {/* Контейнер для изображения */}
-      <div className="relative aspect-video w-full overflow-hidden rounded-lg bg-gray-100 dark:bg-gray-800">
+      <div className="relative aspect-video w-ful">
         <Image
           src={imageUrl}
           alt={altText}

@@ -1,5 +1,6 @@
 import { cn } from "@shared/lib/utils"
 import Link from "next/link"
+import Image from "next/image"
 
 export const Logo = ({
   isScrolled,
@@ -9,14 +10,13 @@ export const Logo = ({
   shouldBeTransparent: boolean
 }) => {
   return (
-    <Link
-      href="/"
-      className={cn(
-        "text-2xl font-bold no-underline md:flex-1",
-        isScrolled || !shouldBeTransparent ? "text-foreground" : "text-white"
-      )}
-    >
-      chinq<span className="text-primary">.</span>
+    <Link href="/">
+      <Image
+        src="/logo/logo.svg"
+        width={30}
+        height={30}
+        alt="Индивидуальные туры в Китай"
+      />
     </Link>
   )
 }
