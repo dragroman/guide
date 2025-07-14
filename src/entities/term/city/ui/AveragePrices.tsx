@@ -44,17 +44,10 @@ export const AveragePrices = ({ prices }: AveragePricesProps) => {
   }
 
   return (
-    <Card>
-      <CardHeader>
-        <CardTitle>Средние цены</CardTitle>
-      </CardHeader>
-      <CardContent>
-        <div className="grid grid-cols-2 md:grid-cols-3 gap-2">
-          {validPrices.map((item, index) => (
-            <PriceCard key={index} label={item.label} value={item.value} />
-          ))}
-        </div>
-      </CardContent>
-    </Card>
+    <div className="grid grid-cols-2 md:grid-cols-3 gap-2">
+      {validPrices.map((item, index) => (
+        <PriceCard key={index} label={item.label} value={item.value} />
+      ))}
+    </div>
   )
 }

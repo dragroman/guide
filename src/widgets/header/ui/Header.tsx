@@ -13,15 +13,34 @@ import { EditIcon, User } from "lucide-react"
 import { useSession } from "next-auth/react"
 import { Button } from "@shared/ui/button"
 
-// Список путей, где хедер должен быть прозрачным
-const TRANSPARENT_PATHS = ["/", "/application"]
+interface TransparentConfig {
+  exact?: string[]
+  patterns?: string[]
+}
+
+const TRANSPARENT_CONFIG: TransparentConfig = {
+  exact: ["/application"],
+  patterns: ["/city/", "/tour/", "/static-special-page"],
+}
 
 export function Header({ className }: { className?: string }) {
   const pathname = usePathname()
   const { data: session } = useSession()
   const [isScrolled, setIsScrolled] = useState(false)
 
-  const isTransparentPage = TRANSPARENT_PATHS.includes(pathname)
+  const shouldBeTransparent = (pathname: string) => {
+    // Точные совпадения
+    if (TRANSPARENT_CONFIG.exact?.includes(pathname)) return true
+
+    // Паттерны (начинается с)
+    return (
+      TRANSPARENT_CONFIG.patterns?.some((pattern) =>
+        pathname.startsWith(pattern)
+      ) || false
+    )
+  }
+
+  const isTransparentPage = shouldBeTransparent(pathname)
 
   useEffect(() => {
     const handleScroll = () => {
@@ -76,7 +95,7 @@ export function Header({ className }: { className?: string }) {
   return (
     <header className={headerStyles}>
       <div className="container mx-auto px-4">
-        <nav className="flex items-center justify-between md:justify-center h-4">
+        <nav className="flex items-center justify-between  h-4">
           {/* Логотип */}
           <Logo
             isScrolled={isScrolled}

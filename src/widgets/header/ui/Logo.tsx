@@ -12,9 +12,10 @@ export const Logo = ({
   return (
     <Link href="/">
       <Image
-        src="/logo/logo.svg"
-        width={30}
+        src="/logo-h.svg"
+        width={100}
         height={30}
+        priority
         alt="Индивидуальные туры в Китай"
       />
     </Link>
