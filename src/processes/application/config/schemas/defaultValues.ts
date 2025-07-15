@@ -1,4 +1,4 @@
-import { ApplicationSchemaType } from "./applicationSchema";
+import { ApplicationSchemaType } from "./applicationSchema"
 
 // Значения формы по умолчанию
 export const defaultFormValues: ApplicationSchemaType = {
@@ -22,7 +22,10 @@ export const defaultFormValues: ApplicationSchemaType = {
   },
 
   trip: {
-    dateRange: undefined,
+    dateRange: {
+      from: undefined,
+      to: undefined,
+    },
     daysCount: null,
     purpose: {
       options: {

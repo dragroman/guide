@@ -9,10 +9,11 @@ export async function createDrupalUser(userData: any) {
         },
         body: JSON.stringify({
           mail: [{ value: userData.email }],
-          name: [{ value: userData.username }],
+          name: [{ value: userData.email }],
           pass: [{ value: userData.password }],
           field_firstname: [{ value: userData.firstName }],
           field_lastname: [{ value: userData.lastName }],
+          field_phone: [{ value: userData.phone }],
         }),
       }
     )

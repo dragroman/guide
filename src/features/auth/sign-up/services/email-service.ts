@@ -1,7 +1,7 @@
 import nodemailer from "nodemailer"
 
 class EmailService {
-  private transporter: nodemailer.Transporter
+  public transporter: nodemailer.Transporter
 
   constructor() {
     this.transporter = nodemailer.createTransport({

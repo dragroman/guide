@@ -12,7 +12,7 @@ export default async function UserProfile() {
 
   return (
     <>
-      <PageTitle title="Логин" />
+      <PageTitle title="Личный кабинет" />
       <UserFull user={session?.user} />
       <SignOut />
       <AddContent />

@@ -3,11 +3,12 @@
 import { useState } from "react"
 import { signIn } from "next-auth/react"
 import { useRouter } from "next/navigation"
-import Link from "next/link"
 import { Button } from "@shared/ui/button"
 import { Input } from "@shared/ui/input"
 import { Label } from "@shared/ui/label"
 import { Alert, AlertDescription } from "@shared/ui/alert"
+import { Lock, User } from "lucide-react"
+import { useTranslations } from "next-intl"
 
 export const SignInForm = ({ onSuccess }: { onSuccess?: () => void }) => {
   const [username, setUsername] = useState("")
@@ -34,7 +35,7 @@ export const SignInForm = ({ onSuccess }: { onSuccess?: () => void }) => {
         if (onSuccess) {
           onSuccess()
         } else {
-          router.push("/")
+          router.push("/dashboard")
         }
       }
     } catch (error) {
@@ -43,40 +44,51 @@ export const SignInForm = ({ onSuccess }: { onSuccess?: () => void }) => {
       setLoading(false)
     }
   }
-
+  const t = useTranslations("signIn")
   return (
-    <form onSubmit={handleSubmit} className="space-y-4">
-      <div className="space-y-2">
-        <Label htmlFor="username">Имя пользователя</Label>
-        <Input
-          id="username"
-          type="text"
-          value={username}
-          onChange={(e) => setUsername(e.target.value)}
-          required
-        />
-      </div>
+    <>
+      <form onSubmit={handleSubmit} className="space-y-4">
+        {/* Username Field */}
+        <div className="space-y-2">
+          <Label htmlFor="username">{t("email")}</Label>
+          <div className="relative">
+            <User className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
+            <Input
+              id="username"
+              type="text"
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
+              placeholder="user@mail.ru"
+              className="pl-10 pr-10"
+            />
+          </div>
+        </div>
 
-      <div className="space-y-2">
-        <Label htmlFor="password">Пароль</Label>
-        <Input
-          id="password"
-          type="password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          required
-        />
-      </div>
+        <div className="space-y-2">
+          <Label htmlFor="password">{t("password")}</Label>
+          <div className="relative">
+            <Lock className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
+            <Input
+              id="password"
+              type="password"
+              className="pl-10 pr-10"
+              placeholder={t("password")}
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+            />
+          </div>
+        </div>
 
-      {error && (
-        <Alert variant="destructive">
-          <AlertDescription>{error}</AlertDescription>
-        </Alert>
-      )}
+        {error && (
+          <Alert variant="destructive">
+            <AlertDescription>{error}</AlertDescription>
+          </Alert>
+        )}
 
-      <Button type="submit" className="w-full" disabled={loading}>
-        {loading ? "Вход..." : "Войти"}
-      </Button>
-    </form>
+        <Button type="submit" className="w-full" disabled={loading}>
+          {loading ? t("enter") : t("entrance")}
+        </Button>
+      </form>
+    </>
   )
 }

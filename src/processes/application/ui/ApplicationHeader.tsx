@@ -54,7 +54,7 @@ export default function ApplicationHeader({
               <div>
                 <Link href="/" title="На главную">
                   <Image
-                    src="/logo/logo.svg"
+                    src="/logo.svg"
                     width={30}
                     height={30}
                     alt="Запрос на индивидуальный тур"

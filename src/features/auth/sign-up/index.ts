@@ -1,5 +1,5 @@
 // UI
-export { RegistrationForm } from "./ui/SignUpForm"
+export { SignUpForm } from "./ui/SignUpForm"
 export { OtpForm } from "./ui/OtpForm"
 export { SuccessScreen } from "./ui/SuccessScreen"
 

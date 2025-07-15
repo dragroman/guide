@@ -1,50 +1,19 @@
-"use client"
+import { PageTitle } from "@shared/ui/page-title"
+import { SignUp } from "@widgets/auth/sign-up"
+import { Metadata } from "next"
+import { getTranslations } from "next-intl/server"
 
-import {
-  useRegistration,
-  RegistrationForm,
-  OtpForm,
-  SuccessScreen,
-} from "@features/auth/sign-up"
+export const metadata: Metadata = {
+  title: "Вход",
+  description: "Вход в систему",
+}
 
-export default function RegisterPage() {
-  const {
-    step,
-    isLoading,
-    error,
-    registrationData,
-    otpInfo,
-    sendOtp,
-    verifyOtp,
-    resendOtp,
-    goBack,
-  } = useRegistration()
-
+export default async function SignUpPage() {
+  const t = await getTranslations("signUp")
   return (
     <>
-      {step === "form" && (
-        <RegistrationForm
-          onSubmit={sendOtp}
-          isLoading={isLoading}
-          error={error}
-        />
-      )}
-
-      {step === "otp" && registrationData && (
-        <OtpForm
-          email={registrationData.email}
-          onSubmit={verifyOtp}
-          onResend={resendOtp}
-          onBack={goBack}
-          isLoading={isLoading}
-          error={error}
-          otpInfo={otpInfo}
-        />
-      )}
-
-      {step === "success" && registrationData && (
-        <SuccessScreen email={registrationData.email} />
-      )}
+      <PageTitle title={t("title")} />
+      <SignUp />
     </>
   )
 }

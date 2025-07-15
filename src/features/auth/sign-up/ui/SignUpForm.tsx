@@ -5,10 +5,13 @@ import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { registrationSchema } from "../model/validation"
 import type { RegistrationData } from "../model/registration"
-import { Input } from "@shared/ui/input"
 import { Button } from "@shared/ui/button"
-import { Card, CardHeader, CardTitle, CardContent } from "@shared/ui/card"
-import { Eye, EyeOff, User, Mail, Lock, UserCheck } from "lucide-react"
+import { Input } from "@shared/ui/input"
+import { Label } from "@shared/ui/label"
+import { Alert, AlertDescription } from "@shared/ui/alert"
+import { Eye, EyeOff, User, Mail, Lock, UserCheck, Phone } from "lucide-react"
+import Link from "next/link"
+import { useTranslations } from "next-intl"
 
 interface RegistrationFormProps {
   onSubmit: (data: RegistrationData) => Promise<void>
@@ -16,7 +19,7 @@ interface RegistrationFormProps {
   error: string | null
 }
 
-export function RegistrationForm({
+export function SignUpForm({
   onSubmit,
   isLoading,
   error,
@@ -34,8 +37,7 @@ export function RegistrationForm({
   })
 
   const password = watch("password")
-  const username = watch("username")
-  const email = watch("email")
+  const t = useTranslations("signUp")
 
   // Password strength indicator
   const getPasswordStrength = (password: string) => {
@@ -69,85 +71,87 @@ export function RegistrationForm({
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
       {error && (
-        <div className="p-3 text-sm text-red-500 bg-red-50 border border-red-200 rounded-md">
-          {error}
-        </div>
+        <Alert variant="destructive">
+          <AlertDescription>{error}</AlertDescription>
+        </Alert>
       )}
 
       {/* Email Field */}
       <div className="space-y-2">
-        <label className="text-sm font-medium">Email</label>
+        <Label htmlFor="email">{t("email")}</Label>
         <div className="relative">
           <Mail className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
           <Input
+            id="email"
             {...register("email")}
             type="email"
             placeholder="email@example.com"
             className="pl-10"
           />
-          {errors.email?.message && (
-            <span className="text-red-500 text-xs">{errors.email.message}</span>
-          )}
         </div>
+        {errors.email && (
+          <p className="text-sm text-destructive">{errors.email.message}</p>
+        )}
       </div>
 
-      {/* Username Field */}
+      {/* Phone Field */}
       <div className="space-y-2">
-        <label className="text-sm font-medium">Имя пользователя</label>
+        <Label htmlFor="phone">{t("phone")}</Label>
         <div className="relative">
-          <User className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
+          <Phone className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
           <Input
-            {...register("username")}
-            placeholder="username"
+            id="phone"
+            {...register("phone")}
+            placeholder="+7 (xxx) xxx-xx-xx"
             className="pl-10"
           />
-          {errors.username?.message && (
-            <span className="text-red-500 text-xs">
-              {errors.username.message}
-            </span>
-          )}
-          {username && !errors.username && (
-            <UserCheck className="absolute right-3 top-3 h-4 w-4 text-green-500" />
-          )}
         </div>
+        {errors.phone && (
+          <p className="text-sm text-destructive">{errors.phone.message}</p>
+        )}
       </div>
 
       {/* Password Field */}
       <div className="space-y-2">
-        <label className="text-sm font-medium">Пароль</label>
+        <Label htmlFor="password">{t("password")}</Label>
         <div className="relative">
           <Lock className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
           <Input
+            id="password"
             {...register("password")}
             type={showPassword ? "text" : "password"}
-            placeholder="Введите пароль"
+            placeholder={t("enterPassword")}
             className="pl-10 pr-10"
           />
-          {errors.password?.message && (
-            <span className="text-red-500 text-xs">
-              {errors.password.message}
-            </span>
-          )}
-          <button
+          <Button
             type="button"
+            variant="ghost"
+            size="sm"
             onClick={() => setShowPassword(!showPassword)}
-            className="absolute right-3 top-3 h-4 w-4 text-muted-foreground hover:text-foreground"
+            className="absolute right-1 top-1 h-8 w-8 p-0"
           >
-            {showPassword ? <EyeOff /> : <Eye />}
-          </button>
+            {showPassword ? (
+              <EyeOff className="h-4 w-4" />
+            ) : (
+              <Eye className="h-4 w-4" />
+            )}
+          </Button>
         </div>
+        {errors.password && (
+          <p className="text-sm text-destructive">{errors.password.message}</p>
+        )}
 
         {/* Password Strength Indicator */}
-        {password && (
-          <div className="space-y-1">
+        {/* {password && (
+          <div className="space-y-2">
             <div className="flex space-x-1">
               {[1, 2, 3, 4, 5].map((level) => (
                 <div
                   key={level}
-                  className={`h-1 flex-1 rounded-full ${
+                  className={`h-1 flex-1 rounded-full transition-colors ${
                     level <= passwordStrength.score
                       ? passwordStrength.color
-                      : "bg-gray-200"
+                      : "bg-muted"
                   }`}
                 />
               ))}
@@ -156,39 +160,62 @@ export function RegistrationForm({
               Надежность пароля: {passwordStrength.label}
             </p>
           </div>
-        )}
+        )} */}
       </div>
 
       {/* Optional Fields */}
       <div className="grid grid-cols-2 gap-4">
         <div className="space-y-2">
-          <label className="text-sm font-medium text-muted-foreground">
-            Имя <span className="text-xs">(необязательно)</span>
-          </label>
-          <Input {...register("firstName")} placeholder="Имя" />
+          <Label htmlFor="firstName" className="text-muted-foreground">
+            {t("name")}{" "}
+            <span className="text-xs">
+              {"("}
+              {t("nonRequired")}
+              {")"}
+            </span>
+          </Label>
+          <Input
+            id="firstName"
+            {...register("firstName")}
+            placeholder={t("name")}
+          />
         </div>
         <div className="space-y-2">
-          <label className="text-sm font-medium text-muted-foreground">
-            Фамилия <span className="text-xs">(необязательно)</span>
-          </label>
-          <Input {...register("lastName")} placeholder="Фамилия" />
+          <Label htmlFor="lastName" className="text-muted-foreground">
+            {t("surname")}{" "}
+            <span className="text-xs">
+              {"("}
+              {t("nonRequired")}
+              {")"}
+            </span>
+          </Label>
+          <Input
+            id="lastName"
+            {...register("lastName")}
+            placeholder={t("surname")}
+          />
         </div>
       </div>
 
       <Button type="submit" className="w-full" disabled={!isValid || isLoading}>
-        {isLoading ? "Отправка..." : "Продолжить"}
+        {isLoading ? t("submitting") : t("submit")}
       </Button>
 
       <p className="text-xs text-center text-muted-foreground">
-        Нажимая `Продолжить`, вы соглашаетесь с{" "}
-        <a href="/terms" className="underline hover:text-foreground">
+        Нажимая Продолжить, вы соглашаетесь с{" "}
+        <a href="/terms" className="underline hover:text-primary">
           условиями использования
         </a>{" "}
         и{" "}
-        <a href="/privacy" className="underline hover:text-foreground">
+        <a href="/privacy" className="underline hover:text-primary">
           политикой конфиденциальности
         </a>
       </p>
+      <div className="mt-4 text-center">
+        <Button asChild variant="link">
+          <Link href="/signin">{t("login")}</Link>
+        </Button>
+      </div>
     </form>
   )
 }

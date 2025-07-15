@@ -1,12 +1,12 @@
-import { locale } from "@shared/config/i18n/messages/ru"
 import { drupal } from "@shared/lib/drupal"
 import { PageTitle } from "@shared/ui/page-title"
 import { ViewsBlog } from "@widgets/views/blog"
 import { DrupalJsonApiParams } from "drupal-jsonapi-params"
 import { DrupalNode } from "next-drupal"
+import { getTranslations } from "next-intl/server"
 
 export default async function BlogPage() {
-  const t = locale.blog
+  const t = await getTranslations("blog")
   const api = new DrupalJsonApiParams()
     .addFilter("status", "1")
     .addFields("node--article", [
@@ -30,7 +30,7 @@ export default async function BlogPage() {
   )
   return (
     <div>
-      <PageTitle title={t.title} />
+      <PageTitle title={t("title")} />
       <ViewsBlog nodes={nodes} />
     </div>
   )

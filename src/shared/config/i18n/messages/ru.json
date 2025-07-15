@@ -1,0 +1,35 @@
+{
+  "blog": {
+    "title": "Блог"
+  },
+  "signUp": {
+    "title": "Регистрация",
+    "email": "Почтовый адрес",
+    "phone": "Номер телефона",
+    "password": "Пароль",
+    "name": "Имя",
+    "surname": "Фамилия",
+    "submit": "Зарегистрироваться",
+    "submitting": "Регистрирую",
+    "login": "Уже есть аккаунт",
+    "nonRequired": "Не обязательно",
+    "enterPassword": "Введите пароль"
+  },
+  "signIn": {
+    "title": "Вход",
+    "enter": "Вхожу...",
+    "entrance": "Вход",
+    "email": "Почтовый адрес",
+    "password": "Пароль",
+    "createAccount": "Регистрация"
+  },
+  "signOut": {
+    "exit": "Выход"
+  },
+  "forgotPassword": {
+    "title": "Восстановление",
+    "email": "Введите почтовый адрес",
+    "backToLogin": "Вернуться",
+    "attemptsLeft": "Осталось попыток"
+  }
+}

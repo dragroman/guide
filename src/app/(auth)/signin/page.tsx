@@ -1,17 +1,13 @@
-import { SignInForm } from "@features/auth/sign-in"
-import { Button } from "@shared/ui/button"
-import Link from "next/link"
+import { PageTitle } from "@shared/ui/page-title"
+import { SignIn } from "@widgets/auth/sign-in"
+import { getTranslations } from "next-intl/server"
 
-export default function SignInPage() {
+export default async function SignInPage() {
+  const t = await getTranslations("signIn")
   return (
     <>
-      <h1 className="text-2xl font-bold mb-6">Вход в систему</h1>
-      <SignInForm />
-      <div className="mt-4 text-center">
-        <Button variant="link" className="text-muted-foreground" asChild>
-          <Link href="/signup">Создать аккаунт</Link>
-        </Button>
-      </div>
+      <PageTitle title={t("title")} />
+      <SignIn />
     </>
   )
 }

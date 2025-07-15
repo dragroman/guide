@@ -60,7 +60,6 @@ export function useRegistration(): UseRegistrationReturn {
     } catch (err) {
       const message = "Ошибка сети. Проверьте подключение к интернету"
       setError(message)
-      toast.error(message)
     } finally {
       setIsLoading(false)
     }

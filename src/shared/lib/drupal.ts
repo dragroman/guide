@@ -14,5 +14,5 @@ export const drupal = new NextDrupal(baseUrl, {
     clientSecret: clientSecret,
   },
   // withAuth: true,
-  // debug: true,
+  debug: process.env.NODE_ENV === "development",
 })

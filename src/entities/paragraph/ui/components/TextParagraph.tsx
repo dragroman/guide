@@ -17,8 +17,6 @@ export const TextParagraph: React.FC<TextParagraphProps> = ({
   // Проверяем, является ли контент Markdown
   const isMarkdown = paragraph.field_body?.format === "markdown"
 
-  console.log(paragraph)
-
   return (
     <div className={cn("paragraph-text", className)}>
       {/* Заголовок параграфа */}

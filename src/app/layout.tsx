@@ -7,6 +7,7 @@ import { GoogleTagManager } from "@next/third-parties/google"
 import "@shared/styles/globals.css"
 import { Providers } from "@features/auth/session"
 import { Toaster } from "@shared/ui/sonner"
+import { NextIntlClientProvider } from "next-intl"
 
 const merriweather = localFont({
   src: [
@@ -69,9 +70,11 @@ export default async function RootLayout({
       {gtmId && <GoogleTagManager gtmId={gtmId} />}
       <body>
         <Providers>
-          {modal}
-          {children}
-          <Toaster />
+          <NextIntlClientProvider>
+            {modal}
+            {children}
+            <Toaster />
+          </NextIntlClientProvider>
         </Providers>
       </body>
     </html>

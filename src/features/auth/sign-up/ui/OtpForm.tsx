@@ -90,114 +90,88 @@ export function OtpForm({
   const isCodeComplete = otpCode.length === 6
 
   return (
-    <Card className="w-full max-w-md mx-auto">
-      <CardHeader className="space-y-1">
-        <div className="flex items-center space-x-2">
-          <Button variant="ghost" size="sm" onClick={onBack}>
-            <ArrowLeft className="h-4 w-4" />
-          </Button>
-          <CardTitle className="text-xl font-bold">
-            Подтверждение email
-          </CardTitle>
+    <>
+      <div className="flex items-center space-x-2">
+        <CardTitle className="text-xl font-bold">Подтверждение email</CardTitle>
+      </div>
+      <div className="flex items-center space-x-2 text-sm text-muted-foreground">
+        <Mail className="h-4 w-4" />
+        <span>Код отправлен на {email}</span>
+      </div>
+      {error && (
+        <div className="p-3 text-sm text-red-500 bg-red-50 border border-red-200 rounded-md dark:bg-red-950 dark:border-red-800 dark:text-red-400">
+          {error}
         </div>
-        <div className="flex items-center space-x-2 text-sm text-muted-foreground">
-          <Mail className="h-4 w-4" />
-          <span>Код отправлен на {email}</span>
-        </div>
-      </CardHeader>
+      )}
 
-      <CardContent className="space-y-6">
-        {error && (
-          <div className="p-3 text-sm text-red-500 bg-red-50 border border-red-200 rounded-md dark:bg-red-950 dark:border-red-800 dark:text-red-400">
-            {error}
-          </div>
-        )}
+      {/* OTP Input с использованием shadcn компонента */}
 
-        {/* OTP Input с использованием shadcn компонента */}
-        <div className="space-y-4">
-          <div className="flex justify-center">
-            <InputOTP
-              maxLength={6}
-              pattern={REGEXP_ONLY_DIGITS}
-              value={otpCode}
-              onChange={(value) => setOtpCode(value)}
-              disabled={isLoading}
-            >
-              <InputOTPGroup>
-                <InputOTPSlot index={0} />
-                <InputOTPSlot index={1} />
-                <InputOTPSlot index={2} />
-              </InputOTPGroup>
-              <InputOTPSeparator />
-              <InputOTPGroup>
-                <InputOTPSlot index={3} />
-                <InputOTPSlot index={4} />
-                <InputOTPSlot index={5} />
-              </InputOTPGroup>
-            </InputOTP>
-          </div>
+      <div className="flex justify-center py-8">
+        <InputOTP
+          maxLength={6}
+          pattern={REGEXP_ONLY_DIGITS}
+          value={otpCode}
+          onChange={(value) => setOtpCode(value)}
+          disabled={isLoading}
+        >
+          <InputOTPGroup>
+            <InputOTPSlot index={0} />
+            <InputOTPSlot index={1} />
+            <InputOTPSlot index={2} />
+            <InputOTPSlot index={3} />
+            <InputOTPSlot index={4} />
+            <InputOTPSlot index={5} />
+          </InputOTPGroup>
+        </InputOTP>
+      </div>
 
-          {/* Информация о таймере и попытках */}
-          <div className="text-center space-y-2">
-            {timeLeft > 0 && (
-              <div className="flex items-center justify-center space-x-1 text-sm text-muted-foreground">
-                <Clock className="h-4 w-4" />
-                <span>Код действителен: {formatTime(timeLeft)}</span>
-              </div>
-            )}
-
-            {otpInfo && (
-              <p className="text-xs text-muted-foreground">
-                Попыток осталось: {otpInfo.maxAttempts - otpInfo.attempts}
-              </p>
-            )}
-          </div>
-        </div>
-
-        {/* Кнопки действий */}
-        <div className="space-y-3">
-          <Button
-            onClick={() => onSubmit(otpCode)}
-            className="w-full"
-            disabled={!isCodeComplete || isLoading}
-          >
-            {isLoading ? "Проверка..." : "Подтвердить"}
-          </Button>
-
-          <div className="text-center">
-            {resendCooldown > 0 ? (
-              <p className="text-sm text-muted-foreground">
-                Повторная отправка через {resendCooldown} сек.
-              </p>
-            ) : (
-              <Button
-                variant="ghost"
-                onClick={handleResend}
-                disabled={isLoading}
-                className="text-sm"
-              >
-                <RotateCcw className="h-4 w-4 mr-2" />
-                Отправить код повторно
-              </Button>
-            )}
-          </div>
-        </div>
-
-        {/* Текст помощи */}
+      {/* Кнопки действий */}
+      <div className="space-y-3">
+        {/* Информация о таймере и попытках */}
         <div className="text-center space-y-2">
-          <p className="text-xs text-muted-foreground">
-            Не получили код? Проверьте папку Спам
-          </p>
-          <Button
-            variant="ghost"
-            size="sm"
-            onClick={onBack}
-            className="text-xs"
-          >
-            Изменить email адрес
-          </Button>
+          {timeLeft > 0 && (
+            <div className="flex items-center justify-center space-x-1 text-sm text-muted-foreground">
+              <Clock className="h-4 w-4" />
+              <span>Код действителен: {formatTime(timeLeft)}</span>
+            </div>
+          )}
         </div>
-      </CardContent>
-    </Card>
+        <Button
+          onClick={() => onSubmit(otpCode)}
+          className="w-full"
+          disabled={!isCodeComplete || isLoading}
+        >
+          {isLoading ? "Проверка..." : "Подтвердить"}
+        </Button>
+
+        <div className="text-center">
+          {resendCooldown > 0 ? (
+            <p className="text-sm text-muted-foreground">
+              Повторная отправка через {resendCooldown} сек.
+            </p>
+          ) : (
+            <Button
+              variant="ghost"
+              onClick={handleResend}
+              disabled={isLoading}
+              className="text-sm"
+            >
+              <RotateCcw className="h-4 w-4 mr-2" />
+              Отправить код повторно
+            </Button>
+          )}
+        </div>
+      </div>
+
+      {/* Текст помощи */}
+      <div className="text-center space-y-2">
+        <p className="text-xs text-muted-foreground">
+          Не получили код? Проверьте папку Спам
+        </p>
+        <Button variant="ghost" size="sm" onClick={onBack} className="text-xs">
+          Изменить email адрес
+        </Button>
+      </div>
+    </>
   )
 }

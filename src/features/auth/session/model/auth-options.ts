@@ -14,7 +14,6 @@ export const authOptions: NextAuthOptions = {
         password: { label: "Пароль", type: "password" },
       },
       async authorize(credentials) {
-        // Код не меняется
         const formData = new URLSearchParams()
         formData.append("grant_type", "password")
         formData.append("client_id", process.env.DRUPAL_USER_CLIENT_ID || "")
@@ -50,7 +49,7 @@ export const authOptions: NextAuthOptions = {
                   params: {
                     // Указываем нужные поля
                     "fields[user--user]":
-                      "drupal_internal__uid,name,mail,field_firstname,field_lastname,field_phone,status,created",
+                      "drupal_internal__uid,name,mail,field_firstname,field_lastname,field_phone,status,created,preferred_langcode",
                   },
                   withAuth: {
                     access_token: data.access_token,
@@ -104,6 +103,7 @@ export const authOptions: NextAuthOptions = {
             lastName: user.user.field_lastname || null,
             phone: user.user.field_phone || null,
             created: user.user.created,
+            preferred_langcode: user.user.preferred_langcode,
           }
         } else {
           console.warn("No user data found in user object:", user)
@@ -135,6 +135,7 @@ export const authOptions: NextAuthOptions = {
             lastName: token.userData.lastName,
             phone: token.userData.phone,
             created: token.userData.created,
+            preferred_langcode: token.userData.preferred_langcode,
           }
         }
 

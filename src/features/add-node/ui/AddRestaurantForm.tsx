@@ -120,7 +120,6 @@ export const AddRestaurantForm = () => {
                   value={field.value}
                   onChange={(cityId, internalId, name) => {
                     field.onChange(cityId)
-                    console.log("Selected:", cityId, internalId, name)
                   }}
                   placeholder="Выберите город..."
                   error={form.formState.errors.cityId?.message}
@@ -145,7 +144,6 @@ export const AddRestaurantForm = () => {
                   value={field.value}
                   onChange={(categoryId, internalId, name) => {
                     field.onChange(categoryId)
-                    console.log("Selected:", categoryId, internalId, name)
                   }}
                   placeholder="Выберите категорию..."
                   error={form.formState.errors.categoryId?.message}
