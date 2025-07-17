@@ -2,10 +2,13 @@ import { NextRequest, NextResponse } from "next/server"
 import { applicationSchema } from "@processes/application/config/schemas/applicationSchema"
 import { drupal } from "@shared/lib/drupal"
 import { format } from "date-fns"
+import { getServerSession } from "next-auth"
+import { authOptions } from "@features/auth/session"
 
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json()
+    const session = await getServerSession(authOptions)
 
     // Проверяем что получены все необходимые данные
     if (
@@ -30,8 +33,6 @@ export async function POST(request: NextRequest) {
       body.expertEmail || request.nextUrl.searchParams.get("email") || ""
 
     // Дополнительная валидация с помощью Zod
-
-    // Преобразуем данные в формат, ожидаемый схемой
     const validatedData = applicationSchema.parse({
       name: body.name,
       peopleCount: body.peopleCount,
@@ -108,12 +109,12 @@ export async function POST(request: NextRequest) {
         ([_, value]) => value === true
       )?.[0] || ""
 
-    const drupalResponse = await drupal.createResource(
+    const response = await drupal.createResource(
       "node--application",
       {
         data: {
           attributes: {
-            title: body.name + body.trip.daysCount,
+            title: "",
             field_name: body.name,
             field_phone: body.contact.phone,
             field_email: body.contact.email,
@@ -195,18 +196,29 @@ export async function POST(request: NextRequest) {
           },
         },
       },
-      { withAuth: false }
+      {
+        withAuth: `Bearer ${session?.accessToken}`,
+      }
     )
 
-    // Проверяем ответ от Drupal
-    if (!drupalResponse.ok) {
-      const error = await drupalResponse.json()
-      throw new Error(error.message || "Ошибка отправки пользователя")
-    }
-
-    return await drupalResponse.json()
+    // Возвращаем успешный ответ
+    return NextResponse.json(
+      {
+        message: "Заявка успешно создана",
+        data: response,
+      },
+      { status: 201 }
+    )
   } catch (error) {
-    console.error("Error creating Drupal user:", error)
-    throw new Error("Ошибка создания пользователя в системе")
+    console.error("Ошибка при создании заявки:", error)
+
+    // Возвращаем ошибку
+    return NextResponse.json(
+      {
+        message: "Ошибка при создании заявки",
+        error: error instanceof Error ? error.message : "Неизвестная ошибка",
+      },
+      { status: 500 }
+    )
   }
 }

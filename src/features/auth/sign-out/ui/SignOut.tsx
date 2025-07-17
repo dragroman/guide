@@ -4,11 +4,11 @@ import { signOut } from "next-auth/react"
 import { useTranslations } from "next-intl"
 
 export const SignOut = () => {
-  const t = useTranslations("signout")
+  const t = useTranslations("signOut")
   return (
     <Button
       className="cursor-pointer"
-      variant="destructive"
+      variant="outline"
       onClick={() => signOut()}
     >
       {t("exit")}

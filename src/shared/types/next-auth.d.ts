@@ -9,26 +9,22 @@ declare module "next-auth" {
   interface Session extends DefaultSession {
     accessToken: string
     refreshToken: string
+    userId: string
+    lang: string
     error?: string
-    user: DefaultSession["user"] & {
-      id: string
-      uid?: number
-      firstName?: string
-      lastName?: string
-      phone?: string
-      created?: string
-      preferred_langcode: string
-    }
   }
 
   /**
    * Расширяем тип User для более точной типизации
    */
-  interface User {
+  interface User extends DefaultUser {
     access_token: string
     refresh_token: string
     expires_in: number
-    user?: any
+    user?: {
+      id: string
+      lang: string
+    }
   }
 }
 
@@ -38,16 +34,7 @@ declare module "next-auth/jwt" {
     accessTokenExpires?: number
     refreshToken: string
     error?: string
-    userData?: {
-      id: string
-      uid: number
-      name: string
-      email: string
-      firstName?: string
-      lastName?: string
-      phone?: string
-      created: string
-      preferred_langcode: string
-    }
+    userId?: string
+    lang?: string
   }
 }
