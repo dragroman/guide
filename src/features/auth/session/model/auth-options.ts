@@ -38,42 +38,19 @@ export const authOptions: NextAuthOptions = {
 
           const data = await response.json()
 
+          console.log(data)
+
           if (response.ok && data?.access_token) {
-            const decoded = jwtDecode<{ sub: string }>(data.access_token)
+            const decoded = jwtDecode<{ id: string; lang: string }>(
+              data.access_token
+            )
 
-            try {
-              // Загружаем полные данные пользователя
-              const userData = await drupal.getResourceByPath<DrupalUser>(
-                `/user/${decoded.sub}`,
-                {
-                  params: {
-                    // Указываем нужные поля
-                    "fields[user--user]":
-                      "drupal_internal__uid,name,mail,field_firstname,field_lastname,field_phone,status,created,preferred_langcode",
-                  },
-                  withAuth: {
-                    access_token: data.access_token,
-                    token_type: "Bearer",
-                    expires_in: data.expires_in,
-                  },
-                }
-              )
-
-              return {
-                ...data,
-                user: userData,
-              }
-            } catch (error) {
-              console.error("Ошибка загрузки профиля пользователя:", error)
-              // Можно вернуть базовые данные из токена
-              return {
-                ...data,
-                user: {
-                  id: decoded.sub,
-                  name: credentials?.username,
-                  // остальные поля будут загружены позже
-                },
-              }
+            return {
+              ...data,
+              user: {
+                id: decoded.id,
+                lang: decoded.lang,
+              },
             }
           }
           return null
@@ -91,23 +68,8 @@ export const authOptions: NextAuthOptions = {
         token.accessToken = user.access_token
         token.accessTokenExpires = Date.now() + user.expires_in * 1000
         token.refreshToken = user.refresh_token
-
-        // Сохраняем данные пользователя только если они есть
-        if (user.user && typeof user.user === "object") {
-          token.userData = {
-            id: user.user.id,
-            uid: user.user.drupal_internal__uid,
-            name: user.user.name,
-            email: user.user.mail,
-            firstName: user.user.field_firstname || null,
-            lastName: user.user.field_lastname || null,
-            phone: user.user.field_phone || null,
-            created: user.user.created,
-            preferred_langcode: user.user.preferred_langcode,
-          }
-        } else {
-          console.warn("No user data found in user object:", user)
-        }
+        token.userId = user.user?.id
+        token.lang = user.user?.lang
       }
 
       // Если токен не истек или время истечения не определено, возвращаем его
@@ -115,28 +77,22 @@ export const authOptions: NextAuthOptions = {
         return token
       }
 
+      const refreshedToken = await refreshAccessToken(token)
+
       // Если токен истек, обновляем его
-      return refreshAccessToken(token)
+      return refreshedToken
     },
 
     async session({ session, token }) {
       if (token?.accessToken) {
         session.accessToken = token.accessToken
         session.refreshToken = token.refreshToken || ""
+        if (typeof token.userId === "string") {
+          session.userId = token.userId
+        }
 
-        if (token.userData) {
-          session.user = {
-            ...session.user,
-            id: token.userData.id,
-            uid: token.userData.uid,
-            name: token.userData.name,
-            email: token.userData.email,
-            firstName: token.userData.firstName,
-            lastName: token.userData.lastName,
-            phone: token.userData.phone,
-            created: token.userData.created,
-            preferred_langcode: token.userData.preferred_langcode,
-          }
+        if (typeof token.lang === "string") {
+          session.lang = token.lang
         }
 
         if (token.error && !session.error) {
