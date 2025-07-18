@@ -1,8 +1,6 @@
 import { jwtDecode } from "jwt-decode"
 import CredentialsProvider from "next-auth/providers/credentials"
-import { drupal } from "@shared/lib/drupal"
 import type { NextAuthOptions } from "next-auth"
-import { DrupalUser } from "next-drupal"
 import { refreshAccessToken } from "../api/refresh-token"
 
 export const authOptions: NextAuthOptions = {
@@ -37,8 +35,6 @@ export const authOptions: NextAuthOptions = {
           )
 
           const data = await response.json()
-
-          console.log(data)
 
           if (response.ok && data?.access_token) {
             const decoded = jwtDecode<{ id: string; lang: string }>(

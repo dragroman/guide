@@ -26,17 +26,15 @@ export default async function UserProfile() {
     }
   )
 
-  console.log(session)
-
-  // const currentUser = await drupal.getResource<DrupalUser>(
-  //   "user--user",
-  //   session.userId
-  // )
+  const currentUser = await drupal.getResource<DrupalUser>(
+    "user--user",
+    session.userId
+  )
 
   return (
     <div className="space-y-4">
       <Typography>Личный кабинет</Typography>
-      <UserFull user={session?.user} />
+      <UserFull user={currentUser} />
       <AddContent />
       {session?.accessToken && (
         <UserApplications nodes={nodes} accessToken={session.accessToken} />
