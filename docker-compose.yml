@@ -1,7 +1,7 @@
 services:
   next:
     build:
-      context: ./
+      context: .
       dockerfile: Dockerfile
       network: host
       args:
@@ -13,6 +13,18 @@ services:
       - NEXT_PUBLIC_DRUPAL_BASE_URL=${NEXT_PUBLIC_DRUPAL_BASE_URL}
       - NEXT_IMAGE_DOMAIN=${IMAGE_DOMAIN}
       - NEXT_PUBLIC_GTM_ID=${NEXT_PUBLIC_GTM_ID}
+      - DRUPAL_CLIENT_ID=${DRUPAL_CLIENT_ID}
+      - DRUPAL_CLIENT_SECRET=${DRUPAL_CLIENT_SECRET}
+      - NEXTAUTH_URL=${NEXTAUTH_URL}
+      - NEXTAUTH_SECRET=${NEXTAUTH_SECRET}
+      - DRUPAL_USER_CLIENT_ID=${DRUPAL_USER_CLIENT_ID}
+      - DRUPAL_USER_CLIENT_SECRET=${DRUPAL_USER_CLIENT_SECRET}
+      - SMTP_HOST=${SMTP_HOST}
+      - SMTP_PORT=465
+      - SMTP_SECURE=true
+      - SMTP_USER=${SMTP_USER}
+      - SMTP_PASSWORD=${SMTP_PASSWORD}
+      - REDIS_URL=redis://shared-redis:6379
     container_name: next
     platform: linux/amd64
     ports:

@@ -84,11 +84,11 @@ export const authOptions: NextAuthOptions = {
         session.accessToken = token.accessToken
         session.refreshToken = token.refreshToken || ""
         if (typeof token.userId === "string") {
-          session.userId = token.userId
+          session.user.id = token.userId
         }
 
         if (typeof token.lang === "string") {
-          session.lang = token.lang
+          session.user.lang = token.lang
         }
 
         if (token.error && !session.error) {

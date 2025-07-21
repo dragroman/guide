@@ -5,7 +5,6 @@ import {
 import { DeleteNode } from "@features/delete-node"
 import { Alert } from "@shared/ui/alert"
 import { Button } from "@shared/ui/button"
-import { Typography } from "@shared/ui/typography"
 import { Edit2Icon } from "lucide-react"
 import Link from "next/link"
 
@@ -18,7 +17,6 @@ export const UserApplications = ({
 }) => {
   return (
     <div className="space-y-4">
-      <Typography level="h2">Шаг 1</Typography>
       {nodes.length > 0 ? (
         nodes.map((node) => (
           <ApplicationTeaser
