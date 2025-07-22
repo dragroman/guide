@@ -18,14 +18,12 @@ import { CitySelect } from "@entities/term/city"
 import { CategorySelect } from "@entities/term/category"
 
 import { toast } from "sonner" // или ваша система уведомлений
-import { FileUpload } from "@features/file-upload"
 import { createMediaFromFile, createNode } from "../api/createNode"
-import { useEffect, useState } from "react"
-import { Textarea } from "@shared/ui/textarea"
+import { useState } from "react"
 import { formSpotSchema } from "../model/schema"
-import { WorkingHoursField } from "@features/office-hours"
 import { ResponsiveWorkingHoursField } from "@features/office-hours/ui/ResponsiveWorkingHoursField"
-import { RichTextMarkdownField } from "@features/rich-text-markdown"
+import { TipTapEditor } from "@shared/ui/tiptap"
+import { FileUpload } from "@shared/ui/file-upload"
 
 type FormData = z.infer<typeof formSpotSchema>
 
@@ -38,13 +36,13 @@ export const AddSpotForm = () => {
   const form = useForm<FormData>({
     resolver: zodResolver(formSpotSchema),
     defaultValues: {
-      title: "Test",
-      titleZh: "中文",
-      cityId: "a1ebf855-942e-46fe-92e8-29e5c45a22cb",
-      categoryId: "54d9907a-95cb-4f5f-a6ba-f5493a117540",
-      body: "Lorem ipsum dolor sit, amet consectetur adipisicing elit. Ipsa ut voluptatibus sunt corporis error quis quas eius labore voluptate aut! Molestiae blanditiis fugiat minima, officia enim adipisci aut praesentium illum, iusto nobis ducimus, atque necessitatibus? Qui cumque dolore, nostrum, repellat sit, eaque ipsam ipsum rem natus officiis nemo minus amet fuga id nobis corrupti quaerat aperiam numquam. Officia doloremque voluptas, commodi eveniet pariatur ex voluptatem maxime labore aperiam. Doloribus, ducimus obcaecati. Vel autem impedit fuga repellendus vero quis dolor magni quia a minus ea perferendis quaerat, fugiat magnam repellat beatae dicta? Maiores eos assumenda ab harum facere culpa sed doloremque!",
-      addressZh: "中文地址",
-      phone: "79146998349",
+      title: "",
+      titleZh: "",
+      cityId: "",
+      categoryId: "",
+      body: "",
+      addressZh: "",
+      phone: "",
       workingHours: [],
     },
   })
@@ -70,14 +68,14 @@ export const AddSpotForm = () => {
       })
 
       if (result?.success) {
-        toast.success("Материал создан!")
+        toast.success("Место создано!")
         form.reset()
         setSelectedFiles([])
       }
       setUploadKey((prev) => prev + 1)
       setSelectedFiles([])
     } catch (error) {
-      toast.error("Ошибка загрузки")
+      toast.error("Ошибка создания")
     } finally {
       setLoading(false)
     }
@@ -86,58 +84,6 @@ export const AddSpotForm = () => {
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
-        <FormField
-          control={form.control}
-          name="title"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Название</FormLabel>
-              <FormControl>
-                <Input placeholder="Название ресторана" {...field} />
-              </FormControl>
-              <FormDescription>
-                Наименование ресторана должно быть от 2 до 50 символов. На
-                русском языке, без знаков препинания. Например: «Красная кухня».
-              </FormDescription>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-
-        <FormField
-          control={form.control}
-          name="titleZh"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Название на китайском</FormLabel>
-              <FormControl>
-                <Input placeholder="餐厅名称 (中文)" {...field} />
-              </FormControl>
-              <FormDescription>
-                Название ресторана на китайском языке.
-              </FormDescription>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-
-        <FormField
-          control={form.control}
-          name="addressZh"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Адрес на китайском</FormLabel>
-              <FormControl>
-                <Input placeholder="餐厅地址 (中文)" {...field} />
-              </FormControl>
-              <FormDescription>
-                Адрес ресторана на китайском языке.
-              </FormDescription>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-
         <FormField
           control={form.control}
           name="cityId"
@@ -155,7 +101,7 @@ export const AddSpotForm = () => {
                 />
               </FormControl>
               <FormDescription>
-                Укажите город, где находится ресторан.
+                Выберите город, где находится место.
               </FormDescription>
               <FormMessage />
             </FormItem>
@@ -178,7 +124,58 @@ export const AddSpotForm = () => {
                   error={form.formState.errors.categoryId?.message}
                 />
               </FormControl>
-              <FormDescription>Укажите категорию.</FormDescription>
+              <FormDescription>
+                Выберите тип заведения или место.
+              </FormDescription>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
+          name="title"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Название</FormLabel>
+              <FormControl>
+                <Input placeholder="Название места" {...field} />
+              </FormControl>
+              <FormDescription>
+                Наименование места должно быть от 2 до 50 символов. На русском
+                языке, без лишних знаков препинания.
+              </FormDescription>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+
+        <FormField
+          control={form.control}
+          name="titleZh"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Название на китайском</FormLabel>
+              <FormControl>
+                <Input placeholder="地方名称 (中文)" {...field} />
+              </FormControl>
+              <FormDescription>
+                Название места на китайском языке.
+              </FormDescription>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+
+        <FormField
+          control={form.control}
+          name="addressZh"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Адрес на китайском</FormLabel>
+              <FormControl>
+                <Input placeholder="地址 (中文)" {...field} />
+              </FormControl>
+              <FormDescription>Адрес места на китайском языке.</FormDescription>
               <FormMessage />
             </FormItem>
           )}
@@ -193,7 +190,7 @@ export const AddSpotForm = () => {
               <FormControl>
                 <Input placeholder="Телефон" {...field} />
               </FormControl>
-              <FormDescription>Контактный телефон ресторана.</FormDescription>
+              <FormDescription>Контактный телефон места.</FormDescription>
               <FormMessage />
             </FormItem>
           )}
@@ -203,22 +200,22 @@ export const AddSpotForm = () => {
           control={form.control}
           name="workingHours"
           label="Часы работы"
-          description="Укажите часы работы ресторана. Можете использовать предустановки или настроить вручную."
+          description="Укажите часы работы места. Можете использовать предустановки или настроить вручную."
         />
 
-        <RichTextMarkdownField
+        <TipTapEditor
           control={form.control}
           name="body"
-          label="Содержание"
-          description="Используйте Markdown для форматирования текста"
-          placeholder="Расскажите о заведении..."
-          rows={15}
+          label="Описание места"
+          description="Расскажите об особенностях, услугах, атмосфере заведения."
+          placeholder="Например: Уютное место с хорошим сервисом, удобным расположением..."
+          minHeight={150}
         />
 
         <FileUpload onFilesChange={handleFilesChange} key={uploadKey} />
 
         <Button type="submit" disabled={loading}>
-          {loading ? "Создание..." : "Создать ресторан"}
+          {loading ? "Создание..." : "Создать место"}
         </Button>
       </form>
     </Form>
