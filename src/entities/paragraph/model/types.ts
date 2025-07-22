@@ -91,3 +91,161 @@ export type Paragraph =
   | ParagraphGallery
   | ParagraphVideo
   | ParagraphQuote
+
+// Тип для создания параграфов
+export interface CreateParagraphBase {
+  type: string
+  title?: string
+}
+
+export interface CreateParagraphText extends CreateParagraphBase {
+  type: "text"
+  body: string
+  format?: string
+}
+
+export interface CreateParagraphImage extends CreateParagraphBase {
+  type: "image"
+  imageId: string
+  alt?: string
+  imageTitle?: string
+}
+
+export interface CreateParagraphTextImage extends CreateParagraphBase {
+  type: "text_image"
+  body: string
+  imageId: string
+  imagePosition?: "left" | "right"
+  format?: string
+}
+
+export interface CreateParagraphGallery extends CreateParagraphBase {
+  type: "gallery"
+  imageIds: string[]
+  columns?: number
+}
+
+export interface CreateParagraphVideo extends CreateParagraphBase {
+  type: "video"
+  videoUrl?: string
+  videoFileId?: string
+  caption?: string
+}
+
+export interface CreateParagraphQuote extends CreateParagraphBase {
+  type: "quote"
+  quoteText: string
+  author?: string
+  source?: string
+}
+
+export type CreateParagraphData =
+  | CreateParagraphText
+  | CreateParagraphImage
+  | CreateParagraphTextImage
+  | CreateParagraphGallery
+  | CreateParagraphVideo
+  | CreateParagraphQuote
+
+// Тип для связывания параграфа с узлом
+export interface ParagraphReference {
+  type: string
+  id: string
+  meta?: {
+    target_revision_id: null
+  }
+}
+
+// Props для компонентов
+export interface ParagraphRendererProps {
+  paragraphs: Paragraph[]
+  className?: string
+  components?: {
+    text?: React.ComponentType<TextParagraphProps>
+    image?: React.ComponentType<ImageParagraphProps>
+    textImage?: React.ComponentType<TextImageParagraphProps>
+    gallery?: React.ComponentType<GalleryParagraphProps>
+    video?: React.ComponentType<VideoParagraphProps>
+    quote?: React.ComponentType<QuoteParagraphProps>
+  }
+}
+
+export interface TextParagraphProps {
+  paragraph: ParagraphText
+  className?: string
+}
+
+export interface ImageParagraphProps {
+  paragraph: ParagraphImage
+  className?: string
+  priority?: boolean
+}
+
+export interface TextImageParagraphProps {
+  paragraph: ParagraphTextImage
+  className?: string
+  priority?: boolean
+}
+
+export interface GalleryParagraphProps {
+  paragraph: ParagraphGallery
+  className?: string
+}
+
+export interface VideoParagraphProps {
+  paragraph: ParagraphVideo
+  className?: string
+}
+
+export interface QuoteParagraphProps {
+  paragraph: ParagraphQuote
+  className?: string
+}
+
+export interface ParagraphTextData {
+  type: "paragraph--text"
+  field_text: {
+    value: string
+    format: string
+  }
+}
+
+export interface ParagraphImageData {
+  type: "paragraph--image"
+  field_image: string // Media ID
+  field_caption?: string
+}
+
+export interface ParagraphTextImageData {
+  type: "paragraph--text_image"
+  field_text: {
+    value: string
+    format: string
+  }
+  field_image: string // Media ID
+  field_caption?: string
+}
+
+export type ParagraphData =
+  | ParagraphTextData
+  | ParagraphImageData
+  | ParagraphTextImageData
+
+export interface ExtendedDrupalParagraph extends DrupalParagraph {
+  field_text?: {
+    value: string
+    format: string
+    processed: string
+  }
+  field_image?: {
+    id: string
+    uri: {
+      url: string
+    }
+    resourceIdObjMeta?: {
+      alt?: string
+      title?: string
+    }
+  }
+  field_caption?: string
+}

@@ -23,13 +23,17 @@ import { createMediaFromFile, createNode } from "../api/createNode"
 import { useEffect, useState } from "react"
 import { Textarea } from "@shared/ui/textarea"
 import { formSpotSchema } from "../model/schema"
+import { WorkingHoursField } from "@features/office-hours"
+import { ResponsiveWorkingHoursField } from "@features/office-hours/ui/ResponsiveWorkingHoursField"
+import { RichTextMarkdownField } from "@features/rich-text-markdown"
 
 type FormData = z.infer<typeof formSpotSchema>
 
-export const AddRestaurantForm = () => {
+export const AddSpotForm = () => {
   const [loading, setLoading] = useState(false)
   const [selectedFiles, setSelectedFiles] = useState<File[]>([])
   const [uploadedImages, setUploadedImages] = useState<string[]>([])
+  const [uploadKey, setUploadKey] = useState(0)
 
   const form = useForm<FormData>({
     resolver: zodResolver(formSpotSchema),
@@ -41,10 +45,7 @@ export const AddRestaurantForm = () => {
       body: "Lorem ipsum dolor sit, amet consectetur adipisicing elit. Ipsa ut voluptatibus sunt corporis error quis quas eius labore voluptate aut! Molestiae blanditiis fugiat minima, officia enim adipisci aut praesentium illum, iusto nobis ducimus, atque necessitatibus? Qui cumque dolore, nostrum, repellat sit, eaque ipsam ipsum rem natus officiis nemo minus amet fuga id nobis corrupti quaerat aperiam numquam. Officia doloremque voluptas, commodi eveniet pariatur ex voluptatem maxime labore aperiam. Doloribus, ducimus obcaecati. Vel autem impedit fuga repellendus vero quis dolor magni quia a minus ea perferendis quaerat, fugiat magnam repellat beatae dicta? Maiores eos assumenda ab harum facere culpa sed doloremque!",
       addressZh: "中文地址",
       phone: "79146998349",
-      workingHours: {
-        day: 0,
-        all_day: true,
-      },
+      workingHours: [],
     },
   })
 
@@ -69,10 +70,12 @@ export const AddRestaurantForm = () => {
       })
 
       if (result?.success) {
-        toast.success("Ресторан создан!")
+        toast.success("Материал создан!")
         form.reset()
         setSelectedFiles([])
       }
+      setUploadKey((prev) => prev + 1)
+      setSelectedFiles([])
     } catch (error) {
       toast.error("Ошибка загрузки")
     } finally {
@@ -196,44 +199,23 @@ export const AddRestaurantForm = () => {
           )}
         />
 
-        <FormField
+        <ResponsiveWorkingHoursField
           control={form.control}
           name="workingHours"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Часы работы</FormLabel>
-              <FormControl>
-                <Input placeholder="Например: 10:00-22:00" {...field} />
-              </FormControl>
-              <FormDescription>Укажите часы работы ресторана.</FormDescription>
-              <FormMessage />
-            </FormItem>
-          )}
+          label="Часы работы"
+          description="Укажите часы работы ресторана. Можете использовать предустановки или настроить вручную."
         />
 
-        <FormField
+        <RichTextMarkdownField
           control={form.control}
           name="body"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Содержание</FormLabel>
-              <FormControl>
-                <Textarea
-                  placeholder="Tell us a little bit about yourself"
-                  className="resize-none"
-                  {...field}
-                />
-              </FormControl>
-              <FormDescription>Укажите часы работы ресторана.</FormDescription>
-              <FormMessage />
-            </FormItem>
-          )}
+          label="Содержание"
+          description="Используйте Markdown для форматирования текста"
+          placeholder="Расскажите о заведении..."
+          rows={15}
         />
 
-        <FileUpload
-          onFilesChange={handleFilesChange}
-          key={form.watch().title}
-        />
+        <FileUpload onFilesChange={handleFilesChange} key={uploadKey} />
 
         <Button type="submit" disabled={loading}>
           {loading ? "Создание..." : "Создать ресторан"}

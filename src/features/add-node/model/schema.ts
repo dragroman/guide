@@ -1,3 +1,4 @@
+import { workingHoursEntrySchema } from "@features/office-hours"
 import { z } from "zod"
 
 export const formSpotSchema = z.object({
@@ -14,13 +15,7 @@ export const formSpotSchema = z.object({
   categoryId: z.string().min(2).max(50),
   addressZh: z.string().min(2).max(100),
   phone: z.string().min(5).max(20),
-  workingHours: z.object({
-    day: z.number(),
-    all_day: z.boolean().optional(),
-    starthours: z.number().optional(),
-    endhours: z.number().optional(),
-    comment: z.string().optional(),
-  }),
+  workingHours: z.array(workingHoursEntrySchema),
   images: z.array(z.string()).optional(),
 })
 
