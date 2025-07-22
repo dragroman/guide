@@ -10,7 +10,6 @@ export {
 
 // Экспорт основного компонента
 export { ParagraphRenderer } from "./ui/ParagraphRenderer"
-export type { ParagraphRendererProps } from "./model/types"
 
 // Экспорт отдельных компонентов для переиспользования
 export { TextParagraph } from "./ui/components/TextParagraph"

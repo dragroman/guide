@@ -1,16 +1,21 @@
 import { useState, useRef, ChangeEvent } from "react"
 import Image from "next/image"
+import { Trash2, Upload } from "lucide-react"
 
 interface FileUploadProps {
   url?: string
   acceptedFiles?: string
-  maxSize?: number // в мегабайтах
+  maxSize?: number
   onUpload?: (file: File) => void
+  onFilesChange: (files: File[]) => void
+  maxFiles?: number
 }
 
 export function FileUpload({
+  onFilesChange,
   url = "/upload",
   acceptedFiles = "image/*",
+  maxFiles = 5,
   maxSize = 2,
   onUpload,
 }: FileUploadProps) {
@@ -50,6 +55,10 @@ export function FileUpload({
     validFiles.forEach((file, index) => {
       simulateUpload(files.length + index, file)
     })
+
+    const newFiles = [...files, ...validFiles].slice(0, maxFiles)
+    setFiles(newFiles)
+    onFilesChange(newFiles)
   }
 
   const simulateUpload = (index: number, file: File) => {
@@ -70,12 +79,22 @@ export function FileUpload({
     }, 200)
   }
 
-  const removeFile = (index: number) => {
-    setFiles((prev) => prev.filter((_, i) => i !== index))
-    setPreviews((prev) => prev.filter((_, i) => i !== index))
-    setProgress((prev) => prev.filter((_, i) => i !== index))
+  const resetFiles = () => {
+    setFiles([])
+    setPreviews([])
+    setProgress([])
   }
 
+  const removeFile = (index: number) => {
+    const newFiles = files.filter((_, i) => i !== index)
+    const newPreviews = previews.filter((_, i) => i !== index)
+    const newProgress = progress.filter((_, i) => i !== index)
+
+    setFiles(newFiles)
+    setPreviews(newPreviews)
+    setProgress(newProgress)
+    onFilesChange(newFiles)
+  }
   const handleDragOver = (e: React.DragEvent) => {
     e.preventDefault()
   }
@@ -94,7 +113,9 @@ export function FileUpload({
         alert(`Файл должен быть не более ${maxSize}МБ.`)
       }
 
-      setFiles((prev) => [...prev, ...validFiles])
+      const newFiles = [...files, ...validFiles].slice(0, maxFiles)
+      setFiles(newFiles)
+      onFilesChange(newFiles)
       setProgress((prev) => [...prev, ...validFiles.map(() => 0)])
 
       validFiles.forEach((file, index) => {
@@ -112,71 +133,52 @@ export function FileUpload({
   }
 
   return (
-    <div className="file-upload-container">
-      {/* Превью загруженных файлов */}
-      {previews.map((preview, index) => (
-        <div
-          key={index}
-          className="relative mt-2 p-2 bg-white border border-gray-200 rounded-xl dark:bg-neutral-800 dark:border-neutral-700"
-        >
-          <Image
-            className="mb-2 w-full object-cover rounded-lg"
-            src={preview}
-            alt="Превью"
-            width={200}
-            height={200}
-          />
+    <>
+      <div className="file-upload-container grid grid-cols-4 gap-2">
+        {/* Превью загруженных файлов */}
+        {previews.map((preview, index) => (
+          <div key={index} className="relative rounded-xl">
+            <Image
+              className="mb-2 w-full object-cover rounded-lg aspect-square"
+              src={preview}
+              alt="Превью"
+              width={200}
+              height={200}
+            />
 
-          <div className="mb-1 flex justify-between items-center gap-x-3 whitespace-nowrap">
-            <div className="w-10">
-              <span className="text-sm text-gray-800 dark:text-white">
-                {progress[index]}%
-              </span>
-            </div>
+            <div className="mb-1 flex justify-between items-center gap-x-3 whitespace-nowrap">
+              <div className="w-10">
+                <span className="text-sm text-gray-800 dark:text-white">
+                  {progress[index]}%
+                </span>
+              </div>
 
-            <div className="flex items-center gap-x-2">
-              <button
-                type="button"
-                className="text-gray-500 hover:text-gray-800 focus:outline-hidden focus:text-gray-800 dark:text-neutral-500 dark:hover:text-neutral-200 dark:focus:text-neutral-200"
-                onClick={() => removeFile(index)}
-              >
-                <svg
-                  className="shrink-0 size-3.5"
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="24"
-                  height="24"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
+              <div className="flex items-center gap-x-2">
+                <button
+                  type="button"
+                  className="text-gray-500 hover:text-gray-800 focus:outline-hidden focus:text-gray-800 dark:text-neutral-500 dark:hover:text-neutral-200 dark:focus:text-neutral-200"
+                  onClick={() => removeFile(index)}
                 >
-                  <path d="M3 6h18"></path>
-                  <path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"></path>
-                  <path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"></path>
-                  <line x1="10" x2="10" y1="11" y2="17"></line>
-                  <line x1="14" x2="14" y1="11" y2="17"></line>
-                </svg>
-              </button>
+                  <Trash2 />
+                </button>
+              </div>
+            </div>
+
+            <div
+              className="flex w-full h-2 bg-gray-200 rounded-full overflow-hidden dark:bg-neutral-700"
+              role="progressbar"
+              aria-valuenow={progress[index]}
+              aria-valuemin={0}
+              aria-valuemax={100}
+            >
+              <div
+                className={`flex flex-col justify-center rounded-full overflow-hidden ${progress[index] === 100 ? "bg-green-500" : "bg-blue-600"} text-xs text-white text-center whitespace-nowrap transition-all duration-500`}
+                style={{ width: `${progress[index]}%` }}
+              ></div>
             </div>
           </div>
-
-          <div
-            className="flex w-full h-2 bg-gray-200 rounded-full overflow-hidden dark:bg-neutral-700"
-            role="progressbar"
-            aria-valuenow={progress[index]}
-            aria-valuemin={0}
-            aria-valuemax={100}
-          >
-            <div
-              className={`flex flex-col justify-center rounded-full overflow-hidden ${progress[index] === 100 ? "bg-green-500" : "bg-blue-600"} text-xs text-white text-center whitespace-nowrap transition-all duration-500`}
-              style={{ width: `${progress[index]}%` }}
-            ></div>
-          </div>
-        </div>
-      ))}
-
+        ))}
+      </div>
       {/* Область загрузки файла */}
       <div
         className="cursor-pointer p-12 flex justify-center bg-white border border-dashed border-gray-300 rounded-xl dark:bg-neutral-800 dark:border-neutral-600"
@@ -186,22 +188,7 @@ export function FileUpload({
       >
         <div className="text-center">
           <span className="inline-flex justify-center items-center size-16 bg-gray-100 text-gray-800 rounded-full dark:bg-neutral-700 dark:text-neutral-200">
-            <svg
-              className="shrink-0 size-6"
-              xmlns="http://www.w3.org/2000/svg"
-              width="24"
-              height="24"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            >
-              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
-              <polyline points="17 8 12 3 7 8"></polyline>
-              <line x1="12" x2="12" y1="3" y2="15"></line>
-            </svg>
+            <Upload />
           </span>
 
           <div className="mt-4 flex flex-wrap justify-center text-sm/6 text-gray-600">
@@ -225,7 +212,8 @@ export function FileUpload({
         accept={acceptedFiles}
         onChange={handleFileChange}
         className="hidden"
+        multiple
       />
-    </div>
+    </>
   )
 }

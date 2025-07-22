@@ -1,0 +1,1 @@
+export const Spot = () => {return <h1>Spot</h1>}

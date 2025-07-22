@@ -16,41 +16,67 @@ import { Input } from "@shared/ui/input"
 import { Button } from "@shared/ui/button"
 import { CitySelect } from "@entities/term/city"
 import { CategorySelect } from "@entities/term/category"
-import { formRestaurantSchema } from "../model/schema"
-import { toast } from "sonner" // или ваша система уведомлений
-import { useCreateNode } from "../api/apiAddNode"
-import { FileUpload } from "@features/file-upload"
 
-type FormData = z.infer<typeof formRestaurantSchema>
+import { toast } from "sonner" // или ваша система уведомлений
+import { FileUpload } from "@features/file-upload"
+import { createMediaFromFile, createNode } from "../api/createNode"
+import { useEffect, useState } from "react"
+import { Textarea } from "@shared/ui/textarea"
+import { formSpotSchema } from "../model/schema"
+
+type FormData = z.infer<typeof formSpotSchema>
 
 export const AddRestaurantForm = () => {
-  const { createNode, loading, error } = useCreateNode()
+  const [loading, setLoading] = useState(false)
+  const [selectedFiles, setSelectedFiles] = useState<File[]>([])
+  const [uploadedImages, setUploadedImages] = useState<string[]>([])
 
   const form = useForm<FormData>({
-    resolver: zodResolver(formRestaurantSchema),
+    resolver: zodResolver(formSpotSchema),
     defaultValues: {
-      title: "",
-      titleZh: "",
-      cityId: "",
-      categoryId: "",
-      description: "",
-      addressZh: "",
-      phone: "",
-      workingHours: "",
+      title: "Test",
+      titleZh: "中文",
+      cityId: "a1ebf855-942e-46fe-92e8-29e5c45a22cb",
+      categoryId: "54d9907a-95cb-4f5f-a6ba-f5493a117540",
+      body: "Lorem ipsum dolor sit, amet consectetur adipisicing elit. Ipsa ut voluptatibus sunt corporis error quis quas eius labore voluptate aut! Molestiae blanditiis fugiat minima, officia enim adipisci aut praesentium illum, iusto nobis ducimus, atque necessitatibus? Qui cumque dolore, nostrum, repellat sit, eaque ipsam ipsum rem natus officiis nemo minus amet fuga id nobis corrupti quaerat aperiam numquam. Officia doloremque voluptas, commodi eveniet pariatur ex voluptatem maxime labore aperiam. Doloribus, ducimus obcaecati. Vel autem impedit fuga repellendus vero quis dolor magni quia a minus ea perferendis quaerat, fugiat magnam repellat beatae dicta? Maiores eos assumenda ab harum facere culpa sed doloremque!",
+      addressZh: "中文地址",
+      phone: "79146998349",
+      workingHours: {
+        day: 0,
+        all_day: true,
+      },
     },
   })
 
-  async function onSubmit(values: FormData) {
-    const result = await createNode({
-      nodeType: "spot",
-      data: values,
-    })
+  const handleFilesChange = async (files: File[]) => {
+    setSelectedFiles(files)
+  }
 
-    if (result?.success) {
-      toast.success("Ресторан успешно создан!")
-      form.reset()
-    } else {
-      toast.error(error || "Ошибка при создании ресторана")
+  async function onSubmit(values: FormData) {
+    setLoading(true)
+
+    try {
+      // Загружаем файлы только при отправке
+      const imageIds = []
+      for (const file of selectedFiles) {
+        const media = await createMediaFromFile(file)
+        imageIds.push(media.id)
+      }
+
+      const result = await createNode({
+        ...values,
+        images: imageIds,
+      })
+
+      if (result?.success) {
+        toast.success("Ресторан создан!")
+        form.reset()
+        setSelectedFiles([])
+      }
+    } catch (error) {
+      toast.error("Ошибка загрузки")
+    } finally {
+      setLoading(false)
     }
   }
 
@@ -157,23 +183,6 @@ export const AddRestaurantForm = () => {
 
         <FormField
           control={form.control}
-          name="description"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Описание</FormLabel>
-              <FormControl>
-                <Input placeholder="Описание ресторана" {...field} />
-              </FormControl>
-              <FormDescription>
-                Добавьте краткое описание ресторана.
-              </FormDescription>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-
-        <FormField
-          control={form.control}
           name="phone"
           render={({ field }) => (
             <FormItem>
@@ -202,7 +211,29 @@ export const AddRestaurantForm = () => {
           )}
         />
 
-        <FileUpload />
+        <FormField
+          control={form.control}
+          name="body"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Содержание</FormLabel>
+              <FormControl>
+                <Textarea
+                  placeholder="Tell us a little bit about yourself"
+                  className="resize-none"
+                  {...field}
+                />
+              </FormControl>
+              <FormDescription>Укажите часы работы ресторана.</FormDescription>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+
+        <FileUpload
+          onFilesChange={handleFilesChange}
+          key={form.watch().title}
+        />
 
         <Button type="submit" disabled={loading}>
           {loading ? "Создание..." : "Создать ресторан"}
