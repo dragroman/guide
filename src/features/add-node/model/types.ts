@@ -6,7 +6,7 @@ export interface TNodeSpot extends DrupalNode {
   field_name_cn: string
   field_location: string
   field_address_cn: string
-  field_phone: string
+  field_map_link: string
   field_opening_hours: {
     day: number
     all_day?: boolean

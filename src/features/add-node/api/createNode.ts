@@ -5,7 +5,6 @@ import { revalidatePath } from "next/cache"
 import { DrupalMedia, DrupalFile } from "next-drupal"
 
 import { SpotFormData } from "../model/schema"
-import { TNodeSpot } from "../model/types"
 
 export async function createMediaFromFile(
   file: File,
@@ -74,8 +73,9 @@ export async function createNode(data: SpotFormData) {
           },
           field_name_cn: data.titleZh,
           field_address_cn: data.addressZh,
-          field_phone: data.phone,
+          field_map_link: data.mapLinks?.map((link) => ({ uri: link.url })),
           field_opening_hours: data.workingHours,
+          field_cuisine_type: data.cuisineTypes,
         },
         relationships: {
           field_category: {

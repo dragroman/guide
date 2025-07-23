@@ -13,10 +13,20 @@ export const formSpotSchema = z.object({
   body: z.string().optional(),
   cityId: z.string().min(1, "Выберите город"),
   categoryId: z.string().min(2).max(50),
+  cuisineTypes: z.array(z.string()).optional(),
+  hotelStars: z.array(z.string()).optional(),
+  attractionTypes: z.array(z.string()).optional(),
   addressZh: z.string().min(2).max(100),
-  phone: z.string().min(5).max(20),
   workingHours: z.array(workingHoursEntrySchema),
   images: z.array(z.string()).optional(),
+  mapLinks: z
+    .array(
+      z.object({
+        url: z.string().url("Введите корректный URL"),
+      })
+    )
+    .optional(),
+  rating: z.string().optional(),
 })
 
 export type SpotFormData = z.infer<typeof formSpotSchema>
