@@ -5,11 +5,16 @@ import { revalidatePath } from "next/cache"
 import { DrupalMedia, DrupalFile } from "next-drupal"
 
 import { SpotFormData } from "../model/schema"
+import { getServerSession } from "next-auth"
 
 export async function createMediaFromFile(
   file: File,
   alt?: string
 ): Promise<DrupalMedia> {
+  const session = await getServerSession()
+  if (!session) {
+    throw new Error("Unauthorized")
+  }
   try {
     // Создаем файл
     const fileBuffer = await file.arrayBuffer()
@@ -27,7 +32,7 @@ export async function createMediaFromFile(
         },
       },
       {
-        withAuth: true,
+        withAuth: `Bearer ${session.accessToken}`,
       }
     )) as DrupalFile
 
@@ -50,7 +55,7 @@ export async function createMediaFromFile(
         },
       },
       {
-        withAuth: true,
+        withAuth: `Bearer ${session.accessToken}`,
       }
     )
 
@@ -62,6 +67,10 @@ export async function createMediaFromFile(
 }
 
 export async function createNode(data: SpotFormData) {
+  const session = await getServerSession()
+  if (!session) {
+    throw new Error("Unauthorized")
+  }
   try {
     const nodeData = {
       data: {
@@ -98,7 +107,7 @@ export async function createNode(data: SpotFormData) {
     }
 
     const node = await drupal.createResource("node--spot", nodeData as any, {
-      withAuth: true,
+      withAuth: `Bearer ${session.accessToken}`,
     })
 
     revalidatePath("/")

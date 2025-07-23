@@ -28,15 +28,14 @@ import { Badge } from "@shared/ui/badge"
 import { POPULAR_CATEGORIES, POPULAR_CITIES } from "../model/constants"
 import { Plus, X } from "lucide-react"
 import { FieldWorkingHours } from "./FieldWorkingHours"
+import { useSession } from "next-auth/react"
 
 type FormData = z.infer<typeof formSpotSchema>
 
 export const AddSpotForm = ({ onSuccess }: { onSuccess?: () => void }) => {
   const [loading, setLoading] = useState(false)
   const [selectedFiles, setSelectedFiles] = useState<File[]>([])
-  const [uploadedImages, setUploadedImages] = useState<string[]>([])
   const [uploadKey, setUploadKey] = useState(0)
-  const [workingHours, setWorkingHours] = useState(false)
 
   const form = useForm<FormData>({
     resolver: zodResolver(formSpotSchema),
