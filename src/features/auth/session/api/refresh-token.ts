@@ -1,33 +1,18 @@
-// src/features/auth/session/api/refresh-token.ts
 import { JWT } from "next-auth/jwt"
-import { Redis } from "ioredis"
 
-const redis = new Redis(process.env.REDIS_URL || "redis://localhost:6379")
-
+// Функция для обновления токена доступа
 export async function refreshAccessToken(token: JWT) {
-  const lockKey = `refresh_lock:${token.userId || token.sub}`
-  const lockTimeout = 10 // секунды
-
   try {
-    // Попытка получить блокировку
-    const lockResult = await redis.set(
-      lockKey,
-      "locked",
-      "EX",
-      lockTimeout,
-      "NX"
-    )
+    const formData = new URLSearchParams()
 
-    if (!lockResult) {
-      // Блокировка не получена, ждем и возвращаем текущий токен
-      console.log("[RefreshToken] Refresh уже выполняется, пропускаем")
-      await new Promise((resolve) => setTimeout(resolve, 100))
-      return token
+    if (!token.refreshToken) {
+      console.error("Отсутствует refresh token")
+      return {
+        ...token,
+        error: "NoRefreshToken",
+      }
     }
 
-    console.log("[RefreshToken] Начинаем обновление токена")
-
-    const formData = new URLSearchParams()
     formData.append("grant_type", "refresh_token")
     formData.append("client_id", process.env.DRUPAL_USER_CLIENT_ID as string)
     formData.append(
@@ -72,8 +57,5 @@ export async function refreshAccessToken(token: JWT) {
       ...token,
       error: "RefreshAccessTokenError",
     }
-  } finally {
-    // Всегда освобождаем блокировку
-    await redis.del(lockKey)
   }
 }

@@ -6,12 +6,13 @@ import { DrupalMedia, DrupalFile } from "next-drupal"
 
 import { SpotFormData } from "../model/schema"
 import { getServerSession } from "next-auth"
+import { authOptions } from "@features/auth/session"
 
 export async function createMediaFromFile(
   file: File,
   alt?: string
 ): Promise<DrupalMedia> {
-  const session = await getServerSession()
+  const session = await getServerSession(authOptions)
   if (!session) {
     throw new Error("Unauthorized")
   }
@@ -67,7 +68,7 @@ export async function createMediaFromFile(
 }
 
 export async function createNode(data: SpotFormData) {
-  const session = await getServerSession()
+  const session = await getServerSession(authOptions)
   if (!session) {
     throw new Error("Unauthorized")
   }

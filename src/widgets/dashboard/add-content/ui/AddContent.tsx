@@ -1,28 +1,31 @@
+import { Button } from "@shared/ui/button"
 import { Typography } from "@shared/ui/typography"
+import { MapPin } from "lucide-react"
 import Link from "next/link"
 
-export const AddContent = () => {
+export const AddContent = ({ name }: { name: string }) => {
   const items = [
     {
       id: 1,
-      title: "Добавить ресторан",
-      path: "/add/restaurant",
+      title: "Добавить место",
+      path: "/add/spot",
+      icon: MapPin,
     },
   ]
   return (
-    <>
-      <Typography level="h2">Кнопки</Typography>
+    <div className="space-y-4">
+      <Typography level="h2">Привет, {name}!</Typography>
+      О, ты эксперт, можешь добавить что-нибудь
       <div className="grid grid-cols-2 gap-2">
         {items.map((item) => (
-          <Link
-            key={item.id}
-            href={item.path}
-            className="border rounded-lg p-4 hover:bg-secondary"
-          >
-            {item.title}
-          </Link>
+          <Button asChild key={item.id}>
+            <Link href={item.path}>
+              <item.icon />
+              {item.title}
+            </Link>
+          </Button>
         ))}
       </div>
-    </>
+    </div>
   )
 }

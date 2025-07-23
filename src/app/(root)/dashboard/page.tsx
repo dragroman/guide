@@ -56,18 +56,23 @@ export default async function UserProfile() {
     }
   )
 
+  const isExpert = session.user.roles.includes("expert")
+
+  const name = session.user.name || session.user.email || ""
+
   return (
-    <div className="space-y-4">
+    <div className="space-y-12">
       <Typography>Личный кабинет</Typography>
-      <UserFull user={currentUser} />
-      {/* TODO: Add actions for content editor */}
-      {/* <AddContent /> */}
+      {/* <UserFull user={currentUser} /> */}
+      {isExpert && <AddContent name={name} />}
       {/* Section "Step 1" */}
-      <Typography level="h2">Шаг 1. Заполнение анкеты</Typography>
-      <UserApplications
-        nodes={applications}
-        accessToken={session.accessToken}
-      />
+      <div className="space-y-4">
+        <Typography level="h2">Шаг 1. Заполнение анкеты</Typography>
+        <UserApplications
+          nodes={applications}
+          accessToken={session.accessToken}
+        />
+      </div>
       {/* Section Step 2 */}
       <Typography level="h2">Шаг 2. Составление тура</Typography>
 

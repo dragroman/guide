@@ -3,6 +3,14 @@ import CredentialsProvider from "next-auth/providers/credentials"
 import type { NextAuthOptions } from "next-auth"
 import { refreshAccessToken } from "../api/refresh-token"
 
+interface DecodedToken {
+  id: string
+  name?: string
+  email?: string
+  lang: string
+  roles?: string[]
+}
+
 export const authOptions: NextAuthOptions = {
   providers: [
     CredentialsProvider({
@@ -37,15 +45,16 @@ export const authOptions: NextAuthOptions = {
           const data = await response.json()
 
           if (response.ok && data?.access_token) {
-            const decoded = jwtDecode<{ id: string; lang: string }>(
-              data.access_token
-            )
+            const decoded = jwtDecode<DecodedToken>(data.access_token)
 
             return {
               ...data,
               user: {
                 id: decoded.id,
+                name: decoded.name,
+                email: decoded.email,
                 lang: decoded.lang,
+                roles: decoded.roles || [], // массив ролей из токена
               },
             }
           }
@@ -60,35 +69,62 @@ export const authOptions: NextAuthOptions = {
   callbacks: {
     async jwt({ token, user }) {
       if (user) {
-        // Сохраняем токены
         token.accessToken = user.access_token
         token.accessTokenExpires = Date.now() + user.expires_in * 1000
         token.refreshToken = user.refresh_token
         token.userId = user.user?.id
+        token.userName = user.user?.name
+        token.userEmail = user.user?.email
         token.lang = user.user?.lang
+        token.roles = user.user?.roles
+        token.lastRefresh = Date.now()
+        return token
       }
 
-      // Если токен не истек или время истечения не определено, возвращаем его
+      if (token.lastRefresh && Date.now() - Number(token.lastRefresh) < 10000) {
+        return token
+      }
+
+      const bufferTime = 30 * 1000
+      if (
+        token.accessTokenExpires &&
+        Date.now() < token.accessTokenExpires - bufferTime
+      ) {
+        return token
+      }
+
+      if (!token.refreshToken) {
+        console.error("Отсутствует refresh token")
+        return { ...token, error: "NoRefreshToken" }
+      }
+
       if (token.accessTokenExpires && Date.now() < token.accessTokenExpires) {
         return token
       }
 
       const refreshedToken = await refreshAccessToken(token)
+      token.lastRefresh = Date.now()
 
-      // Если токен истек, обновляем его
       return refreshedToken
     },
 
     async session({ session, token }) {
+      if (!token?.accessToken || !token?.refreshToken) {
+        throw new Error("Отсутствуют необходимые токены")
+      }
+
       if (token?.accessToken) {
         session.accessToken = token.accessToken
-        session.refreshToken = token.refreshToken || ""
-        if (typeof token.userId === "string") {
-          session.user.id = token.userId
-        }
+        session.refreshToken = token.refreshToken
 
-        if (typeof token.lang === "string") {
-          session.user.lang = token.lang
+        // Заполняем объект user
+        session.user = {
+          id: token.userId || "",
+          name: token.userName || null,
+          email: token.userEmail || null,
+          image: null,
+          lang: token.lang || "en",
+          roles: token.roles || [],
         }
 
         if (token.error && !session.error) {
