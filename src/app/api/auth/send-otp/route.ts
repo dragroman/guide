@@ -37,9 +37,9 @@ export async function POST(
       validatedData
     )
 
-    // await emailService.sendOtpEmail(validatedData.email, otpCode)
-
-    console.log("OTP sent:", otpCode)
+    process.env.NODE_ENV === "development"
+      ? console.log("OTP sent:", otpCode)
+      : await emailService.sendOtpEmail(validatedData.email, otpCode)
 
     return NextResponse.json({
       success: true,

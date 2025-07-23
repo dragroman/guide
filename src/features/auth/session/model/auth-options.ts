@@ -47,6 +47,8 @@ export const authOptions: NextAuthOptions = {
           if (response.ok && data?.access_token) {
             const decoded = jwtDecode<DecodedToken>(data.access_token)
 
+            console.log(decoded)
+
             return {
               ...data,
               user: {
