@@ -11,6 +11,10 @@ import { Typography } from "@shared/ui/typography"
 import { Separator } from "@shared/ui/separator"
 import { DrupalUser } from "next-drupal"
 import { Metadata } from "next"
+import { Alert } from "@shared/ui/alert"
+import { Button } from "@shared/ui/button"
+import Link from "next/link"
+import { Edit2Icon } from "lucide-react"
 
 export const metadata: Metadata = {
   title: "Личный кабинет",
@@ -67,14 +71,16 @@ export default async function UserProfile() {
       {isExpert && <AddContent name={name} />}
       {/* Section "Step 1" */}
       <div className="space-y-4">
-        <Typography level="h2">Шаг 1. Заполнение анкеты</Typography>
-        <UserApplications
-          nodes={applications}
-          accessToken={session.accessToken}
-        />
+        <Typography level="h2">Анкеты</Typography>
+        <UserApplications nodes={applications} />
       </div>
       {/* Section Step 2 */}
-      <Typography level="h2">Шаг 2. Составление тура</Typography>
+      <div className="space-y-4">
+        <Typography level="h2">Туры</Typography>
+        <Alert className="flex min-h-20 items-center justify-center">
+          Процесс создания тура будет доступен только после заполнения анкеты
+        </Alert>
+      </div>
 
       <Separator />
       <div className="text-center">

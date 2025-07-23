@@ -7,6 +7,8 @@ import { DrupalMedia, DrupalFile } from "next-drupal"
 import { SpotFormData } from "../model/schema"
 import { getServerSession } from "next-auth"
 import { authOptions } from "@features/auth/session"
+import { sendTelegramMessage } from "@shared/lib/telegram"
+import { getCategoryName, getCityName } from "@shared/cache/taxonomies"
 
 export async function createMediaFromFile(
   file: File,
@@ -113,6 +115,8 @@ export async function createNode(data: SpotFormData) {
 
     revalidatePath("/")
 
+    sendNotificationToTelegram(data)
+
     return {
       success: true,
       node,
@@ -125,4 +129,25 @@ export async function createNode(data: SpotFormData) {
       error: "Не удалось создать материал. Попробуйте еще раз.",
     }
   }
+}
+
+async function sendNotificationToTelegram(data: SpotFormData) {
+  const [categoryName, cityName] = await Promise.all([
+    getCategoryName(data.categoryId),
+    getCityName(data.cityId),
+  ])
+
+  const message = `
+🏮 <b>Новое место добавлено!</b>
+
+📍 <b>${data.title}</b>
+🇨🇳 ${data.titleZh}
+
+🏢 <b>Категория:</b> ${categoryName}
+🌍 <b>Город:</b> ${cityName}
+📍 <b>Адрес:</b> ${data.addressZh}
+...
+  `.trim()
+
+  await sendTelegramMessage(message)
 }

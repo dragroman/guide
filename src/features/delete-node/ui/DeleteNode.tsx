@@ -20,14 +20,9 @@ import { access } from "fs"
 interface DeleteNodeProps {
   nodeId: string
   nodeType: string
-  accessToken: string
 }
 
-export const DeleteNode = ({
-  nodeId,
-  nodeType,
-  accessToken,
-}: DeleteNodeProps) => {
+export const DeleteNode = ({ nodeId, nodeType }: DeleteNodeProps) => {
   const [isDeleting, setIsDeleting] = useState(false)
   const [isOpen, setIsOpen] = useState(false)
 
@@ -36,7 +31,7 @@ export const DeleteNode = ({
       setIsDeleting(true)
 
       // Вызываем Server Action - выполняется на сервере
-      const result = await deleteNodeAction(nodeType, nodeId, accessToken)
+      const result = await deleteNodeAction(nodeType, nodeId)
 
       if (result.success) {
         toast.success(result.message)

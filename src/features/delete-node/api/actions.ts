@@ -1,22 +1,23 @@
 // lib/actions.ts
 "use server"
 
+import { authOptions } from "@features/auth/session"
 import { drupal } from "@shared/lib/drupal"
-import { revalidatePath } from "next/cache"
+import { getServerSession, Session } from "next-auth"
+import { revalidateTag } from "next/cache"
 
-export async function deleteNodeAction(
-  nodeType: string,
-  nodeId: string,
-  accessToken: string
-) {
+export async function deleteNodeAction(nodeType: string, nodeId: string) {
+  const session = await getServerSession(authOptions)
+
+  if (!session) {
+    throw Error("Authentication failed!")
+  }
   try {
     const deleted = await drupal.deleteResource(nodeType, nodeId, {
-      withAuth: () => `Bearer ${accessToken}`,
+      withAuth: () => `Bearer ${session.accessToken}`,
     })
 
-    // Обновляем кеш страниц
-    revalidatePath("/")
-    revalidatePath("/[...slug]", "page")
+    revalidateTag(`user-applications ${session.user.id}`)
 
     return { success: true, message: "Анкета успешно удалена" }
   } catch (error) {

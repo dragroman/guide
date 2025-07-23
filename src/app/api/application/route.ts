@@ -4,6 +4,7 @@ import { drupal } from "@shared/lib/drupal"
 import { format } from "date-fns"
 import { getServerSession } from "next-auth"
 import { authOptions } from "@features/auth/session"
+import { revalidateTag } from "next/cache"
 
 export async function POST(request: NextRequest) {
   try {
@@ -200,6 +201,8 @@ export async function POST(request: NextRequest) {
         withAuth: `Bearer ${session?.accessToken}`,
       }
     )
+
+    revalidateTag(`user-applications ${session?.user.id}`)
 
     // Возвращаем успешный ответ
     return NextResponse.json(

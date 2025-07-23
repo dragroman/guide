@@ -10,23 +10,15 @@ import Link from "next/link"
 
 export const UserApplications = ({
   nodes,
-  accessToken,
 }: {
   nodes: TApplicationTeaser[]
-  accessToken: string
 }) => {
   return (
     <div className="space-y-4">
       {nodes.length > 0 ? (
         nodes.map((node) => (
           <ApplicationTeaser
-            actions={
-              <DeleteNode
-                nodeId={node.id}
-                nodeType={node.type}
-                accessToken={accessToken}
-              />
-            }
+            actions={<DeleteNode nodeId={node.id} nodeType={node.type} />}
             node={node}
             key={node.id}
           />
