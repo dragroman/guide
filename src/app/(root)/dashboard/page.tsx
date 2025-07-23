@@ -60,15 +60,18 @@ export default async function UserProfile() {
     }
   )
 
-  const isExpert = session.user.roles.includes("expert")
+  // const isExpert = session.user.roles.includes("expert")
 
-  const name = session.user.name || session.user.email || ""
+  // const name = session.user.name || session.user.email || ""
+
+  // console.log(session)
 
   return (
     <div className="space-y-12">
       <Typography>Личный кабинет</Typography>
+
       {/* <UserFull user={currentUser} /> */}
-      {isExpert && <AddContent name={name} />}
+      {/* {isExpert && <AddContent name={name} />} */}
       {/* Section "Step 1" */}
       <div className="space-y-4">
         <Typography level="h2">Анкеты</Typography>
