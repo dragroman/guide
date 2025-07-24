@@ -16,6 +16,10 @@ export default async function CitiesPage() {
 
   const terms = await drupal.getView<TCityTeaser[]>("cities--page_1", {
     params: params.getQueryObject(),
+    next: {
+      revalidate: 3600,
+      tags: ["cities"],
+    },
   })
 
   return (

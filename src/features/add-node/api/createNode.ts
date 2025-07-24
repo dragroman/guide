@@ -22,6 +22,8 @@ export async function createMediaFromFile(
 
   try {
     // Создаем файл
+    const safeFilename = generateSafeFilename(file.name)
+
     const fileBuffer = await file.arrayBuffer()
     const buffer = Buffer.from(fileBuffer)
     const drupalFile = (await drupal.createFileResource(
@@ -31,7 +33,7 @@ export async function createMediaFromFile(
           attributes: {
             type: "media--image",
             field: "field_media_image",
-            filename: file.name,
+            filename: safeFilename,
             file: buffer,
           },
         },
@@ -155,4 +157,16 @@ async function sendNotificationToTelegram(data: SpotFormData) {
   `.trim()
 
   await sendTelegramMessage(message)
+}
+
+let fileCounter = 0
+
+function generateSafeFilename(originalName: string): string {
+  const extensionMatch = originalName.match(/\.[^.]*$/)
+  const extension = extensionMatch ? extensionMatch[0] : ".jpg"
+
+  const timestamp = Date.now()
+  fileCounter++
+
+  return `image_${timestamp}_${fileCounter}${extension}`
 }
