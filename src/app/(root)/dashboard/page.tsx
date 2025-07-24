@@ -15,6 +15,7 @@ import { Alert } from "@shared/ui/alert"
 import { Button } from "@shared/ui/button"
 import Link from "next/link"
 import { Edit2Icon } from "lucide-react"
+import { DashboardMenu } from "@widgets/dashboard/menu"
 
 export const metadata: Metadata = {
   title: "Личный кабинет",
@@ -64,28 +65,14 @@ export default async function UserProfile() {
   const name = session.user.name || session.user.email || ""
 
   return (
-    <div className="space-y-12">
+    <div className="space-y-8">
       <Typography>Личный кабинет</Typography>
-
+      <Typography level="h2">Привет, {name}!</Typography>
       {/* <UserFull user={currentUser} /> */}
       {isExpert && <AddContent name={name} />}
       {/* Section "Step 1" */}
-      <div className="space-y-4">
-        <Typography level="h2">Анкеты</Typography>
-        <UserApplications nodes={applications} />
-      </div>
-      {/* Section Step 2 */}
-      <div className="space-y-4">
-        <Typography level="h2">Туры</Typography>
-        <Alert className="flex min-h-20 items-center justify-center">
-          Процесс создания тура будет доступен только после заполнения анкеты
-        </Alert>
-      </div>
-
+      <DashboardMenu />
       <Separator />
-      <div className="text-center">
-        <SignOut />
-      </div>
     </div>
   )
 }

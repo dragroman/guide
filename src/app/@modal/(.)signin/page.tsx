@@ -13,7 +13,7 @@ export default function LoginModal() {
     // Закрываем модальное окно и перенаправляем
     router.back()
     setTimeout(() => {
-      router.push("/")
+      router.push("/dashboard")
     }, 200)
   }
 

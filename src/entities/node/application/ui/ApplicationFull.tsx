@@ -8,8 +8,15 @@ import { SectionShopping } from "./sections/SectionShopping"
 import { SectionBudget } from "./sections/SectionBudget"
 import { SectionContact } from "./sections/SectionContact"
 import { Card } from "@shared/ui/card"
+import { ReactNode } from "react"
 
-export const ApplicationFull = ({ node }: { node: TApplicationFull }) => {
+export const ApplicationFull = ({
+  node,
+  actions,
+}: {
+  node: TApplicationFull
+  actions?: ReactNode
+}) => {
   return (
     <>
       <div className="grid gap-6">
@@ -21,6 +28,7 @@ export const ApplicationFull = ({ node }: { node: TApplicationFull }) => {
         <SectionShopping node={node} />
         <SectionBudget node={node} />
         <SectionContact node={node} />
+        {actions}
       </div>
     </>
   )

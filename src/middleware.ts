@@ -3,7 +3,7 @@ import type { NextRequest } from "next/server"
 import { getToken } from "next-auth/jwt"
 
 const authRoutes = ["/signin", "/signup"]
-const protectedRoutes = ["/dashboard"]
+const protectedRoutes = ["/dashboard/*"]
 
 export async function middleware(req: NextRequest) {
   const { pathname } = req.nextUrl

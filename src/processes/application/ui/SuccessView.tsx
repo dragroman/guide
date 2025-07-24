@@ -1,3 +1,5 @@
+"use client"
+
 import React, { useEffect, useState } from "react"
 import { CheckCircle2 } from "lucide-react"
 import { Button } from "@shared/ui/button"
@@ -31,7 +33,7 @@ export function SuccessView({ onReset }: SuccessViewProps) {
   }, [searchParams])
 
   return (
-    <div className="h-[100vh] flex flex-col items-center justify-between">
+    <div className="min-h-screen flex flex-col items-center">
       <div className="w-full max-w-md mx-auto pt-20 px-4">
         <div className="mb-4">
           <div className="text-center text-3xl font-bold mb-4">

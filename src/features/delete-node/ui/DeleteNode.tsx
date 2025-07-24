@@ -16,6 +16,7 @@ import {
 import { Button } from "@shared/ui/button"
 import { toast } from "sonner"
 import { access } from "fs"
+import { useRouter } from "next/navigation"
 
 interface DeleteNodeProps {
   nodeId: string
@@ -25,6 +26,7 @@ interface DeleteNodeProps {
 export const DeleteNode = ({ nodeId, nodeType }: DeleteNodeProps) => {
   const [isDeleting, setIsDeleting] = useState(false)
   const [isOpen, setIsOpen] = useState(false)
+  const router = useRouter()
 
   const handleDelete = async () => {
     try {
@@ -35,6 +37,7 @@ export const DeleteNode = ({ nodeId, nodeType }: DeleteNodeProps) => {
 
       if (result.success) {
         toast.success(result.message)
+        router.back()
         setIsOpen(false)
       } else {
         toast.error(result.message)

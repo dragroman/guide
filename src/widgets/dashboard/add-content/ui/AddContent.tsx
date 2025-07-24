@@ -14,8 +14,6 @@ export const AddContent = ({ name }: { name: string }) => {
   ]
   return (
     <div className="space-y-4">
-      <Typography level="h2">Привет, {name}!</Typography>
-      О, ты эксперт, можешь добавить что-нибудь
       <div className="grid grid-cols-2 gap-2">
         {items.map((item) => (
           <Button asChild key={item.id}>

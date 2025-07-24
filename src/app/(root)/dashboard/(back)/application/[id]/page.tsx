@@ -1,7 +1,10 @@
 import { ApplicationFull } from "@entities/node/application"
 import { TApplicationFull } from "@entities/node/application/model/types"
+import { DeleteNode } from "@features/delete-node"
 import { drupal } from "@shared/lib/drupal"
+import { BackButton } from "@shared/ui/back-button"
 import { Typography } from "@shared/ui/typography"
+import { ArrowLeft } from "lucide-react"
 import { Metadata } from "next"
 import { notFound } from "next/navigation"
 export const metadata: Metadata = {
@@ -30,7 +33,10 @@ export default async function PageApplicationFull({
   return (
     <>
       <Typography title={node.title} />
-      <ApplicationFull node={node} />
+      <ApplicationFull
+        node={node}
+        actions={<DeleteNode nodeId={node.id} nodeType={node.type} />}
+      />
     </>
   )
 }

@@ -16,14 +16,14 @@ export function Typography({
   const Tag = `${level}` as const
 
   const styles = {
-    h1: "scroll-m-20 text-4xl font-extrabold tracking-tight text-balance",
+    h1: "scroll-m-20 text-4xl font-extrabold tracking-tight text-balance mb-8",
     h2: "scroll-m-20 border-b pb-2 text-xl font-semibold tracking-tight first:mt-0",
     h3: "scroll-m-20 text-2xl font-semibold tracking-tight",
     h4: "scroll-m-20 text-xl font-semibold tracking-tight",
   }
 
   return (
-    <Tag className={cn(styles[level], { className })} {...props}>
+    <Tag className={cn(styles[level], className)} {...props}>
       {title}
       {children}
     </Tag>
