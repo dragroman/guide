@@ -16,7 +16,8 @@ import {
   UtensilsCrossed,
 } from "lucide-react"
 import { CardSelector, CardOption } from "../CardSelector"
-import texts, { getDaysText } from "../../localization/ru"
+import texts from "../../localization/ru"
+import { getDaysText } from "@shared/lib/utils"
 
 export function StepTripPurpose({
   control,

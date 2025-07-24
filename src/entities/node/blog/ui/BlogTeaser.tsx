@@ -37,7 +37,7 @@ export const BlogTeaser = ({ node }: { node: DrupalNode }) => {
       )} */}
       <CardHeader>
         <CardTitle>
-          <Link href={node.path.alias}>{node.title}</Link>
+          <Link href={`/blog/${node.drupal_internal__nid}`}>{node.title}</Link>
         </CardTitle>
         <CardDescription>
           <div className="flex items-center">

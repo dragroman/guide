@@ -1,7 +1,4 @@
-import Image from "next/image"
-import { absoluteUrl, formatDate } from "@shared/lib/utils"
-import { ParagraphRenderer } from "@entities/paragraph"
-import { PageTitle } from "@shared/ui/page-title"
+import { formatDate } from "@shared/lib/utils"
 import { TNodeBlog } from "../model/types"
 
 export const BlogFull = ({

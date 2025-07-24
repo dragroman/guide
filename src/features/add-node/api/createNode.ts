@@ -12,12 +12,14 @@ import { getCategoryName, getCityName } from "@shared/cache/taxonomies"
 
 export async function createMediaFromFile(
   file: File,
-  alt?: string
+  alt: string,
+  title: string
 ): Promise<DrupalMedia> {
   const session = await getServerSession(authOptions)
   if (!session) {
     throw new Error("Unauthorized")
   }
+
   try {
     // Создаем файл
     const fileBuffer = await file.arrayBuffer()
@@ -45,14 +47,17 @@ export async function createMediaFromFile(
       {
         data: {
           attributes: {
-            name: file.name,
+            name: title,
           },
           relationships: {
             field_media_image: {
               data: {
                 type: "file--file",
                 id: drupalFile.id,
-              },
+                meta: {
+                  alt: alt,
+                },
+              } as any,
             },
           },
         },

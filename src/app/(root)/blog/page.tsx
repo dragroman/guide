@@ -18,7 +18,7 @@ export default async function BlogPage() {
       "drupal_internal__nid",
     ])
     .addSort("-created")
-    .addPageLimit(3)
+    .addPageLimit(10)
   const nodes = await drupal.getResourceCollection<DrupalNode[]>(
     "node--article",
     {

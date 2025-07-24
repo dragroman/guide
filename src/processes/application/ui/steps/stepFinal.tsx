@@ -1,6 +1,6 @@
 import React from "react"
 import { format } from "date-fns"
-import { getDaysText } from "@shared/utils/getDay"
+import { getDaysText } from "@shared/lib/utils"
 import { StepProps } from "../../model/types"
 import { SmilePlus } from "lucide-react"
 import texts from "../../localization/ru"

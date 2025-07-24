@@ -18,7 +18,7 @@ import {
   DrawerClose,
   DrawerTrigger,
 } from "@shared/ui/drawer"
-import { getDaysText } from "@shared/utils/getDay"
+import { getDaysText } from "@shared/lib/utils"
 
 // Определяем тип для диапазона дат, используемый библиотекой react-day-picker
 interface ZodDateRange {

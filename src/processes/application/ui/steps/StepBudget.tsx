@@ -7,7 +7,7 @@ import { Switch } from "@shared/ui/switch"
 import { Label } from "@shared/ui/label"
 import texts from "../../localization/ru"
 import { StepProps } from "../../model/types"
-import { getDaysText } from "@shared/utils/getDay"
+import { getDaysText } from "@shared/lib/utils"
 import { formatNumberWithSpaces } from "../../utils/formatUtils"
 import { HelpTotal, HelpVisa } from "../Help"
 

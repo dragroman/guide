@@ -1,13 +1,14 @@
 import Link from "next/link"
 import { TCityTeaser } from "../model/types"
 import Image from "next/image"
+import { absoluteUrl } from "@shared/lib/utils"
 
 export const CityTeaser = async ({ term }: { term: TCityTeaser }) => {
   return (
     <div className="relative rounded-lg overflow-hidden">
       <div className="absolute inset-0 bg-opacity-50 bg-gradient-to-t from-black/60"></div>
       <Image
-        src={term.field_image.uri.url}
+        src={absoluteUrl(term.field_image.uri.url)}
         alt={term.name}
         width={600}
         height={300}

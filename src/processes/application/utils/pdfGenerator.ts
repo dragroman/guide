@@ -2,7 +2,7 @@
 import { format } from "date-fns"
 import { ru } from "date-fns/locale"
 import { ApplicationSchemaType } from "../config/schemas/applicationSchema"
-import { getDaysText } from "@shared/utils/getDay"
+import { getDaysText } from "@shared/lib/utils"
 import texts from "../localization/ru"
 
 // Функция для получения локализованного текста опций

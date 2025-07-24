@@ -19,7 +19,7 @@ import { CategorySelect } from "@entities/term/category"
 
 import { toast } from "sonner" // или ваша система уведомлений
 import { createMediaFromFile, createNode } from "../api/createNode"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { formSpotSchema } from "../model/schema"
 import { TipTapEditor } from "@shared/ui/tiptap"
 import { FileUpload } from "@shared/ui/file-upload"
@@ -29,6 +29,7 @@ import { POPULAR_CATEGORIES, POPULAR_CITIES } from "../model/constants"
 import { Plus, X } from "lucide-react"
 import { FieldWorkingHours } from "./FieldWorkingHours"
 import { useSession } from "next-auth/react"
+import { getCategoryName, getCityName } from "@shared/cache/taxonomies"
 
 type FormData = z.infer<typeof formSpotSchema>
 
@@ -71,7 +72,13 @@ export const AddSpotForm = ({ onSuccess }: { onSuccess?: () => void }) => {
       // Загружаем файлы только при отправке
       const imageIds = []
       for (const file of selectedFiles) {
-        const media = await createMediaFromFile(file)
+        const cityName = await getCityName(values.cityId)
+        const categoryName = await getCategoryName(values.categoryId)
+
+        const alt = `Изображение "${values.title}" (${cityName})`
+        const title = `${cityName} - ${categoryName} - ${values.title}`
+
+        const media = await createMediaFromFile(file, alt, title)
         imageIds.push(media.id)
       }
 
@@ -90,6 +97,7 @@ export const AddSpotForm = ({ onSuccess }: { onSuccess?: () => void }) => {
       setSelectedFiles([])
     } catch (error) {
       toast.error("Ошибка создания")
+      console.error(error)
     } finally {
       setLoading(false)
     }

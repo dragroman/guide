@@ -64,7 +64,7 @@ export function FileUpload({
   const simulateUpload = (index: number, file: File) => {
     let currentProgress = 0
     const interval = setInterval(() => {
-      currentProgress += 5
+      currentProgress += 10
       if (currentProgress > 100) {
         clearInterval(interval)
         if (onUpload) onUpload(file)
@@ -76,7 +76,7 @@ export function FileUpload({
         newProgress[index] = currentProgress
         return newProgress
       })
-    }, 200)
+    }, 100)
   }
 
   const resetFiles = () => {
