@@ -6,7 +6,7 @@ export default function DashboardLayout({ children }: { children: ReactNode }) {
   return (
     <div className="">
       <Suspense>
-        <div className="mb-4">
+        <div className="-mt-12 mb-4">
           <BackButton>
             <ArrowLeft />
             Вернуться

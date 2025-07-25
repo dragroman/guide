@@ -1,8 +1,8 @@
 import { drupal } from "@shared/lib/drupal"
 import { CityFull, TCityFull } from "@entities/term/city"
-import { ViewsCityRestaurant } from "@widgets/views/restaurant"
-import { TRestaurantTeaser } from "@entities/node/restaurant"
 import { DrupalJsonApiParams } from "drupal-jsonapi-params"
+import { ViewsSpotDefault } from "@widgets/views/spots"
+import { TSpotDefaultTeaser } from "@entities/node/spot"
 
 export default async function CityFullPage({
   params,
@@ -18,20 +18,24 @@ export default async function CityFullPage({
       },
     }
   )
-  const restaurantsParams = new DrupalJsonApiParams()
+  const spotsParams = new DrupalJsonApiParams()
     .addInclude(["field_category"])
+    .addInclude(["field_images.field_media_image"])
     .addFilter("field_location.id", city.id)
-    .addFilter("field_category.machine_name", "restaurant")
-  const restaurants = await drupal.getResourceCollection<TRestaurantTeaser[]>(
+    .addFields("taxonomy_term--category", ["name"])
+    .addFields("media--image", ["field_media_image", "name"])
+
+  const spots = await drupal.getResourceCollection<TSpotDefaultTeaser[]>(
     "node--spot",
     {
-      params: restaurantsParams.getQueryObject(),
+      params: spotsParams.getQueryObject(),
     }
   )
+
   return (
     <>
       <CityFull city={city} />
-      <ViewsCityRestaurant items={restaurants} />
+      <ViewsSpotDefault nodes={spots} />
     </>
   )
 }

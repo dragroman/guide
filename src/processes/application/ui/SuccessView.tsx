@@ -13,6 +13,7 @@ import {
 import Image from "next/image"
 import { useSearchParams } from "next/navigation"
 import { SOCIAL } from "@shared/lib/constants"
+import { Typography } from "@shared/ui/typography"
 
 interface SuccessViewProps {
   onReset: () => void
@@ -33,12 +34,10 @@ export function SuccessView({ onReset }: SuccessViewProps) {
   }, [searchParams])
 
   return (
-    <div className="min-h-screen flex flex-col items-center">
-      <div className="w-full max-w-md mx-auto pt-20 px-4">
+    <div className="min-h-screen flex items-center justify-center">
+      <div className="w-full max-w-md mx-auto px-4 text-center">
         <div className="mb-4">
-          <div className="text-center text-3xl font-bold mb-4">
-            Заявка успешно отправлена!
-          </div>
+          <Typography level="h1">Заявка успешно отправлена!</Typography>
         </div>
         <div className="flex flex-col items-center gap-4 mb-8">
           <div className="mt-4 w-16 h-16 rounded-full bg-primary/20 flex items-center justify-center text-primary animate-bounce">
@@ -78,9 +77,6 @@ export function SuccessView({ onReset }: SuccessViewProps) {
           <Link href="/" className="mb-2">
             <Button variant="outline">Вернуться на сайт</Button>
           </Link>
-          <Button variant="link" onClick={onReset}>
-            Отправить еще одну заявку
-          </Button>
         </div>
       </div>
       <div className="w-full max-w-sm mx-auto text-center mb-4">

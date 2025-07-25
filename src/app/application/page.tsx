@@ -10,7 +10,10 @@ export default function ApplicationStartPage() {
     <Suspense
       fallback={
         <>
-          <LoadingScreen />
+          <LoadingScreen
+            title="Секунду..."
+            description="Подбираем лучшие впечатления для вашего путешествия"
+          />
         </>
       }
     >

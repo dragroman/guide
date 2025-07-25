@@ -3,6 +3,7 @@
 import { Edit, LogOut, Cog, Luggage, LucideIcon } from "lucide-react"
 import { signOut } from "next-auth/react"
 import { useRouter } from "next/navigation"
+import { toast } from "sonner"
 
 interface MenuItem {
   icon: LucideIcon
@@ -10,13 +11,6 @@ interface MenuItem {
   path?: string
   onClick?: () => void
 }
-
-const menuItems = [
-  { icon: Edit, title: "Анкеты", path: "/dashboard/application" },
-  { icon: Luggage, title: "Туры", path: "/dashboard/tour" },
-  { icon: Cog, title: "Настройки", path: "/dashboard/settings" },
-  { icon: LogOut, title: "Выход", onClick: () => signOut() },
-]
 
 export const DashboardMenu = () => {
   const router = useRouter()
@@ -28,9 +22,27 @@ export const DashboardMenu = () => {
       router.push(item.path)
     }
   }
+
+  const handleSignOut = async () => {
+    try {
+      await signOut({ redirect: false })
+      toast.success("Вы успешно вышли из системы")
+      router.push("/")
+    } catch (error) {
+      toast.error("Ошибка при выходе")
+    }
+  }
+
+  const menuItems = [
+    { icon: Edit, title: "Анкеты", path: "/dashboard/application" },
+    { icon: Luggage, title: "Туры", path: "/dashboard/tour" },
+    { icon: Cog, title: "Настройки", path: "/dashboard/settings" },
+    { icon: LogOut, title: "Выход", onClick: handleSignOut },
+  ]
+
   return (
     <div className="rounded-xl bg-card text-card-foreground">
-      <div className="grid grid-cols-4 gap-4 text-center">
+      <div className="grid grid-cols-4 gap-2 md:gap-4 text-center">
         {menuItems.map((item, index) => (
           <div
             className="flex flex-col gap-2 border items-center p-4 hover:bg-accent rounded-lg cursor-pointer transition-colors"
