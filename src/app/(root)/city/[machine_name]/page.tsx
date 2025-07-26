@@ -15,17 +15,18 @@ export default async function CityFullPage({
 }) {
   const { machine_name } = await params
 
+  const session = await getServerSession(authOptions)
+
+  const cityParams = new DrupalJsonApiParams().addInclude(["field_image"])
   const city = await drupal.getResourceByPath<TCityFull>(
     `/location/${machine_name}`,
     {
-      params: {
-        include: "field_image",
-      },
+      params: cityParams.getQueryObject(),
     }
   )
 
   // Обновляем фильтр с реальным ID города
-  const updatedSpotsParams = new DrupalJsonApiParams()
+  const spotsParams = new DrupalJsonApiParams()
     .addInclude(["field_category", "field_images.field_media_image"])
     .addFilter("field_location.id", city.id)
     .addFields("taxonomy_term--category", ["name"])
@@ -34,25 +35,18 @@ export default async function CityFullPage({
   const spots = await drupal.getResourceCollection<TSpotDefaultTeaser[]>(
     "node--spot",
     {
-      params: updatedSpotsParams.getQueryObject(),
+      params: spotsParams.getQueryObject(),
     }
   )
 
-  return (
-    <>
-      <CityFull city={city} />
-      <Suspense fallback={<ViewsSpotDefault userFlags={[]} nodes={spots} />}>
-        <FlagsLoader spots={spots} />
-      </Suspense>
-    </>
-  )
-}
-
-async function FlagsLoader({ spots }: { spots: TSpotDefaultTeaser[] }) {
-  const session = await getServerSession(authOptions)
   const userFlags = session?.user?.id
     ? await getUserFlags(session.user.id, session.accessToken)
     : []
 
-  return <ViewsSpotDefault userFlags={userFlags} nodes={spots} />
+  return (
+    <>
+      <CityFull city={city} />
+      <ViewsSpotDefault userFlags={userFlags} nodes={spots} />
+    </>
+  )
 }

@@ -120,7 +120,7 @@ export async function createNode(data: SpotFormData) {
       withAuth: `Bearer ${session.accessToken}`,
     })
 
-    revalidatePath("/")
+    revalidatePath("/cities")
 
     sendNotificationToTelegram(data)
 
