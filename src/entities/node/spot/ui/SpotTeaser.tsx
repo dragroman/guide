@@ -47,7 +47,15 @@ export const SpotTeaser = ({
           <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-all duration-300" />
 
           {/* Иконки в углах */}
-          <div className="absolute top-3 right-3">{favorite}</div>
+          <div
+            className="absolute top-3 right-3 z-50"
+            onClick={(e) => {
+              e.preventDefault()
+              e.stopPropagation()
+            }}
+          >
+            {favorite}
+          </div>
 
           {cuisineTypes.length > 0 && (
             <div className="absolute bottom-3 left-3">

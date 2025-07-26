@@ -29,7 +29,7 @@ export const SpotFull = ({
       {/* Фоновое изображение */}
       <div className="absolute inset-0 bg-gradient-to-br from-blue-100 to-purple-100">
         <div className="absolute inset-0 flex items-center justify-center">
-          {node.field_images ? (
+          {node.field_images?.[0]?.field_media_image?.uri?.url ? (
             <Image
               src={absoluteUrl(node.field_images[0].field_media_image.uri.url)}
               alt={
@@ -37,7 +37,10 @@ export const SpotFull = ({
                 node.title
               }
               fill
-              className="w-12 h-12"
+              sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+              className="object-cover w-full h-full"
+              priority={false}
+              quality={75}
             />
           ) : (
             <Camera className="h-12 w-12 text-gray-400" />

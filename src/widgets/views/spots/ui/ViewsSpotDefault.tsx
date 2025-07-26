@@ -31,9 +31,9 @@ export const ViewsSpotDefault = ({
               {categoryName}
             </Typography>
             <div className="grid grid-cols-3 gap-2">
-              {categoryNodes.map((node) => (
+              {categoryNodes.map((node, index) => (
                 <SpotTeaser
-                  key={node.drupal_internal__nid}
+                  key={`${node.drupal_internal__nid}-${index}`}
                   node={node}
                   favorite={
                     <FavoriteButton
