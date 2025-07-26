@@ -1,3 +1,4 @@
+import { TApplicationTeaser } from "@entities/node/application"
 import { drupal } from "@shared/lib/drupal"
 import { EmptyState } from "@shared/ui/empty-state"
 import { Skeleton } from "@shared/ui/skeleton"
@@ -6,7 +7,6 @@ import { DashboardList } from "@widgets/dashboard/list"
 import { DrupalJsonApiParams } from "drupal-jsonapi-params"
 import { Edit, Plus } from "lucide-react"
 import { Metadata } from "next"
-import { DrupalNode } from "next-drupal"
 import { Suspense } from "react"
 
 export const metadata: Metadata = {
@@ -27,7 +27,9 @@ export default function DashboardApplicationPage() {
 
 async function ApplicationsList() {
   const applicationParams = new DrupalJsonApiParams()
-  const applications = await drupal.getResourceCollection<DrupalNode[]>(
+    .addInclude(["field_cities"])
+    .addFields("taxonomy_term--location", ["name"])
+  const applications = await drupal.getResourceCollection<TApplicationTeaser[]>(
     "node--application",
     {
       params: applicationParams.getQueryObject(),

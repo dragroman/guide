@@ -34,7 +34,7 @@ export function SuccessView({ onReset }: SuccessViewProps) {
   }, [searchParams])
 
   return (
-    <div className="min-h-screen flex items-center justify-center">
+    <div className="min-h-screen flex flex-col items-center justify-center">
       <div className="w-full max-w-md mx-auto px-4 text-center">
         <div className="mb-4">
           <Typography level="h1">Заявка успешно отправлена!</Typography>
@@ -57,47 +57,24 @@ export function SuccessView({ onReset }: SuccessViewProps) {
             </div>
           )}
         </div>
+        <div className="mb-10">
+          <Link href="/dashboard">
+            <Button>Личный кабинет</Button>
+          </Link>
+        </div>
         <div className="flex flex-col text-center space-y-4">
-          <p className="">
-            А пока можете подписаться наши социальные сети, чтобы бы быть в
-            курсе
-          </p>
           <div className="space-x-4">
             <a target="_blank" href={t.instagram.link}>
-              <Button>
+              <Button variant="outline">
                 <t.instagram.icon /> {t.instagram.label}
               </Button>
             </a>
             <a target="_blank" href={t.telegram.link}>
-              <Button>
+              <Button variant="outline">
                 <t.telegram.icon /> {t.telegram.label}
               </Button>
             </a>
           </div>
-          <Link href="/" className="mb-2">
-            <Button variant="outline">Вернуться на сайт</Button>
-          </Link>
-        </div>
-      </div>
-      <div className="w-full max-w-sm mx-auto text-center mb-4">
-        <div className="text-muted-foreground text-sm">
-          Написать разработчику формы
-        </div>
-        <div>
-          <Button variant={"link"}>
-            <Link target="_blank" href="https://t.me/dragroman">
-              Telegram
-            </Link>
-          </Button>
-          <Dialog>
-            <DialogTrigger asChild>
-              <Button variant={"link"}>WeChat</Button>
-            </DialogTrigger>
-            <DialogContent className="sm:max-w-[425px]">
-              <DialogTitle>Мой id: romal003</DialogTitle>
-              <Image src="/wechat.jpg" width={400} height={400} alt="" />
-            </DialogContent>
-          </Dialog>
         </div>
       </div>
     </div>

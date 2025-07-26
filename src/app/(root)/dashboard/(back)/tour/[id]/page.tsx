@@ -1,3 +1,5 @@
+import { ApplicationTeaser } from "@entities/node/application"
+import { ApplicationTeaserAdaptive } from "@shared/testing/TESTApplication2"
 import { TSpotDefaultTeaser } from "@entities/node/spot"
 import { TourFull } from "@entities/node/tour"
 import { TTourFull } from "@entities/node/tour/model/types"
@@ -19,10 +21,16 @@ export const metadata: Metadata = {
 
 async function getNode(id: string, token: string): Promise<TTourFull> {
   const tourParams = new DrupalJsonApiParams()
-    .addInclude(["field_spots", "field_spots.field_category"])
-    .addFields("taxonomy_term--category", ["name"])
+    .addInclude([
+      "field_spots",
+      "field_spots.field_category",
+      "field_application.field_cities",
+      "field_spots.field_location",
+    ])
     .addInclude(["field_spots.field_images.field_media_image"])
     .addFields("media--image", ["field_media_image", "name"])
+    .addFields("taxonomy_term--category", ["name"])
+    .addFields("taxonomy_term--location", ["name"])
 
   return await drupal.getResourceByPath<TTourFull>(`/tour/${id}`, {
     params: tourParams.getQueryObject(),
@@ -47,15 +55,29 @@ export default async function PageTourFull({
   const userFlags = await getUserFlags(session.user.id, session.accessToken)
 
   const spots = node.field_spots
+  const application = node.field_application
+
+  if (!application.drupal_internal__nid) {
+    notFound()
+  }
 
   return (
-    <>
+    <div className="space-y-12">
       <Typography title={node.title} />
       <TourFull
         node={node}
         actions={<DeleteNode nodeId={node.id} nodeType={node.type} />}
       />
+
+      <div className="space-y-4">
+        <Typography level="h3">Анкета</Typography>
+        <ApplicationTeaser
+          node={node.field_application}
+          key={node.id}
+          actions={<></>}
+        />
+      </div>
       <ViewsSpotDefault userFlags={userFlags} nodes={spots} />
-    </>
+    </div>
   )
 }

@@ -27,6 +27,15 @@ export const formSpotSchema = z.object({
     )
     .optional(),
   rating: z.string().optional(),
+  averagePrices: z.coerce
+    .number()
+    .min(0, { message: "Средний чек не может быть отрицательным" })
+    .default(0),
+
+  ticketPrice: z.coerce
+    .number()
+    .min(0, { message: "Цена билета не может быть отрицательной" })
+    .optional(), // Если поле может быть не заполнено
 })
 
 export type SpotFormData = z.infer<typeof formSpotSchema>

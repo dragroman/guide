@@ -15,6 +15,7 @@ import {
   CUISINE_OPTIONS,
   HOTEL_STARS_OPTIONS,
 } from "../model/constants"
+import { Input } from "@shared/ui/input"
 
 interface ConditionalFieldsProps {
   control: Control<any>
@@ -76,6 +77,26 @@ export function ConditionalFields({
                   />
                 ))}
               </div>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+
+        <FormField
+          control={control}
+          name="averagePrices"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Средний чек</FormLabel>
+              <FormControl>
+                <div className="relative">
+                  <Input placeholder="140" type="number" {...field} />
+                  <span className="absolute right-6 top-0 bottom-0 flex items-center pr-4 text-xl text-muted-foreground">
+                    {"¥"}
+                  </span>
+                </div>
+              </FormControl>
+              <FormDescription>Введите средний чек в заведении</FormDescription>
               <FormMessage />
             </FormItem>
           )}
@@ -150,44 +171,21 @@ export function ConditionalFields({
 
         <FormField
           control={control}
-          name="attractionTypes"
-          render={() => (
+          name="ticketPrice"
+          render={({ field }) => (
             <FormItem>
-              <FormLabel>Типы достопримечательности</FormLabel>
-              <div className="grid grid-cols-2 gap-3">
-                {ATTRACTION_OPTIONS.map((option) => (
-                  <FormField
-                    key={option.value}
-                    control={control}
-                    name="attractionTypes"
-                    render={({ field }) => {
-                      return (
-                        <FormItem
-                          key={option.value}
-                          className="flex flex-row items-start space-x-3 space-y-0"
-                        >
-                          <FormControl>
-                            <Checkbox
-                              checked={field.value?.includes(option.value)}
-                              onCheckedChange={(checked) => {
-                                const updatedValue = checked
-                                  ? [...(field.value || []), option.value]
-                                  : field.value?.filter(
-                                      (value: string) => value !== option.value
-                                    )
-                                field.onChange(updatedValue)
-                              }}
-                            />
-                          </FormControl>
-                          <FormLabel className="text-sm font-normal">
-                            {option.label}
-                          </FormLabel>
-                        </FormItem>
-                      )
-                    }}
-                  />
-                ))}
-              </div>
+              <FormLabel>Стоимость входа</FormLabel>
+              <FormControl>
+                <div className="relative">
+                  <Input placeholder="100" type="number" {...field} />
+                  <span className="absolute right-6 top-0 bottom-0 flex items-center pr-4 text-xl text-muted-foreground">
+                    {"¥"}
+                  </span>
+                </div>
+              </FormControl>
+              <FormDescription>
+                Ввеите стоимость входного билета
+              </FormDescription>
               <FormMessage />
             </FormItem>
           )}

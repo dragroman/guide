@@ -1,8 +1,14 @@
+import { TCityTeaser } from "@entities/term/city"
 import { DrupalNode } from "next-drupal"
 
 export interface TApplicationTeaser extends DrupalNode {
   field_date_from: string
   field_date_to: string
+  field_people_count: number
+  field_purpose: string[]
+  field_name: string
+  field_days_count: number
+  field_cities: TCityTeaser[]
 }
 
 export interface TApplicationFull extends TApplicationTeaser {
@@ -26,9 +32,7 @@ export interface TApplicationFull extends TApplicationTeaser {
   field_need_guide: boolean
   field_need_insurance: boolean
   field_need_visa: boolean
-  field_people_count: number
   field_phone: string
-  field_purpose: string[]
   field_purpose_other: string
   field_seniors: number
   field_shopping_budget: string

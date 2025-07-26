@@ -45,6 +45,8 @@ async function TourList() {
   const tourParams = new DrupalJsonApiParams()
     .addInclude(["field_spots.field_images.field_media_image"])
     .addFields("media--image", ["field_media_image", "name"])
+    .addFilter("field_application.id", "missing", "<>")
+
   const tours = await drupal.getResourceCollection<TTourTeaser[]>(
     "node--tour",
     {

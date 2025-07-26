@@ -50,6 +50,7 @@ export const AddSpotForm = ({ onSuccess }: { onSuccess?: () => void }) => {
       mapLinks: [],
       workingHours: [],
       rating: "",
+      averagePrices: 0,
     },
   })
 
