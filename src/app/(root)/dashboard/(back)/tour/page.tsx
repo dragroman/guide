@@ -13,7 +13,7 @@ import { getServerSession } from "next-auth"
 import { Suspense } from "react"
 
 export const metadata: Metadata = {
-  title: "DashboardTourPage",
+  title: "Мои туры",
   description: "",
 }
 export default async function DashboardTourPage() {

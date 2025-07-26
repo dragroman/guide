@@ -1,6 +1,4 @@
 import { ApplicationTeaser } from "@entities/node/application"
-import { ApplicationTeaserAdaptive } from "@shared/testing/TESTApplication2"
-import { TSpotDefaultTeaser } from "@entities/node/spot"
 import { TourFull } from "@entities/node/tour"
 import { TTourFull } from "@entities/node/tour/model/types"
 import { authOptions } from "@features/auth/session"
@@ -14,9 +12,81 @@ import { Metadata } from "next"
 import { getServerSession } from "next-auth"
 
 import { notFound } from "next/navigation"
-export const metadata: Metadata = {
-  title: "PageTourFull",
-  description: "",
+import { Suspense } from "react"
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ id: string }>
+}): Promise<Metadata> {
+  const { id } = await params
+
+  // Получаем данные блог-поста
+  const session = await getServerSession(authOptions)
+
+  const node = await getNode(id, session?.accessToken ?? "")
+
+  // Извлекаем данные из Drupal node
+  const title = node.title || "Анкета"
+  const description = node.field_meta_description
+
+  return {
+    title: title,
+    description: description,
+  }
+}
+
+export default async function PageTourFull({
+  params,
+}: {
+  params: Promise<{ id: string }>
+}) {
+  const { id } = await params
+  const session = await getServerSession(authOptions)
+
+  if (!session) {
+    return <div>Access denied!</div>
+  }
+
+  return (
+    <div className="space-y-12">
+      <Suspense fallback={<div>Загрузка тура...</div>}>
+        <TourContent id={id} session={session} />
+      </Suspense>
+    </div>
+  )
+}
+
+async function TourContent({ id, session }: { id: string; session: any }) {
+  const [node, userFlags] = await Promise.all([
+    getNode(id, session.accessToken),
+    getUserFlags(session.user.id, session.accessToken),
+  ])
+
+  if (!node.field_application.drupal_internal__nid) {
+    notFound()
+  }
+
+  const spots = node.field_spots
+
+  return (
+    <>
+      <Typography title={node.title} />
+      <TourFull
+        node={node}
+        actions={<DeleteNode nodeId={node.id} nodeType={node.type} />}
+      />
+      <div className="space-y-4">
+        <Typography level="h3">Анкета</Typography>
+        <ApplicationTeaser
+          node={node.field_application}
+          key={node.id}
+          actions={<></>}
+        />
+      </div>
+      <ViewsSpotDefault userFlags={userFlags} nodes={spots} />
+    </>
+  )
 }
 
 async function getNode(id: string, token: string): Promise<TTourFull> {
@@ -36,48 +106,4 @@ async function getNode(id: string, token: string): Promise<TTourFull> {
     params: tourParams.getQueryObject(),
     withAuth: `Bearer ${token}`,
   })
-}
-
-export default async function PageTourFull({
-  params,
-}: {
-  params: Promise<{ id: string }>
-}) {
-  const { id } = await params
-  const session = await getServerSession(authOptions)
-
-  if (!session) {
-    return <div>Access denied!</div>
-  }
-
-  const node = await getNode(id, session.accessToken)
-
-  const userFlags = await getUserFlags(session.user.id, session.accessToken)
-
-  const spots = node.field_spots
-  const application = node.field_application
-
-  if (!application.drupal_internal__nid) {
-    notFound()
-  }
-
-  return (
-    <div className="space-y-12">
-      <Typography title={node.title} />
-      <TourFull
-        node={node}
-        actions={<DeleteNode nodeId={node.id} nodeType={node.type} />}
-      />
-
-      <div className="space-y-4">
-        <Typography level="h3">Анкета</Typography>
-        <ApplicationTeaser
-          node={node.field_application}
-          key={node.id}
-          actions={<></>}
-        />
-      </div>
-      <ViewsSpotDefault userFlags={userFlags} nodes={spots} />
-    </div>
-  )
 }

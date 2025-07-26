@@ -2,20 +2,36 @@ import { ApplicationFull } from "@entities/node/application"
 import { TApplicationFull } from "@entities/node/application/model/types"
 import { DeleteNode } from "@features/delete-node"
 import { drupal } from "@shared/lib/drupal"
-import { BackButton } from "@shared/ui/back-button"
 import { Typography } from "@shared/ui/typography"
-import { ArrowLeft } from "lucide-react"
 import { Metadata } from "next"
 import { notFound } from "next/navigation"
-export const metadata: Metadata = {
-  title: "PageApplicationFull",
-  description: "",
+import { Suspense } from "react"
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ id: string }>
+}): Promise<Metadata> {
+  const { id } = await params
+
+  // Получаем данные блог-поста
+  const node = await getNode(id)
+
+  // Извлекаем данные из Drupal node
+  const title = node.title || "Анкета"
+  const description = node.field_meta_description
+
+  return {
+    title: title,
+    description: description,
+  }
 }
 
 async function getNode(id: string): Promise<TApplicationFull> {
   try {
-    // Если не UUID, пробуем как путь
-    return await drupal.getResourceByPath<TApplicationFull>(`/node/${id}`)
+    return await drupal.getResourceByPath<TApplicationFull>(
+      `/application/${id}`
+    )
   } catch {
     return notFound()
   }
@@ -28,8 +44,15 @@ export default async function PageApplicationFull({
 }) {
   const { id } = await params
 
-  const node = await getNode(id)
+  return (
+    <Suspense fallback="Грузим...">
+      <ApplicationContent id={id} />
+    </Suspense>
+  )
+}
 
+async function ApplicationContent({ id }: { id: string }) {
+  const node = await getNode(id)
   return (
     <>
       <Typography title={node.title} />
