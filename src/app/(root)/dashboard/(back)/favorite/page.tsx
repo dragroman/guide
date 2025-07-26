@@ -1,9 +1,12 @@
+import { TSpotDefaultTeaser } from "@entities/node/spot"
 import { authOptions } from "@features/auth/session"
 import { getUserFlags } from "@features/favorites"
+import { drupal } from "@shared/lib/drupal"
 import { EmptyState } from "@shared/ui/empty-state"
 import { Skeleton } from "@shared/ui/skeleton"
 import { Typography } from "@shared/ui/typography"
 import { ViewsSpotDefault } from "@widgets/views/spots"
+import { DrupalJsonApiParams } from "drupal-jsonapi-params"
 import { ChevronRight, Edit } from "lucide-react"
 import { Metadata } from "next"
 import { getServerSession } from "next-auth"
@@ -33,22 +36,23 @@ async function ItemList() {
 
   const userFlags = await getUserFlags(session.user.id, session.accessToken)
 
-  const response = await fetch(
-    `${process.env.NEXT_PUBLIC_DRUPAL_BASE_URL}/api/user-favorites`,
+  const favoritesParams = new DrupalJsonApiParams()
+    .addInclude(["field_images.field_media_image"])
+    .addInclude(["field_category"])
+    .addFields("taxonomy_term--category", ["name"])
+
+  const favorites = await drupal.getView<TSpotDefaultTeaser[]>(
+    "favorites--user",
     {
-      headers: {
-        Authorization: `Bearer ${session.accessToken}`,
-        Accept: "application/json",
-      },
+      params: favoritesParams.getQueryObject(),
+      withAuth: `Bearer ${session.accessToken}`,
     }
   )
 
-  const favorites = await response.json()
-
   return (
     <>
-      {favorites.data && favorites.data.length > 0 ? (
-        <ViewsSpotDefault nodes={favorites.data} userFlags={userFlags} />
+      {favorites.meta.count > 0 ? (
+        <ViewsSpotDefault nodes={favorites.results} userFlags={userFlags} />
       ) : (
         <EmptyState
           icon={Edit}
