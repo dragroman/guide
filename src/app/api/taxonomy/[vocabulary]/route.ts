@@ -1,6 +1,7 @@
 // src/app/api/taxonomy/[vocabulary]/route.ts
 import { NextRequest, NextResponse } from "next/server"
 import { drupal } from "@shared/lib/drupal"
+import { DrupalJsonApiParams } from "drupal-jsonapi-params"
 
 export async function GET(
   request: NextRequest,
@@ -17,27 +18,24 @@ export async function GET(
   try {
     const resourceType = `taxonomy_term--${vocabulary}`
 
-    // Формируем параметры запроса к Drupal JSON API
-    const apiParams: Record<string, any> = {
-      "filter[status]": 1,
-      sort: "weight",
-      "page[limit]": limit,
-      "page[offset]": page * limit,
-    }
+    const apiParams = new DrupalJsonApiParams()
+      .addSort("weight")
+      .addFilter("status", "1")
+      .addPageLimit(limit)
+      .addPageOffset(page * limit)
+      .addFields(`taxonomy__term--${vocabulary}`, [
+        "name,path,description,weight,changed,drupal_internal__tid,field_select_text,field_title_cn,status",
+      ])
 
-    // Добавляем поля как отдельный параметр (решение проблемы с синтаксисом)
-    apiParams[`fields[taxonomy_term--${vocabulary}]`] =
-      "name,path,description,weight,changed,drupal_internal__tid,field_select_text,field_title_cn"
-
-    // Добавляем поиск, если указан
     if (search && search.length >= 2) {
-      apiParams["filter[name][operator]"] = "CONTAINS"
-      apiParams["filter[name][value]"] = search
+      if (search && search.length >= 2) {
+        apiParams.addFilter("name", search, "CONTAINS")
+      }
     }
 
     // Выполняем запрос к API Drupal
     const data = await drupal.getResourceCollection<any[]>(resourceType, {
-      params: apiParams,
+      params: apiParams.getQueryObject(),
       cache: search ? "no-store" : "force-cache",
       next: {
         revalidate: search ? 0 : 3600,

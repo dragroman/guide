@@ -10,11 +10,7 @@ import {
   CommandItem,
   CommandList,
 } from "@shared/ui/command"
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@shared/ui/popover"
+import { Popover, PopoverContent, PopoverTrigger } from "@shared/ui/popover"
 import { ChevronsUpDown, Check, Loader2 } from "lucide-react"
 import { cn } from "@shared/lib/utils"
 import { useDebounce } from "@shared/hooks/useDebounce" // Создайте этот хук или используйте npm-пакет use-debounce
