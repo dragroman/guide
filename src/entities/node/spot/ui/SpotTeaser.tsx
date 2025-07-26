@@ -23,7 +23,7 @@ export const SpotTeaser = ({
         {/* Изображение */}
         <div className="relative aspect-square rounded-2xl overflow-hidden bg-gradient-to-br from-blue-100 to-purple-100">
           <div className="absolute inset-0 flex items-center justify-center">
-            {node.field_images ? (
+            {node.field_images?.[0]?.field_media_image?.uri?.url ? (
               <Image
                 src={absoluteUrl(
                   node.field_images[0].field_media_image.uri.url
