@@ -5,8 +5,15 @@ import { Button } from "@shared/ui/button"
 import { Badge } from "@shared/ui/badge"
 import Image from "next/image"
 import { absoluteUrl } from "@shared/lib/utils"
+import { ReactNode } from "react"
 
-export const SpotTeaser = ({ node }: { node: TSpotDefaultTeaser }) => {
+export const SpotTeaser = ({
+  node,
+  favorite,
+}: {
+  node: TSpotDefaultTeaser
+  favorite: ReactNode
+}) => {
   const cuisineTypes = node.field_cuisine_type?.length
     ? Array.from(new Set(node.field_cuisine_type)).slice(0, 1)
     : []
@@ -26,7 +33,10 @@ export const SpotTeaser = ({ node }: { node: TSpotDefaultTeaser }) => {
                     ?.alt || node.title
                 }
                 fill
-                className="w-12 h-12"
+                sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                className="object-cover w-full h-full"
+                priority={false}
+                quality={75}
               />
             ) : (
               <Camera className="h-12 w-12 text-gray-400" />
@@ -37,16 +47,7 @@ export const SpotTeaser = ({ node }: { node: TSpotDefaultTeaser }) => {
           <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-all duration-300" />
 
           {/* Иконки в углах */}
-          <div className="absolute top-3 right-3">
-            <Button
-              size="sm"
-              variant="ghost"
-              className="text-gray-600 hover:text-red-500 hover:bg-white/80 p-2 backdrop-blur-sm"
-              onClick={(e) => e.preventDefault()}
-            >
-              <Heart className="h-4 w-4" />
-            </Button>
-          </div>
+          <div className="absolute top-3 right-3">{favorite}</div>
 
           {cuisineTypes.length > 0 && (
             <div className="absolute bottom-3 left-3">

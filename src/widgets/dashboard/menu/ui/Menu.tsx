@@ -1,6 +1,6 @@
 "use client"
 
-import { Edit, LogOut, Cog, Luggage, LucideIcon } from "lucide-react"
+import { Edit, LogOut, Luggage, LucideIcon, Heart } from "lucide-react"
 import { signOut } from "next-auth/react"
 import { useRouter } from "next/navigation"
 import { toast } from "sonner"
@@ -36,7 +36,7 @@ export const DashboardMenu = () => {
   const menuItems = [
     { icon: Edit, title: "Анкеты", path: "/dashboard/application" },
     { icon: Luggage, title: "Туры", path: "/dashboard/tour" },
-    { icon: Cog, title: "Настройки", path: "/dashboard/settings" },
+    { icon: Heart, title: "Избранное", path: "/dashboard/favorite" },
     { icon: LogOut, title: "Выход", onClick: handleSignOut },
   ]
 

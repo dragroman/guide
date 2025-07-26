@@ -3,6 +3,7 @@ import { TourFull } from "@entities/node/tour"
 import { TTourFull } from "@entities/node/tour/model/types"
 import { authOptions } from "@features/auth/session"
 import { DeleteNode } from "@features/delete-node"
+import { getUserFlags } from "@features/favorites"
 import { drupal } from "@shared/lib/drupal"
 import { Typography } from "@shared/ui/typography"
 import { ViewsSpotDefault } from "@widgets/views/spots"
@@ -43,6 +44,8 @@ export default async function PageTourFull({
 
   const node = await getNode(id, session.accessToken)
 
+  const userFlags = await getUserFlags(session.user.id, session.accessToken)
+
   const spots = node.field_spots
 
   return (
@@ -52,7 +55,7 @@ export default async function PageTourFull({
         node={node}
         actions={<DeleteNode nodeId={node.id} nodeType={node.type} />}
       />
-      <ViewsSpotDefault nodes={spots} />
+      <ViewsSpotDefault userFlags={userFlags} nodes={spots} />
     </>
   )
 }
