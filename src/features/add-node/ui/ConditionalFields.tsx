@@ -184,7 +184,7 @@ export function ConditionalFields({
                 </div>
               </FormControl>
               <FormDescription>
-                Ввеите стоимость входного билета
+                Ввеите стоимость входного билета, 0 означает бесплатный вход
               </FormDescription>
               <FormMessage />
             </FormItem>

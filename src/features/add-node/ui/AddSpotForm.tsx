@@ -51,6 +51,7 @@ export const AddSpotForm = ({ onSuccess }: { onSuccess?: () => void }) => {
       workingHours: [],
       rating: "",
       averagePrices: 0,
+      ticketPrice: 0,
     },
   })
 

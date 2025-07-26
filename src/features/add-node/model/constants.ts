@@ -1,7 +1,10 @@
+// TODO: В идеале лучше перенести из констант в запрос, например сделать один запрос, отсортировать по популярности или по weight, и просто взять первые 5
+
 export const POPULAR_CATEGORIES = [
   { id: "6a8631d4-c78a-4afc-b6c6-88cad3a74976", name: "Ресторан" },
   { id: "54d9907a-95cb-4f5f-a6ba-f5493a117540", name: "Отель" },
   { id: "336ffaca-af66-4963-bf2e-e3418b47a8b4", name: "Достопримечательность" },
+  { id: "cbcbd821-7edb-4c04-a884-c2d00bbd63bc", name: "Пляжи" },
 ]
 
 export const POPULAR_CITIES = [
@@ -13,9 +16,19 @@ export const POPULAR_CITIES = [
 ]
 
 export const CATEGORY_IDS = {
-  RESTAURANT: ["6a8631d4-c78a-4afc-b6c6-88cad3a74976"] as string[], // UUID ресторанов
+  RESTAURANT: [
+    "6a8631d4-c78a-4afc-b6c6-88cad3a74976",
+    "ebfd4f44-f812-49e1-ab7e-b85ac893bb82",
+    "d830726e-c6ae-423c-9916-431ef297191e",
+    "5c72762a-b662-4a17-ac13-598b0056ae75",
+    "43a062f0-02ef-4f25-98d1-4ab78fd06d70",
+  ] as string[], // UUID ресторанов
   HOTEL: ["4"] as string[], // UUID отелей
-  ATTRACTION: ["5"] as string[], // UUID достопримечательностей
+  ATTRACTION: [
+    "336ffaca-af66-4963-bf2e-e3418b47a8b4",
+    "9da022a4-a10f-48f1-81e5-6142b0e1fb50",
+    "a7faf2cc-8431-4552-824e-5371e1e5fa80",
+  ] as string[],
 } as const
 
 export const CUISINE_OPTIONS = [

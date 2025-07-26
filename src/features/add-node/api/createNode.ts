@@ -95,8 +95,8 @@ export async function createNode(data: SpotFormData) {
           field_map_link: data.mapLinks?.map((link) => ({ uri: link.url })),
           field_opening_hours: data.workingHours,
           field_cuisine_type: data.cuisineTypes,
-          field_ticket_price: data.ticketPrice,
           field_average_bill: data.averagePrices,
+          field_ticket_price: data.ticketPrice,
         },
         relationships: {
           field_category: {
