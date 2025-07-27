@@ -6,7 +6,7 @@ import { DeleteNode } from "@features/delete-node"
 import { getUserFlags } from "@features/favorites"
 import { drupal } from "@shared/lib/drupal"
 import { Typography } from "@shared/ui/typography"
-import { ViewsSpotDefault } from "@widgets/views/spots"
+import { ViewsSpotDefault, ViewsTourByDays } from "@widgets/views/spots"
 import { DrupalJsonApiParams } from "drupal-jsonapi-params"
 import { Metadata } from "next"
 import { getServerSession } from "next-auth"
@@ -67,7 +67,9 @@ async function TourContent({ id, session }: { id: string; session: any }) {
     notFound()
   }
 
-  const spots = node.field_spots
+  const days = node.field_days
+
+  console.log(days)
 
   return (
     <>
@@ -84,7 +86,11 @@ async function TourContent({ id, session }: { id: string; session: any }) {
           actions={<></>}
         />
       </div>
-      <ViewsSpotDefault userFlags={userFlags} nodes={spots} />
+      <ViewsTourByDays
+        userFlags={userFlags}
+        days={days}
+        showParagraphData={true}
+      />
     </>
   )
 }
@@ -92,12 +98,13 @@ async function TourContent({ id, session }: { id: string; session: any }) {
 async function getNode(id: string, token: string): Promise<TTourFull> {
   const tourParams = new DrupalJsonApiParams()
     .addInclude([
-      "field_spots",
-      "field_spots.field_category",
+      "field_days",
+      "field_days.field_day_spots",
+      "field_days.field_day_spots.field_spot.field_category",
+      "field_days.field_day_spots.field_spot.field_location",
+      "field_days.field_day_spots.field_spot.field_images.field_media_image",
       "field_application.field_cities",
-      "field_spots.field_location",
     ])
-    .addInclude(["field_spots.field_images.field_media_image"])
     .addFields("media--image", ["field_media_image", "name"])
     .addFields("taxonomy_term--category", ["name"])
     .addFields("taxonomy_term--location", ["name"])

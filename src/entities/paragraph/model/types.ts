@@ -1,5 +1,6 @@
 // entities/paragraph/model/types.ts
 
+import { TSpotDefaultTeaser } from "@entities/node/spot"
 import { DrupalFile, DrupalMedia, JsonApiResource } from "next-drupal"
 
 // Базовый интерфейс для всех параграфов
@@ -248,4 +249,33 @@ export interface ExtendedDrupalParagraph extends DrupalParagraph {
     }
   }
   field_caption?: string
+}
+
+export interface TParagraphSpotDetails {
+  type: "paragraph--tour_spot_details"
+  drupal_internal__id: number
+  field_spot: TSpotDefaultTeaser
+  field_instructions?: {
+    value: string
+    format: string
+    processed: string
+  }
+  field_additional_notes?: {
+    value: string
+    format: string
+    processed: string
+  }
+}
+
+export interface TParagraphTourDay {
+  type: "paragraph--tour_day"
+  drupal_internal__id: number
+  field_day_number: number
+  field_day_title?: string
+  field_day_description?: {
+    value: string
+    format: string
+    processed: string
+  }
+  field_day_spots: TParagraphSpotDetails[]
 }
